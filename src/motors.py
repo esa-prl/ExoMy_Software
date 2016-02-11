@@ -6,6 +6,8 @@ import RPi.GPIO as GPIO
 import time
 import numpy as np
 
+import Adafruit_PCA9685
+
 class Motors():
     '''
     Motors class contains all functions to control the steering and driving motors.
@@ -19,175 +21,130 @@ class Motors():
     FL, FR, CL, CR, RL, RR = range(0, 6)
 
     def __init__(self):
-        # Set the GPIO modes
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setwarnings(False)
 
         # Set variables for the GPIO motor pins
-        pin_drive_fr = 8 
-        pin_steer_fr = 7
+        self.pin_drive_fl = 0 
+        self.pin_steer_fl = 1
 
-        pin_drive_fl = 12
-        pin_steer_fl = 10
+        self.pin_drive_fr = 2 
+        self.pin_steer_fr = 3
 
-        pin_drive_cl = 11 
-        pin_steer_cl = 16
+        self.pin_drive_cl = 4 
+        self.pin_steer_cl = 5
 
-        pin_drive_cr = 13 
-        pin_steer_cr = 18
+        self.pin_drive_cr = 6
+        self.pin_steer_cr = 7
 
-        pin_drive_rl = 36
-        pin_steer_rl = 37
+        self.pin_drive_rl = 8
+        self.pin_steer_rl = 9
 
-        pin_drive_rr = 33
-        pin_steer_rr = 31
+        self.pin_drive_rr = 10
+        self.pin_steer_rr = 11
 
-
-        # Set the GPIO Pin mode to be Output
-        GPIO.setup(pin_drive_fl, GPIO.OUT)
-        GPIO.setup(pin_steer_fl, GPIO.OUT)
-
-        GPIO.setup(pin_drive_fr, GPIO.OUT)
-        GPIO.setup(pin_steer_fr, GPIO.OUT)
-                
-        GPIO.setup(pin_drive_cl, GPIO.OUT)
-        GPIO.setup(pin_steer_cl, GPIO.OUT)
-
-        GPIO.setup(pin_drive_cr, GPIO.OUT)
-        GPIO.setup(pin_steer_cr, GPIO.OUT)
-
-        GPIO.setup(pin_drive_rl, GPIO.OUT)
-        GPIO.setup(pin_steer_rl, GPIO.OUT)
-
-        GPIO.setup(pin_drive_rr, GPIO.OUT)
-        GPIO.setup(pin_steer_rr, GPIO.OUT)
 
         # PWM characteristics 
-        pwm_frequency = 50 		# Hz
+        self.pwm = Adafruit_PCA9685.PCA9685()
+        self.pwm.set_pwm_freq(50) #Hz
+
         self.steering_pwm_neutral =  [None] * 6
 
-        self.steering_pwm_low_limit = 2.5 	   
-        self.steering_pwm_neutral[self.FL] = 7.0 
-        self.steering_pwm_neutral[self.FR] = 6.2
-        self.steering_pwm_neutral[self.CL] = 8.0 
-        self.steering_pwm_neutral[self.CR] = 8.0 
-        self.steering_pwm_neutral[self.RL] = 5.0 
-        self.steering_pwm_neutral[self.RR] = 10.0 
-        self.steering_pwm_upper_limit = 11.5
-        self.steering_pwm_range = 2.5
+        self.steering_pwm_low_limit = 100 
+        self.steering_pwm_neutral[self.FL] = 300 
+        self.steering_pwm_neutral[self.FR] = 300
+        self.steering_pwm_neutral[self.CL] = 300
+        self.steering_pwm_neutral[self.CR] = 300
+        self.steering_pwm_neutral[self.RL] = 300
+        self.steering_pwm_neutral[self.RR] = 300
+        self.steering_pwm_upper_limit = 500
+        self.steering_pwm_range = 200
 
-        self.driving_pwm_low_limit = 5.0
-        self.driving_pwm_neutral = 7.0 	
-        self.driving_pwm_upper_limit = 9.0
-        self.driving_pwm_range = 2.0
+        self.driving_pwm_low_limit = 100
+        self.driving_pwm_neutral = 300
+        self.driving_pwm_upper_limit = 500
+        self.driving_pwm_range = 200
 
         # Set the GPIO to software PWM at 'Frequency' Hertz
         self.driving_motors = [None] * 6
         self.steering_motors = [None] * 6
 
-        self.driving_motors[self.FL] = GPIO.PWM(pin_drive_fl, pwm_frequency)
-        self.steering_motors[self.FL] = GPIO.PWM(pin_steer_fl, pwm_frequency)
+        # Set motors to neutral values
+        self.pwm.set_pwm(self.pin_steer_fl, 0, self.steering_pwm_neutral[self.FL])
+        time.sleep(0.3)
+        self.pwm.set_pwm(self.pin_steer_fr, 0, self.steering_pwm_neutral[self.FR])
+        time.sleep(0.3)
+        self.pwm.set_pwm(self.pin_steer_cl, 0, self.steering_pwm_neutral[self.CL])
+        time.sleep(0.3)
+        self.pwm.set_pwm(self.pin_steer_cr, 0, self.steering_pwm_neutral[self.CR])
+        time.sleep(0.3)
+        self.pwm.set_pwm(self.pin_steer_rl, 0, self.steering_pwm_neutral[self.RL])
+        time.sleep(0.3)
+        self.pwm.set_pwm(self.pin_steer_rr, 0, self.steering_pwm_neutral[self.RR])
+        time.sleep(0.3)
 
-        self.driving_motors[self.FR] = GPIO.PWM(pin_drive_fr, pwm_frequency)
-        self.steering_motors[self.FR] = GPIO.PWM(pin_steer_fr, pwm_frequency)
-
-        self.driving_motors[self.CL] = GPIO.PWM(pin_drive_cl, pwm_frequency)
-        self.steering_motors[self.CL] = GPIO.PWM(pin_steer_cl, pwm_frequency)
-
-        self.driving_motors[self.CR] = GPIO.PWM(pin_drive_cr, pwm_frequency)
-        self.steering_motors[self.CR] = GPIO.PWM(pin_steer_cr, pwm_frequency)
-
-        self.driving_motors[self.RL] = GPIO.PWM(pin_drive_rl, pwm_frequency)
-        self.steering_motors[self.RL] = GPIO.PWM(pin_steer_rl, pwm_frequency)
-
-        self.driving_motors[self.RR] = GPIO.PWM(pin_drive_rr, pwm_frequency)
-        self.steering_motors[self.RR] = GPIO.PWM(pin_steer_rr, pwm_frequency)
-
-        self.steering_motors[self.FL].start(self.steering_pwm_neutral[self.FL])
-        time.sleep(0.5)
-        self.steering_motors[self.FR].start(self.steering_pwm_neutral[self.FR])
-        time.sleep(0.5)
-        self.steering_motors[self.CL].start(self.steering_pwm_neutral[self.CL])
-        time.sleep(0.5)
-        self.steering_motors[self.CR].start(self.steering_pwm_neutral[self.CR])
-        time.sleep(0.5)
-        self.steering_motors[self.RL].start(self.steering_pwm_neutral[self.RL])
-        time.sleep(0.5)
-        self.steering_motors[self.RR].start(self.steering_pwm_neutral[self.RR])
-        time.sleep(0.5)
-
-        for motor in self.driving_motors:
-            if motor is not None:
-                motor.start(0.0)
-                #motor.start(self.driving_pwm_neutral)
-                time.sleep(0.5)
-
+        
     def setSteering(self, steering_command):
-        duty_cycle = self.steering_pwm_neutral[self.FL] + steering_command[self.FL]/90.0 * self.steering_pwm_range 
-        self.steering_motors[self.FL].ChangeDutyCycle(duty_cycle)
+        duty_cycle = int(self.steering_pwm_neutral[self.FL] + steering_command[self.FL]/90.0 * self.steering_pwm_range)
+        self.pwm.set_pwm(self.pin_steer_fl, 0, duty_cycle )
 
-        duty_cycle = self.steering_pwm_neutral[self.FR] + steering_command[self.FR]/90.0 * self.steering_pwm_range 
-        self.steering_motors[self.FR].ChangeDutyCycle(duty_cycle)
+        duty_cycle = int(self.steering_pwm_neutral[self.FR] + steering_command[self.FR]/90.0 * self.steering_pwm_range) 
+        self.pwm.set_pwm(self.pin_steer_fr, 0, duty_cycle )
 
-        duty_cycle = self.steering_pwm_neutral[self.CL] + steering_command[self.CL]/90.0 * self.steering_pwm_range 
-        self.steering_motors[self.CL].ChangeDutyCycle(duty_cycle)
+        duty_cycle = int(self.steering_pwm_neutral[self.CL] + steering_command[self.CL]/90.0 * self.steering_pwm_range) 
+        self.pwm.set_pwm(self.pin_steer_cl, 0, duty_cycle)
         
-        duty_cycle = self.steering_pwm_neutral[self.CR] + steering_command[self.CR]/90.0 * self.steering_pwm_range 
-        self.steering_motors[self.CR].ChangeDutyCycle(duty_cycle)
+        duty_cycle = int(self.steering_pwm_neutral[self.CR] + steering_command[self.CR]/90.0 * self.steering_pwm_range)
+        self.pwm.set_pwm(self.pin_steer_cr, 0, duty_cycle )
 
-        duty_cycle = self.steering_pwm_neutral[self.RL] + steering_command[self.RL]/90.0 * self.steering_pwm_range 
-        self.steering_motors[self.RL].ChangeDutyCycle(duty_cycle)
+        duty_cycle = int(self.steering_pwm_neutral[self.RL] + steering_command[self.RL]/90.0 * self.steering_pwm_range)
+        self.pwm.set_pwm(self.pin_steer_rl, 0, duty_cycle )
         
-        duty_cycle = self.steering_pwm_neutral[self.RR] + steering_command[self.RR]/90.0 * self.steering_pwm_range 
-        self.steering_motors[self.RR].ChangeDutyCycle(duty_cycle)
+        duty_cycle = int(self.steering_pwm_neutral[self.RR] + steering_command[self.RR]/90.0 * self.steering_pwm_range) 
+        self.pwm.set_pwm(self.pin_steer_rr, 0, duty_cycle )
             
     def setDriving(self, driving_command):
-	if(driving_command[self.FL]==0.0):
-		duty_cycle=0.0
-	else:
-	        duty_cycle = self.driving_pwm_neutral - driving_command[self.FL]/100.0 * self.driving_pwm_range 
-	 
-        self.driving_motors[self.FL].ChangeDutyCycle(duty_cycle)
+        if(driving_command[self.FL]==0.0):
+            duty_cycle=0
+        else:
+            duty_cycle = int(self.driving_pwm_neutral - driving_command[self.FL]/100.0 * self.driving_pwm_range) 
+        self.pwm.set_pwm(self.pin_drive_fl, 0, duty_cycle)
+         
+        if(driving_command[self.FR]==0.0):
+            duty_cycle=0
+        else:
+            duty_cycle = int(self.driving_pwm_neutral + driving_command[self.FR]/100.0 * self.driving_pwm_range) 
+        self.pwm.set_pwm(self.pin_drive_fr, 0, duty_cycle)
 
-	if(driving_command[self.FR]==0.0):
-		duty_cycle=0.0
-	else:
-        	duty_cycle = self.driving_pwm_neutral + driving_command[self.FR]/100.0 * self.driving_pwm_range 
-	
-        self.driving_motors[self.FR].ChangeDutyCycle(duty_cycle)
+        if(driving_command[self.CL]==0.0):
+            duty_cycle=0
+        else:
+            duty_cycle = int(self.driving_pwm_neutral - driving_command[self.CL]/100.0 * self.driving_pwm_range)
+        self.pwm.set_pwm(self.pin_drive_cl, 0, duty_cycle)
 
-	if(driving_command[self.CL]==0.0):
-		duty_cycle=0.0
-	else:
-        	duty_cycle = self.driving_pwm_neutral - driving_command[self.CL]/100.0 * self.driving_pwm_range 
-	
-        self.driving_motors[self.CL].ChangeDutyCycle(duty_cycle)
+        if(driving_command[self.CR]==0.0):
+            duty_cycle=0
+        else:
+            duty_cycle = int(self.driving_pwm_neutral + driving_command[self.CR]/100.0 * self.driving_pwm_range)
+        self.pwm.set_pwm(self.pin_drive_cr, 0, duty_cycle)
 
-	if(driving_command[self.CR]==0.0):
-		duty_cycle=0.0
-	else:
-        	duty_cycle = self.driving_pwm_neutral + driving_command[self.CR]/100.0 * self.driving_pwm_range 
-	 
-        self.driving_motors[self.CR].ChangeDutyCycle(duty_cycle)
-
-	if(driving_command[self.RL]==0.0):
-		duty_cycle=0.0
-	else:
-        	duty_cycle = self.driving_pwm_neutral - driving_command[self.RL]/100.0 * self.driving_pwm_range 
-	
-        self.driving_motors[self.RL].ChangeDutyCycle(duty_cycle)
-
-	if(driving_command[self.RR]==0.0):
-		duty_cycle=0.0
-	else:
-	       	duty_cycle = self.driving_pwm_neutral + driving_command[self.RR]/100.0 * self.driving_pwm_range 
-	
-        self.driving_motors[self.RR].ChangeDutyCycle(duty_cycle)
+        if(driving_command[self.RL]==0.0):
+            duty_cycle=0
+        else:
+            duty_cycle = int(self.driving_pwm_neutral - driving_command[self.RL]/100.0 * self.driving_pwm_range)
+        self.pwm.set_pwm(self.pin_drive_rl, 0, duty_cycle)
+        
+        if(driving_command[self.RR]==0.0):
+            duty_cycle=0
+        else:
+            duty_cycle = int(self.driving_pwm_neutral + driving_command[self.RR]/100.0 * self.driving_pwm_range)
+        self.pwm.set_pwm(self.pin_drive_rr, 0, duty_cycle)
 
     def stopMotors(self):
-        for motor in self.driving_motors:
-            if motor is not None:
-                motor.ChangeDutyCycle(0.0)
+        self.pwm.set_pwm(self.pin_drive_fl, 0, 0)
+        self.pwm.set_pwm(self.pin_drive_fr, 0, 0)
+        self.pwm.set_pwm(self.pin_drive_cl, 0, 0)
+        self.pwm.set_pwm(self.pin_drive_cr, 0, 0)
+        self.pwm.set_pwm(self.pin_drive_rl, 0, 0)
+        self.pwm.set_pwm(self.pin_drive_rr, 0, 0)
 
     def cleanup(self):
-        GPIO.cleanup()
+       bla =1 
