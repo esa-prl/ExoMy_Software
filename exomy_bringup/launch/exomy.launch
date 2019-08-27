@@ -1,0 +1,11 @@
+<launch>
+    <node name="robot" pkg="exomy" type="robot_node.py" respawn="true" />
+    <node name="motors" pkg="exomy" type="motor_node.py" respawn="true" />
+    <node name="joystick" pkg="exomy" type="joystick_node.py" respawn="true" />
+
+    <!-- Nodes to run the rover -->
+    <node respawn="false" pkg="joy" type="joy_node" name="joy_node">
+	<!--param name="autorepeat_rate"   value="1.0"/-->
+	<param name="coalesce_interval" value="0.05"/>
+    </node>
+</launch>
