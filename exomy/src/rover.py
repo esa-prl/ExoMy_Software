@@ -12,10 +12,10 @@ class Rover():
     FL, FR, CL, CR, RL, RR = range(0,6)
 
     # Defining locomotion modes
-    ACKERMANN, POINT_TURN, CRABBING = range(0,3)
+    FAKE_ACKERMANN, ACKERMANN, POINT_TURN, CRABBING = range(0,4)
 
     def __init__(self):
-        self.locomotion_mode=self.ACKERMANN
+        self.locomotion_mode=self.FAKE_ACKERMANN
 
         self.wheel_x=14.0
         self.wheel_y=16.0
@@ -32,6 +32,29 @@ class Rover():
 
         steering_angles = [0]*6
 
+        if(self.locomotion_mode==self.FAKE_ACKERMANN):
+            deg = 180*steering_command
+
+            '''
+            if(-10 < deg < 10 ):
+                # Drive straight
+                steering_angles[self.FL]= 0
+                steering_angles[self.FR]= 0
+                steering_angles[self.CR]= 0
+                steering_angles[self.CL]= 0
+                steering_angles[self.RL]= 0
+                steering_angles[self.RR]= 0
+            else:
+                steering_angles[self.FL]= 45
+                steering_angles[self.FR]= 45
+                steering_angles[self.CR]= 0
+                steering_angles[self.CL]= 0
+                steering_angles[self.RL]= 0
+                steering_angles[self.RR]= 0
+
+            '''
+
+            return steering_angles
         if(self.locomotion_mode==self.ACKERMANN):
             # Scale between min and max Ackermann radius
             if steering_command == 0: r = self.ackermann_r_max

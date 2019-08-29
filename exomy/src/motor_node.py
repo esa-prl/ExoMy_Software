@@ -23,6 +23,8 @@ if __name__ == "__main__":
 
     sub = rospy.Subscriber("/robot_commands",Commands, callback)
 
-    rate = rospy.Rate(5)
+    rate = rospy.Rate(10)
+
+    rate.sleep()
 
     rospy.spin()
