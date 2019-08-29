@@ -40,8 +40,8 @@ def callback(data):
 	now = time.time()
 
 	#cmd = two_joy(x,y,rt)
-	joy_out.vel = 100 * y #cmd[0]
-	joy_out.steering = -100 * x#cmd[1]
+	joy_out.vel = 100 
+	joy_out.steering = math.atan2(y, x)*180.0/math.pi 
 	joy_out.mode = mode
 	joy_out.connected = True
 	pub.publish(joy_out)
