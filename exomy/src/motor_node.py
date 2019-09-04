@@ -8,9 +8,8 @@ from motors import Motors
 motors = Motors()
 
 def callback(cmds):
-    motors.setDriving(cmds.motor_speeds)
-    time.sleep(0.5)
     motors.setSteering(cmds.motor_angles)
+    motors.setDriving(cmds.motor_speeds)
     
 def shutdown():
     motors.stopMotors()
@@ -25,6 +24,6 @@ if __name__ == "__main__":
 
     rate = rospy.Rate(10)
 
-    rate.sleep()
+#   rate.sleep()
 
     rospy.spin()
