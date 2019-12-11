@@ -2,7 +2,7 @@
 import rospy
 import time
 from sensor_msgs.msg import Joy
-from exomy_msgs.msg import Joystick
+from exomy.msg import Joystick
 import math
 import enum
 
@@ -26,20 +26,15 @@ def callback(data):
     # Function map for the Logitech F710 joystick 
     # Button on pad | function
     # --------------|----------------------
-    # LT			| decrease the max speed
-    # LB			| increase the max speed
-    # RT			| increase the angular velocity
-    # RB			| decrease the angular velocity
     # B				| Toggle crabbing mode
     # X				| Toggle point turn mode
     # left stick	| control speed and direction
 
+    # Reading out joystick data
     y =  data.axes[1]
     x =  data.axes[0]
 
-    dpad = data.buttons[11:]
-    if 1 in dpad: mode = dpad.index(1)
-
+    # Reading out button data
     if (data.buttons[1] == 1):
         if (screen_mode == 0):
             screen_mode = 1
@@ -56,10 +51,17 @@ def callback(data):
         else:
             screen_mode = 3
 
+    # The velocity is decoded as value between 0...100 
     joy_out.vel = 100 * math.sqrt(x*x + y*y)
+
+    # The steering is described as an angle between -180...180
+    # Which describe the joystick position as follows:
+    #   +90
+    # 0      +-180
+    #   -90
+    #
     joy_out.steering = math.atan2(y, x)*180.0/math.pi 
 
-    joy_out.mode = mode
     joy_out.screen_mode = screen_mode
     joy_out.connected = True
 

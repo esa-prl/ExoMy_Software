@@ -3,7 +3,7 @@
 import rospy
 import rospkg
 import os
-from exomy_msgs.msg import Screen
+from exomy.msg import Screen
 from ST7735 import ST7735
 from PIL import Image 
 

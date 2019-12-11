@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import time
-from exomy_msgs.msg import Joystick, Commands, Screen
+from exomy.msg import Joystick, Commands, Screen
 import rospy
 from rover import Rover 
 import message_filters

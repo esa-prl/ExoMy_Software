@@ -2,7 +2,7 @@
 import time
 import rospy
 
-from exomy_msgs.msg import Commands
+from exomy.msg import Commands
 from motors import Motors
 
 motors = Motors()
@@ -16,6 +16,7 @@ def shutdown():
     motors.cleanup()
 
 if __name__ == "__main__":
+    # This node waits for commands from the robot and sets the motors accordingly
     rospy.init_node("motors")
     rospy.loginfo("Starting the motors node")
     rospy.on_shutdown(shutdown)
@@ -23,7 +24,5 @@ if __name__ == "__main__":
     sub = rospy.Subscriber("/robot_commands",Commands, callback)
 
     rate = rospy.Rate(10)
-
-#   rate.sleep()
 
     rospy.spin()

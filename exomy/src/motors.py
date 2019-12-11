@@ -64,21 +64,21 @@ class Motors():
 
         # PWM characteristics 
         pwm_frequency = 50 		# Hz
-	self.steering_pwm_neutral =  [None] * 6
+        self.steering_pwm_neutral =  [None] * 6
 
-        self.steering_pwm_low_limit = 2.5#5 	# %
-        self.steering_pwm_neutral[self.FL] = 7.0 # %
-        self.steering_pwm_neutral[self.FR] = 6.2# %
-        self.steering_pwm_neutral[self.CL] = 8.0 # %
-        self.steering_pwm_neutral[self.CR] = 8.0 # %
-        self.steering_pwm_neutral[self.RL] = 5.0 # %
-        self.steering_pwm_neutral[self.RR] = 10.0 # %
-        self.steering_pwm_upper_limit = 11.5#10	# %
+        self.steering_pwm_low_limit = 2.5 	   
+        self.steering_pwm_neutral[self.FL] = 7.0 
+        self.steering_pwm_neutral[self.FR] = 6.2
+        self.steering_pwm_neutral[self.CL] = 8.0 
+        self.steering_pwm_neutral[self.CR] = 8.0 
+        self.steering_pwm_neutral[self.RL] = 5.0 
+        self.steering_pwm_neutral[self.RR] = 10.0 
+        self.steering_pwm_upper_limit = 11.5
         self.steering_pwm_range = 2.5
 
-        self.driving_pwm_low_limit = 5.0#5 	# %
-        self.driving_pwm_neutral = 7.0 			# %
-        self.driving_pwm_upper_limit = 9.0#10	# %
+        self.driving_pwm_low_limit = 5.0
+        self.driving_pwm_neutral = 7.0 	
+        self.driving_pwm_upper_limit = 9.0
         self.driving_pwm_range = 2.0
 
         # Set the GPIO to software PWM at 'Frequency' Hertz
@@ -103,18 +103,18 @@ class Motors():
         self.driving_motors[self.RR] = GPIO.PWM(pin_drive_rr, pwm_frequency)
         self.steering_motors[self.RR] = GPIO.PWM(pin_steer_rr, pwm_frequency)
 
-	self.steering_motors[self.FL].start(self.steering_pwm_neutral[self.FL])
-	time.sleep(0.5)
-	self.steering_motors[self.FR].start(self.steering_pwm_neutral[self.FR])
-	time.sleep(0.5)
-	self.steering_motors[self.CL].start(self.steering_pwm_neutral[self.CL])
-	time.sleep(0.5)
-	self.steering_motors[self.CR].start(self.steering_pwm_neutral[self.CR])
-	time.sleep(0.5)
-	self.steering_motors[self.RL].start(self.steering_pwm_neutral[self.RL])
-	time.sleep(0.5)
-	self.steering_motors[self.RR].start(self.steering_pwm_neutral[self.RR])
-	time.sleep(0.5)
+        self.steering_motors[self.FL].start(self.steering_pwm_neutral[self.FL])
+        time.sleep(0.5)
+        self.steering_motors[self.FR].start(self.steering_pwm_neutral[self.FR])
+        time.sleep(0.5)
+        self.steering_motors[self.CL].start(self.steering_pwm_neutral[self.CL])
+        time.sleep(0.5)
+        self.steering_motors[self.CR].start(self.steering_pwm_neutral[self.CR])
+        time.sleep(0.5)
+        self.steering_motors[self.RL].start(self.steering_pwm_neutral[self.RL])
+        time.sleep(0.5)
+        self.steering_motors[self.RR].start(self.steering_pwm_neutral[self.RR])
+        time.sleep(0.5)
 
         for motor in self.driving_motors:
             if motor is not None:
