@@ -3,27 +3,18 @@ import rospy
 import time
 from sensor_msgs.msg import Joy
 from exomy.msg import Joystick
+from locomotion_modes import LocomotionMode
 import math
 import enum
 
-global mode
-global screen_mode
-global last
-global counter
-
-mode, screen_mode, counter = 0,0,0
-last = time.time()
+# Define locomotion modes
 
 
 def callback(data):
-    global mode
-    global screen_mode
-    global counter
-    global last
 
     joy_out = Joystick()
 
-    # Function map for the Logitech F710 joystick 
+    # Function map for the Logitech F710 joystick
     # Button on pad | function
     # --------------|----------------------
     # B				| Toggle crabbing mode
@@ -31,27 +22,21 @@ def callback(data):
     # left stick	| control speed and direction
 
     # Reading out joystick data
-    y =  data.axes[1]
-    x =  data.axes[0]
+    y = data.axes[1]
+    x = data.axes[0]
 
     # Reading out button data
+    if (data.buttons[0] == 1):
+        joy_out.locomotion_mode = LocomotionMode.FAKE_ACKERMANN
+        rospy.loginfo('FAKE_ACKERMANN')
     if (data.buttons[1] == 1):
-        if (screen_mode == 0):
-            screen_mode = 1
-        else:
-            screen_mode = 0
+        joy_out.locomotion = LocomotionMode.CRABBING
+        rospy.loginfo('CRABBING')
     if (data.buttons[2] == 1):
-        if (screen_mode != 2):
-            screen_mode = 2
-        else:
-            screen_mode = 0
-    if (data.buttons[3] == 1):
-        if (screen_mode != 0):
-            screen_mode = 0
-        else:
-            screen_mode = 3
+        joy_out.locomotion_mode = LocomotionMode.POINT_TURN
+        rospy.loginfo('POINT_TURN')
 
-    # The velocity is decoded as value between 0...100 
+    # The velocity is decoded as value between 0...100
     joy_out.vel = 100 * math.sqrt(x*x + y*y)
 
     # The steering is described as an angle between -180...180
@@ -60,12 +45,24 @@ def callback(data):
     # 0      +-180
     #   -90
     #
-    joy_out.steering = math.atan2(y, x)*180.0/math.pi 
+    joy_out.steering = math.atan2(y, x)*180.0/math.pi
 
-    joy_out.screen_mode = screen_mode
     joy_out.connected = True
 
     pub.publish(joy_out)
+
+
+def button_pressed(self, index):
+    return self.prev_data.buttons[index] != self.curr_data.buttons[index] and self.curr_data.buttons[index]
+
+
+def any_button_pressed(self, buttons_index):
+    for index in buttons_index:
+        if self.button_pressed(index):
+            return True
+
+    return False
+
 
 if __name__ == '__main__':
     global pub
@@ -77,4 +74,3 @@ if __name__ == '__main__':
     pub = rospy.Publisher('joystick', Joystick, queue_size=1)
 
     rospy.spin()
-
