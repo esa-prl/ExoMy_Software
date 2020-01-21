@@ -12,6 +12,8 @@ exomy = Rover()
 
 def joy_callback(message):
     cmds = Commands()
+
+    exomy.setLocomotionMode(message.locomotion_mode)
     cmds.motor_angles = exomy.joystickToSteeringAngle(
         message.vel, message.steering)
     cmds.motor_speeds = exomy.joystickToVelocity(message.vel, message.steering)

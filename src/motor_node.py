@@ -13,7 +13,6 @@ def callback(cmds):
     
 def shutdown():
     motors.stopMotors()
-    motors.cleanup()
 
 if __name__ == "__main__":
     # This node waits for commands from the robot and sets the motors accordingly

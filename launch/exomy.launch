@@ -1,7 +1,7 @@
 <launch>
     <node name="robot" pkg="exomy" type="robot_node.py" respawn="true" output="screen"/>
     <node name="motors" pkg="exomy" type="motor_node.py" respawn="true" output="screen" />
-    <node name="joystick" pkg="exomy" type="joystick_node.py" respawn="true" />
+    <node name="joystick" pkg="exomy" type="joystick_node.py" respawn="true" output="screen" />
 
     <!-- Nodes to run the rover -->
     <node respawn="false" pkg="joy" type="joy_node" name="joy_node">

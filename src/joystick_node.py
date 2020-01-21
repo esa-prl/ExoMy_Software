@@ -9,32 +9,34 @@ import enum
 
 # Define locomotion modes
 
+global locomotion_mode
+locomotion_mode = LocomotionMode.FAKE_ACKERMANN.value
 
 def callback(data):
 
+    global locomotion_mode
     joy_out = Joystick()
 
     # Function map for the Logitech F710 joystick
     # Button on pad | function
     # --------------|----------------------
-    # B				| Toggle crabbing mode
-    # X				| Toggle point turn mode
+    # X 			| Fake Ackermann mode
+    # B				| Point turn mode
+    # A				| Crabbing mode
     # left stick	| control speed and direction
 
     # Reading out joystick data
     y = data.axes[1]
     x = data.axes[0]
 
-    # Reading out button data
+    # Reading out button data to set locomotion mode
     if (data.buttons[0] == 1):
-        joy_out.locomotion_mode = LocomotionMode.FAKE_ACKERMANN
-        rospy.loginfo('FAKE_ACKERMANN')
+        locomotion_mode = LocomotionMode.FAKE_ACKERMANN.value
     if (data.buttons[1] == 1):
-        joy_out.locomotion = LocomotionMode.CRABBING
-        rospy.loginfo('CRABBING')
+        locomotion_mode = LocomotionMode.CRABBING.value
     if (data.buttons[2] == 1):
-        joy_out.locomotion_mode = LocomotionMode.POINT_TURN
-        rospy.loginfo('POINT_TURN')
+        locomotion_mode = LocomotionMode.POINT_TURN.value
+    joy_out.locomotion_mode=locomotion_mode
 
     # The velocity is decoded as value between 0...100
     joy_out.vel = 100 * math.sqrt(x*x + y*y)
@@ -51,17 +53,6 @@ def callback(data):
 
     pub.publish(joy_out)
 
-
-def button_pressed(self, index):
-    return self.prev_data.buttons[index] != self.curr_data.buttons[index] and self.curr_data.buttons[index]
-
-
-def any_button_pressed(self, buttons_index):
-    for index in buttons_index:
-        if self.button_pressed(index):
-            return True
-
-    return False
 
 
 if __name__ == '__main__':
