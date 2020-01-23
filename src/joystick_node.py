@@ -20,10 +20,10 @@ def callback(data):
     # Function map for the Logitech F710 joystick
     # Button on pad | function
     # --------------|----------------------
-    # X 			| Fake Ackermann mode
-    # B				| Point turn mode
-    # A				| Crabbing mode
-    # left stick	| control speed and direction
+    # X 	    | Fake Ackermann mode
+    # B		    | Point turn mode
+    # A		    | Crabbing mode
+    # left stick    | control speed and direction
 
     # Reading out joystick data
     y = data.axes[1]
@@ -36,10 +36,12 @@ def callback(data):
         locomotion_mode = LocomotionMode.CRABBING.value
     if (data.buttons[2] == 1):
         locomotion_mode = LocomotionMode.POINT_TURN.value
+    if (data.buttons[3] == 1):
+        locomotion_mode = LocomotionMode.ACKERMANN.value
     joy_out.locomotion_mode=locomotion_mode
 
     # The velocity is decoded as value between 0...100
-    joy_out.vel = 100 * math.sqrt(x*x + y*y)
+    joy_out.vel = 100 * min(math.sqrt(x*x + y*y),1.0)
 
     # The steering is described as an angle between -180...180
     # Which describe the joystick position as follows:
