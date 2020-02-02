@@ -48,8 +48,8 @@ class JoystickNode(Node):
             self.locomotion_mode = LocomotionMode.FAKE_ACKERMANN.value
         if (joy_msg.buttons[1] == 1):
             self.locomotion_mode = LocomotionMode.CRABBING.value
-        if joy_ms.buttons[2] == 1):
-            swlf.locomotion_mode = LocomotionMode.POINT_TURN.value
+        if (joy_ms.buttons[2] == 1):
+            self.locomotion_mode = LocomotionMode.POINT_TURN.value
         joy_out.locomotion_mode=self.locomotion_mode
 
         # The velocity is decoded as value between 0...100
