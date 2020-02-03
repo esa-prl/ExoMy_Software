@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import numpy as np
-from locomotion_modes import LocomotionMode
+from exomy.locomotion_modes import LocomotionMode
 import math
 
 

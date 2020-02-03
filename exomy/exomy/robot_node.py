@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 import time
-from exomy.msg import Joystick, Commands, Screen
+from exomy_msgs.msg import Joystick, Commands
 import rclpy
 from rclpy.node import Node
-from rover import Rover
+from exomy.rover import Rover
 
 
 class RobotNode(Node):
     def __init__(self):
-        super.__init__('robot_node')
+        super().__init__('robot_node')
 
         self.joy_sub = self.create_subscription(
             Joystick,

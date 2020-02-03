@@ -4,8 +4,8 @@ from rclpy.node import Node
 
 import time
 from sensor_msgs.msg import Joy
-from exomy.msg import Joystick
-from locomotion_modes import LocomotionMode
+from exomy_msgs.msg import Joystick
+from exomy.locomotion_modes import LocomotionMode
 import math
 import enum
 

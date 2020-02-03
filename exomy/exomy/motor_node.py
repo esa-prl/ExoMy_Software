@@ -3,8 +3,9 @@ import rclpy
 from rclpy.node import Node
 import time
 
-from exomy.msg import Commands
-from motors import Motors
+from exomy_msgs.msg import Commands
+from exomy.motors import Motors
+
 
 class MotorNode(Node):
 
@@ -12,11 +13,11 @@ class MotorNode(Node):
         super().__init__('motor_node')
 
         self.subscription = self.create_subscription(
-                Commands,
-                '/robot_commands',
-                self.command_callback,
-                10)
-        self.subscription # prevent unused variable warning
+            Commands,
+            '/robot_commands',
+            self.callback,
+            10)
+        self.subscription  # prevent unused variable warning
         self.motors = Motors()
 
     def __del__(self):
@@ -25,7 +26,8 @@ class MotorNode(Node):
     def callback(self, cmds):
         self.motors.setSteering(cmds.motor_angles)
         self.motors.setDriving(cmds.motor_speeds)
-    
+
+
 def main(args=None):
     rclpy.init(args=args)
 
@@ -35,6 +37,6 @@ def main(args=None):
 
     rclpy.shutdown()
 
+
 if __name__ == "__main__":
     main()
-
