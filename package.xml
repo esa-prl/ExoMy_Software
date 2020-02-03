@@ -2,9 +2,9 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>exomy</name>
-  <version>0.0.0</version>
+  <version>2.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="root@todo.todo">root</maintainer>
+  <maintainer email="max.ehrhardt@hotmail.de">root</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_python</buildtool_depend>
@@ -14,6 +14,9 @@
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
 
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  
   <export>
     <build_type>ament_python</build_type>
   </export>
