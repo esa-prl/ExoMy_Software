@@ -14,7 +14,7 @@ class MotorNode(Node):
 
         self.subscription = self.create_subscription(
             Commands,
-            '/robot_commands',
+            'robot_commands',
             self.callback,
             10)
         self.subscription  # prevent unused variable warning

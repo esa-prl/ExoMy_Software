@@ -17,6 +17,13 @@ def generate_launch_description():
         node_namespace=namespace_,
         output='screen'
     )
+    joy = Node(
+        package='joy',
+        node_executable='joy_node',
+        node_name='joy_node',
+        node_namespace=namespace_,
+        output='screen'
+    )
     joystick = Node(
         package='exomy',
         node_executable='joystick_node',
@@ -35,5 +42,6 @@ def generate_launch_description():
     return LaunchDescription([
         robot,
         joystick,
+        joy,
         motors
     ])

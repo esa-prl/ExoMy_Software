@@ -16,7 +16,7 @@ class JoystickNode(Node):
 
         self.sub = self.create_subscription(
             Joy,
-            '/joy',
+            'joy',
             self.callback,
             10)
 
@@ -32,9 +32,9 @@ class JoystickNode(Node):
         # Function map for the Logitech F710 joystick
         # Button on pad | function
         # --------------|----------------------
-        # X 			| Fake Ackermann mode
-        # B				| Point turn mode
-        # A				| Crabbing mode
+        # X 		| Fake Ackermann mode
+        # B		| Point turn mode
+        # A		| Crabbing mode
         # left stick	| control speed and direction
 
         # Reading out joystick data
@@ -46,20 +46,21 @@ class JoystickNode(Node):
             self.locomotion_mode = LocomotionMode.FAKE_ACKERMANN.value
         if (joy_msg.buttons[1] == 1):
             self.locomotion_mode = LocomotionMode.CRABBING.value
-        if (joy_ms.buttons[2] == 1):
+        if (joy_msg.buttons[2] == 1):
             self.locomotion_mode = LocomotionMode.POINT_TURN.value
+        if (joy_msg.buttons[3] == 1):
+            self.locomotion_mode = LocomotionMode.ACKERMANN.value
         joy_out.locomotion_mode = self.locomotion_mode
 
         # The velocity is decoded as value between 0...100
-        joy_out.vel = 100 * math.sqrt(x*x + y*y)
+        joy_out.vel = int(100 * min(math.sqrt(x*x + y*y),1.0))
 
         # The steering is described as an angle between -180...180
         # Which describe the joystick position as follows:
         #   +90
         # 0      +-180
         #   -90
-        #
-        joy_out.steering = math.atan2(y, x)*180.0/math.pi
+        joy_out.steering = int(math.atan2(y, x)*180.0/math.pi)
 
         joy_out.connected = True
 

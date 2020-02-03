@@ -12,13 +12,13 @@ class RobotNode(Node):
 
         self.joy_sub = self.create_subscription(
             Joystick,
-            '/joystick',
+            'joystick',
             self.joy_callback,
             10)
 
         self.robot_pub = self.create_publisher(
             Commands,
-            '/robot_commands',
+            'robot_commands',
             1)
         self.robot = Rover()
 

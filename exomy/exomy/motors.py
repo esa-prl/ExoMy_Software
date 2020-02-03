@@ -22,23 +22,23 @@ class Motors():
     def __init__(self):
 
         # Set variables for the GPIO motor pins
-        self.pin_drive_fl = 0
-        self.pin_steer_fl = 1
+        self.pin_drive_fl = 15
+        self.pin_steer_fl = 13
 
-        self.pin_drive_fr = 2
+        self.pin_drive_fr = 0
         self.pin_steer_fr = 3
 
-        self.pin_drive_cl = 4
-        self.pin_steer_cl = 5
+        self.pin_drive_cl = 14
+        self.pin_steer_cl = 12
 
-        self.pin_drive_cr = 6
-        self.pin_steer_cr = 7
+        self.pin_drive_cr = 1
+        self.pin_steer_cr = 2
 
-        self.pin_drive_rl = 8
-        self.pin_steer_rl = 9
+        self.pin_drive_rl = 9
+        self.pin_steer_rl = 11
 
-        self.pin_drive_rr = 10
-        self.pin_steer_rr = 11
+        self.pin_drive_rr = 8
+        self.pin_steer_rr = 10
 
         # PWM characteristics
         self.pwm = Adafruit_PCA9685.PCA9685()
@@ -46,41 +46,44 @@ class Motors():
 
         self.steering_pwm_neutral = [None] * 6
 
+        self.steering_pwm_low_limit = 100
         self.steering_pwm_neutral[self.FL] = 300
         self.steering_pwm_neutral[self.FR] = 300
         self.steering_pwm_neutral[self.CL] = 300
         self.steering_pwm_neutral[self.CR] = 300
         self.steering_pwm_neutral[self.RL] = 300
         self.steering_pwm_neutral[self.RR] = 300
-
+        self.steering_pwm_upper_limit = 500
         self.steering_pwm_range = 200
 
+        self.driving_pwm_low_limit = 100
         self.driving_pwm_neutral = 300
+        self.driving_pwm_upper_limit = 500
         self.driving_pwm_range = 200
 
         # Set the GPIO to software PWM at 'Frequency' Hertz
         self.driving_motors = [None] * 6
         self.steering_motors = [None] * 6
 
-        # Set motors to neutral values
+        # Set steering motors to neutral values
         self.pwm.set_pwm(self.pin_steer_fl, 0,
                          self.steering_pwm_neutral[self.FL])
-        time.sleep(0.3)
+        time.sleep(0.1)
         self.pwm.set_pwm(self.pin_steer_fr, 0,
                          self.steering_pwm_neutral[self.FR])
-        time.sleep(0.3)
+        time.sleep(0.1)
         self.pwm.set_pwm(self.pin_steer_cl, 0,
                          self.steering_pwm_neutral[self.CL])
-        time.sleep(0.3)
+        time.sleep(0.1)
         self.pwm.set_pwm(self.pin_steer_cr, 0,
                          self.steering_pwm_neutral[self.CR])
-        time.sleep(0.3)
+        time.sleep(0.1)
         self.pwm.set_pwm(self.pin_steer_rl, 0,
                          self.steering_pwm_neutral[self.RL])
-        time.sleep(0.3)
+        time.sleep(0.1)
         self.pwm.set_pwm(self.pin_steer_rr, 0,
                          self.steering_pwm_neutral[self.RR])
-        time.sleep(0.3)
+        time.sleep(0.1)
 
     def setSteering(self, steering_command):
         duty_cycle = int(
@@ -157,4 +160,3 @@ class Motors():
         self.pwm.set_pwm(self.pin_drive_cr, 0, 0)
         self.pwm.set_pwm(self.pin_drive_rl, 0, 0)
         self.pwm.set_pwm(self.pin_drive_rr, 0, 0)
-
