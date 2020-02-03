@@ -23,10 +23,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'motors = py_pubsub.publish_member_function:main',
-            'joystick = py_pubsub.publish_member_function:main',
-            'robot = py_pubsub.publish_member_function:main',
-
+            'motor_node = exomy.motor_node:main',
+            'joystick_node = exomy.joystick_node:main',
+            'robot_node = exomy.robot_node:main',
         ],
     },
 )

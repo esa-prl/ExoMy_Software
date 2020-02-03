@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import rclpy 
+import rclpy
 from rclpy.node import Node
 
 import time
@@ -23,8 +23,6 @@ class JoystickNode(Node):
         self.pub = self.create_publisher(Joystick, 'joystick', 1)
 
         self.locomotion_mode = LocomotionMode.FAKE_ACKERMANN.value
-
-
 
     def callback(self, joy_msg):
 
@@ -50,7 +48,7 @@ class JoystickNode(Node):
             self.locomotion_mode = LocomotionMode.CRABBING.value
         if (joy_ms.buttons[2] == 1):
             self.locomotion_mode = LocomotionMode.POINT_TURN.value
-        joy_out.locomotion_mode=self.locomotion_mode
+        joy_out.locomotion_mode = self.locomotion_mode
 
         # The velocity is decoded as value between 0...100
         joy_out.vel = 100 * math.sqrt(x*x + y*y)
@@ -68,8 +66,6 @@ class JoystickNode(Node):
         self.pub.publish(joy_out)
 
 
-
-
 def main(args=None):
     rclpy.init(args=args)
 
@@ -81,6 +77,6 @@ def main(args=None):
 
     rclpy.shutdown()
 
+
 if __name__ == '__main__':
     main()
-
