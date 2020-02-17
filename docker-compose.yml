@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+    exomy:
+        build:
+            context: .
+            args:
+        image: exomy:ros1
+        volumes:
+            - ./exomy:/root/exomy_ws/src/exomy
+        ports:
+            - 8080:8080
+            - 8000:8000
+            - 9090:9090
+        stdin_open: true
+        tty: true
+        privileged: true
+        container_name: exomy
