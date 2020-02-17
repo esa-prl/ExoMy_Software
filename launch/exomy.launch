@@ -1,0 +1,28 @@
+<launch>
+    <node name="robot" pkg="exomy" type="robot_node.py" respawn="true" output="screen"/>
+    <node name="motors" pkg="exomy" type="motor_node.py" respawn="true" output="screen" />
+    <node name="joystick" pkg="exomy" type="joystick_node.py" respawn="true" output="screen" />
+
+    <node respawn="false" pkg="joy" type="joy_node" name="joy_node">
+        <param name="coalesce_interval" value="0.05"/>
+    </node>
+
+    <node pkg="web_video_server" type="web_video_server"  name="web_video_server" respawn="true" output="screen">
+        <param name="default_transport" value="compressed"/>
+        <param name="quality" value="50"/>
+    </node>
+
+    <node pkg="usb_cam" type="usb_cam_node" name="pi_cam" respawn="true" output="screen">
+        <param name="framerate" value="10"/>
+        <param name="video_device" value="/dev/video0"/>
+        <param name="image_width" value="640"/>
+        <param name="image_height" value="480"/>
+        <param name="pixel_format" value="yuyv"/>
+        <param name="camera_frame_id" value="pi_cam"/>
+        <param name="io_method" value="mmap"/>
+    </node>
+
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+    
+
+</launch>
