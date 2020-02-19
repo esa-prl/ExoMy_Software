@@ -13,7 +13,7 @@ RUN apt-get update && \
 RUN apt-get update && \
     apt-get install zsh -y
 ENV ZSH_THEME avit
-RUN curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 RUN echo "source /opt/ros/melodic/setup.zsh" >> ~/.zshrc
 
 # Install additional ros packages
