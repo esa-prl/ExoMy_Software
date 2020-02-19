@@ -15,6 +15,7 @@ RUN apt-get update && \
 ENV ZSH_THEME avit
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 RUN echo "source /opt/ros/melodic/setup.zsh" >> ~/.zshrc
+RUN echo "set-option -g default-shell /bin/zsh" >> ~/.tmux.conf
 
 # Install additional ros packages
 RUN apt-get install ros-melodic-rosbridge-server ros-melodic-joy -y
