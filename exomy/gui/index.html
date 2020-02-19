@@ -34,6 +34,7 @@
         position: { left: '50%', top: '50%' },
         mode: 'static',
         size: 150,
+        color: 'black'
       };
       manager = nipplejs.create(options);
 
@@ -106,24 +107,23 @@
 <body>
   <main>
     <div class="wrapper">
-        <div class="left" id="left">
-            <div class="joy_container" id="joy_container">
-            </div>
+      <div class="left" id="left">
+        <div class="joy_container" id="joy_container">
         </div>
+      </div>
 
-        <div class="middle" id="middle">
-            <div class="image_container" >
-                <img  id="video_output" style="object-fit:cover; width:100%;"></img>
-            </div>
+      <div class="middle" id="middle">
+        <div class="image_container">
+          <img id="video_output" style="object-fit:cover; width:100%;"></img>
         </div>
-        <div class="right" id="right">
-          <div class="button_container">
-            <button class="button buttonY" onclick="buttonY_clicked()">Y</button>
-            <button class="button buttonX" onclick="buttonX_clicked()">X</button>
-            <button class="button buttonB" onclick="buttonB_clicked()">B</button>
-            <button class="button buttonA" onclick="buttonA_clicked()">A</button>
-          </div>
+      </div>
+      <div class="right" id="right">
+        <div class="button_container">
+          <button class="button buttonY" onclick="buttonY_clicked()">ACKERMANN</button>
+          <button class="button buttonB" onclick="buttonB_clicked()">POINT_TURN</button>
+          <button class="button buttonA" onclick="buttonA_clicked()">CRABBING</button>
         </div>
+      </div>
     </div>
   </main>
 
