@@ -1,0 +1,22 @@
+# Pin numbers for motors on PWM board
+# fl - front left  | fr - front right
+# cl - center left | cr - center right
+# rl - rear left   | rr - rear right
+
+pin_drive_fl: 15
+pin_steer_fl: 13
+
+pin_drive_fr: 0
+pin_steer_fr: 3
+
+pin_drive_cl: 14
+pin_steer_cl: 12
+
+pin_drive_cr: 1
+pin_steer_cr: 2
+
+pin_drive_rl: 9
+pin_steer_rl: 11
+
+pin_drive_rr: 8
+pin_steer_rr: 10
