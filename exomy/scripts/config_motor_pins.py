@@ -1,6 +1,5 @@
 import Adafruit_PCA9685
 import time
-import yaml
 
 DRIVE_MOTOR, STEER_MOTOR = [0, 1]
 
@@ -20,25 +19,25 @@ pin_dict = {
 
 class Motor():
     def __init__(self, pin):
-        # self.pwm = Adafruit_PCA9685.PCA9685()
-        # # For most motors a pwm frequency of 50Hz is normal
-        # pwm_frequency = 50  # Hz
-        # pwm.set_pwm_freq(pwm_frequency)
+        self.pwm = Adafruit_PCA9685.PCA9685()
+        # For most motors a pwm frequency of 50Hz is normal
+        pwm_frequency = 50  # Hz
+        self.pwm.set_pwm_freq(pwm_frequency)
 
-        # # The cycle is the inverted frequency converted to milliseconds
-        # cycle = 1/pwm_frequency * 1000  # ms
+        # The cycle is the inverted frequency converted to milliseconds
+        cycle = 1/pwm_frequency * 1000  # ms
 
-        # # The time the pwm signal is set to on during the duty cycle
-        # on_time_1 = 2.0  # ms
-        # on_time_2 = 2.0  # ms
+        # The time the pwm signal is set to on during the duty cycle
+        on_time_1 = 2.0  # ms
+        on_time_2 = 2.0  # ms
 
-        # # Duty cycle is the percentage of a cycle the signal is on
-        # duty_cycle_1 = on_time_1/cycle
-        # duty_cycle_2 = on_time_2/cycle
+        # Duty cycle is the percentage of a cycle the signal is on
+        duty_cycle_1 = on_time_1/cycle
+        duty_cycle_2 = on_time_2/cycle
 
-        # # The PCA 9685 board requests a 12 bit number for the duty_cycle
-        # self.value_1 = int(duty_cycle_1*4096.0)
-        # self.value_2 = int(duty_cycle_2*4096.0)
+        # The PCA 9685 board requests a 12 bit number for the duty_cycle
+        self.value_1 = int(duty_cycle_1*4096.0)
+        self.value_2 = int(duty_cycle_2*4096.0)
 
         self.pin_name = 'pin_'
         self.pin_number = pin
@@ -46,17 +45,17 @@ class Motor():
     def wiggle_motor(self):
 
         # Set the motor to the first value
-        pwm.set_pwm(pin, 0, value_1)
+        self.pwm.set_pwm(self.pin_number, 0, self.value_1)
         # Wait for 2 seconds
         time.sleep(2.0)
         # Set the motor to the second value
-        pwm.set_pwm(pin, 0, value_2)
+        self.pwm.set_pwm(self.pin_number, 0, self.value_2)
         # Wait for 2 seconds
         time.sleep(2.0)
 
-    def stop_motor(serlf):
+    def stop_motor(self):
         # Turn the motor off
-        pwm.set_pwm(pin, 0, 0)
+        self.pwm.set_pwm(self.pin, 0, 0)
 
 
 def print_exomy_layout():
@@ -97,12 +96,14 @@ Motor Configuration
 
 This scripts leads you through the configuration of the motors.
 First we have to find out to which pin of the PWM board a motor is connected.
+Look closely which motor moves and type in the asnwer.
 
 ###############
         '''
     )
     for pin_number in range(12):
         motor = Motor(pin_number)
+        motor.wiggle_motor()
         while(1):
             print(
                 'Was it a steering or driving motor that moved, or should I repeat the movement? ')
@@ -117,7 +118,7 @@ First we have to find out to which pin of the PWM board a motor is connected.
                 break
             elif(input == 'r'):
                 print('Look closely\n')
-                # motor.wiggle_motor()
+                motor.wiggle_motor()
             else:
                 print('Input must be d, s or r\n')
         while(1):
