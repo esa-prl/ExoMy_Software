@@ -1,8 +1,10 @@
-# Pin numbers for motors on PWM board
+# Naming conventions:
+#
 # fl - front left  | fr - front right
 # cl - center left | cr - center right
 # rl - rear left   | rr - rear right
 
+# Pin numbers for motors on PWM board
 pin_drive_fl: 15
 pin_steer_fl: 13
 
@@ -20,3 +22,11 @@ pin_steer_rl: 11
 
 pin_drive_rr: 8
 pin_steer_rr: 10
+
+# Offsets for the steering motors
+steer_offset_fl: 307
+steer_offset_fr: 307
+steer_offset_cl: 307
+steer_offset_cr: 307
+steer_offset_rl: 307
+steer_offset_rr: 307
