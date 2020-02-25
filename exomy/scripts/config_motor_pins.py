@@ -77,7 +77,6 @@ def update_config_file():
         for line in file:
             for key, value in pin_dict.items():
                 if(key in line):
-                    print(line.split(': ', 1)[1])
                     line = line.replace(line.split(': ', 1)[
                                         1], str(value) + '\n')
 
@@ -91,6 +90,21 @@ def update_config_file():
 if __name__ == "__main__":
     print(
         '''
+$$$$$$$$\                     $$\      $$\           
+$$  _____|                    $$$\    $$$ |          
+$$ |      $$\   $$\  $$$$$$\  $$$$\  $$$$ |$$\   $$\ 
+$$$$$\    \$$\ $$  |$$  __$$\ $$\$$\$$ $$ |$$ |  $$ |
+$$  __|    \$$$$  / $$ /  $$ |$$ \$$$  $$ |$$ |  $$ |
+$$ |       $$  $$<  $$ |  $$ |$$ |\$  /$$ |$$ |  $$ |
+$$$$$$$$\ $$  /\$$\ \$$$$$$  |$$ | \_/ $$ |\$$$$$$$ |
+\________|\__/  \__| \______/ \__|     \__| \____$$ |
+                                           $$\   $$ |
+                                           \$$$$$$  |
+                                            \______/ 
+        '''
+    )
+    print(
+        '''
 ###############
 Motor Configuration
 
@@ -98,6 +112,7 @@ This scripts leads you through the configuration of the motors.
 First we have to find out to which pin of the PWM board a motor is connected.
 Look closely which motor moves and type in the asnwer.
 
+This script can always be stopped with ctrl+c and restarted.
 ###############
         '''
     )
