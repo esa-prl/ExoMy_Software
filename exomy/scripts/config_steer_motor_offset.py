@@ -15,6 +15,16 @@ def get_steering_motor_pins():
             steering_motor_pins[param_key] = param_value
     return steering_motor_pins
 
+def get_steering_motor_offsets():
+    steering_motor_offsets = {}
+    with open(config_filename, 'r') as file:
+        param_dict = yaml.load(file)
+
+    for param_key, param_value in param_dict.items():
+        if('steer_offset_' in str(param_key)):
+            steering_motor_offsets[param_key] = param_value
+    return steering_motor_offsets
+
 
 def get_position_name(name):
     position_name = ''
@@ -102,11 +112,12 @@ ctrl+c - Exit script
 
     # Get all steering pins
     steering_motor_pins = get_steering_motor_pins()
-    offset_dict = {}
-
+    offset_dict = get_steering_motor_offsets()
+    print(offset_dict)
     # Iterating over all motors and fine tune the zero value
     for pin_name, pin_value in steering_motor_pins.items():
-        offset_value = initial_value
+        offset_name = pin_name.replace('pin_steer_', 'steer_offset_')
+        offset_value = offset_dict[offset_name] 
 
         print('Set ' + get_position_name(pin_name) + ' steering motor: \n')
         while(1):
@@ -126,6 +137,5 @@ ctrl+c - Exit script
             elif(input is 'd'):
                 print('Increased offset')
                 offset_value += 5
-        offset_name = pin_name.replace('pin_steer_', 'steer_offset_')
         offset_dict[offset_name] = offset_value
     update_config_file(offset_dict)
