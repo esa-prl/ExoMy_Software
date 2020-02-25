@@ -1,22 +1,22 @@
 import Adafruit_PCA9685
 import time
-
+import sys
 '''
 This script helps to test pwm motors with the Adafruit PCA9685 board 
 '''
 
 # Set the pin of the motor
-pin = 14
+pin = int(sys.argv[1])
 print('Pin: '+str(pin))
 
 
 pwm = Adafruit_PCA9685.PCA9685()
 # For most motors a pwm frequency of 50Hz is normal
-pwm_frequency = 50 #Hz
+pwm_frequency = 50.0 #Hz
 pwm.set_pwm_freq(pwm_frequency)
 
 # The cycle is the inverted frequency converted to milliseconds
-cycle = 1/pwm_frequency * 1000 #ms 
+cycle = 1.0/pwm_frequency * 1000.0 #ms 
 
 # The time the pwm signal is set to on during the duty cycle
 on_time = 2.0 #ms
