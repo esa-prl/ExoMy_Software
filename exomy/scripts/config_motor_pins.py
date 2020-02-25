@@ -16,46 +16,50 @@ pin_dict = {
 
 }
 
+pwm = Adafruit_PCA9685.PCA9685()
+# For most motors a pwm frequency of 50Hz is normal
+pwm_frequency = 50.0  # Hz
+pwm.set_pwm_freq(pwm_frequency)
+# The cycle is the inverted frequency converted to milliseconds
+cycle = 1.0/pwm_frequency * 1000.0  # ms
+
+# The time the pwm signal is set to on during the duty cycle
+on_time_1 = 2.4  # ms
+on_time_2 = 1.5  # ms
+
+# Duty cycle is the percentage of a cycle the signal is on
+duty_cycle_1 = on_time_1/cycle
+duty_cycle_2 = on_time_2/cycle
+
+# The PCA 9685 board requests a 12 bit number for the duty_cycle
+value_1 = 200 #int(duty_cycle_1*4096.0)
+value_2 = 400#int(duty_cycle_2*4096.0)
 
 class Motor():
     def __init__(self, pin):
-        self.pwm = Adafruit_PCA9685.PCA9685()
-        # For most motors a pwm frequency of 50Hz is normal
-        pwm_frequency = 50  # Hz
-        self.pwm.set_pwm_freq(pwm_frequency)
-
-        # The cycle is the inverted frequency converted to milliseconds
-        cycle = 1/pwm_frequency * 1000  # ms
-
-        # The time the pwm signal is set to on during the duty cycle
-        on_time_1 = 2.0  # ms
-        on_time_2 = 2.0  # ms
-
-        # Duty cycle is the percentage of a cycle the signal is on
-        duty_cycle_1 = on_time_1/cycle
-        duty_cycle_2 = on_time_2/cycle
-
-        # The PCA 9685 board requests a 12 bit number for the duty_cycle
-        self.value_1 = int(duty_cycle_1*4096.0)
-        self.value_2 = int(duty_cycle_2*4096.0)
 
         self.pin_name = 'pin_'
         self.pin_number = pin
 
     def wiggle_motor(self):
 
-        # Set the motor to the first value
-        self.pwm.set_pwm(self.pin_number, 0, self.value_1)
-        # Wait for 2 seconds
-        time.sleep(2.0)
         # Set the motor to the second value
-        self.pwm.set_pwm(self.pin_number, 0, self.value_2)
+        pwm.set_pwm(self.pin_number, 0, value_2)
+        # Wait for 1 seconds
+        time.sleep(1.0)
+        # Set the motor to the first value
+        pwm.set_pwm(self.pin_number, 0, value_1)
+        # Wait for 1 seconds
+        time.sleep(1.0)
+        # Set the motor to the second value
+        pwm.set_pwm(self.pin_number, 0, value_2)
+        # Stop the motor
+        pwm.set_pwm(self.pin_number, 0, 0)
         # Wait for 2 seconds
-        time.sleep(2.0)
 
     def stop_motor(self):
         # Turn the motor off
-        self.pwm.set_pwm(self.pin, 0, 0)
+        pwm.set_pwm(self.pin_number, 0, 0)
 
 
 def print_exomy_layout():
@@ -116,6 +120,10 @@ This script can always be stopped with ctrl+c and restarted.
 ###############
         '''
     )
+    for pin_number in range(12):
+        motor = Motor(pin_number)
+        motor.stop_motor()
+
     for pin_number in range(12):
         motor = Motor(pin_number)
         motor.wiggle_motor()
