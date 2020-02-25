@@ -51,11 +51,12 @@ class Motor():
         pwm.set_pwm(self.pin_number, 0, value_1)
         # Wait for 1 seconds
         time.sleep(1.0)
-        # Set the motor to the second value
-        pwm.set_pwm(self.pin_number, 0, value_2)
+        # Set the motor to neutral
+        pwm.set_pwm(self.pin_number, 0, 307)
+        # Wait for half seconds
+        time.sleep(0.5)
         # Stop the motor
         pwm.set_pwm(self.pin_number, 0, 0)
-        # Wait for 2 seconds
 
     def stop_motor(self):
         # Turn the motor off
@@ -71,7 +72,6 @@ def print_exomy_layout():
         5 rl====rr 6
         '''
     )
-
 
 def update_config_file():
     file_name = '../config/exomy.yaml'
@@ -113,10 +113,11 @@ $$$$$$$$\ $$  /\$$\ \$$$$$$  |$$ | \_/ $$ |\$$$$$$$ |
 Motor Configuration
 
 This scripts leads you through the configuration of the motors.
-First we have to find out to which pin of the PWM board a motor is connected.
+First we have to find out, to which pin of the PWM board a motor is connected.
 Look closely which motor moves and type in the asnwer.
 
 This script can always be stopped with ctrl+c and restarted.
+All other controls will be explained in the process.
 ###############
         '''
     )
@@ -150,7 +151,6 @@ This script can always be stopped with ctrl+c and restarted.
                 'Type the position of the motor that moved.[1-6] or (r)epeat\n')
             if(input == 'r'):
                 print('Look closely\n')
-                motor.wiggle_motor()
             else:
                 try:
                     pos = int(input)
@@ -165,4 +165,191 @@ This script can always be stopped with ctrl+c and restarted.
         print('Motor set!\n')
         print('########################################################\n')
     print('All motors set!\n')
+    print('Now we will step through all the motors and check whether they have been assigned correctly.\n')
+    print('Press ctrl+c if somethinsg is wrong and start the script again. \n')
+    
+    print('Front left driving motor\n')
+    print(
+        '''
+        > fl-||-fr  
+             ||
+          cl-||-cr  
+          rl====rr  
+        '''
+    )
+    pin = pin_dict['pin_drive_fl']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+    print('Front left steering motor\n')
+    print(
+        '''
+        > fl-||-fr  
+             ||
+          cl-||-cr  
+          rl====rr  
+        '''
+    )
+    pin = pin_dict['pin_steer_fl']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+    print('Front right driving motor\n')
+    print(
+        '''
+          fl-||-fr <
+             ||
+          cl-||-cr  
+          rl====rr  
+        '''
+    )
+    pin = pin_dict['pin_drive_fr']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+    print('Front right steering motor\n')
+    print(
+        '''
+          fl-||-fr <
+             ||
+          cl-||-cr  
+          rl====rr  
+        '''
+    )
+    pin = pin_dict['pin_steer_fr']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+    print('Center left driving motor\n')
+    print(
+        '''
+          fl-||-fr  
+             ||
+        > cl-||-cr  
+          rl====rr  
+        '''
+    )
+    pin = pin_dict['pin_drive_cl']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+    print('Center left steering motor\n')
+    print(
+        '''
+          fl-||-fr  
+             ||
+        > cl-||-cr  
+          rl====rr  
+        '''
+    )
+    pin = pin_dict['pin_steer_cl']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+    print('Center right driving motor\n')
+    print(
+        '''
+          fl-||-fr  
+             ||
+          cl-||-cr <
+          rl====rr  
+        '''
+    )
+    pin = pin_dict['pin_drive_cr']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+    print('Center right steering motor\n')
+    print(
+        '''
+          fl-||-fr  
+             ||
+          cl-||-cr <
+          rl====rr  
+        '''
+    )
+    pin = pin_dict['pin_steer_cr']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+    print('Rear left driving motor\n')
+    print(
+        '''
+          fl-||-fr  
+             ||
+          cl-||-cr  
+        > rl====rr  
+        '''
+    )
+    pin = pin_dict['pin_drive_rl']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+    print('Rear left steering motor\n')
+    print(
+        '''
+          fl-||-fr  
+             ||
+          cl-||-cr  
+        > rl====rr  
+        '''
+    )
+    pin = pin_dict['pin_steer_rl']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+    print('Rear right driving motor\n')
+    print(
+        '''
+          fl-||-fr  
+             ||
+          cl-||-cr  
+          rl====rr <
+        '''
+    )
+    pin = pin_dict['pin_drive_rr']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+    print('Rear right steering motor\n')
+    print(
+        '''
+          fl-||-fr  
+             ||
+          cl-||-cr  
+          rl====rr <
+        '''
+    )
+    pin = pin_dict['pin_steer_rr']
+    motor = Motor(pin)
+    motor.wiggle_motor()
+    raw_input('Press button to continue')
+
+
+
+    print('Write to config file\n')
     update_config_file()
+    print(
+    '''
+    $$$$$$$$\ $$\           $$\           $$\                       $$\ 
+    $$  _____|\__|          \__|          $$ |                      $$ |
+    $$ |      $$\ $$$$$$$\  $$\  $$$$$$$\ $$$$$$$\   $$$$$$\   $$$$$$$ |
+    $$$$$\    $$ |$$  __$$\ $$ |$$  _____|$$  __$$\ $$  __$$\ $$  __$$ |
+    $$  __|   $$ |$$ |  $$ |$$ |\$$$$$$\  $$ |  $$ |$$$$$$$$ |$$ /  $$ |
+    $$ |      $$ |$$ |  $$ |$$ | \____$$\ $$ |  $$ |$$   ____|$$ |  $$ |
+    $$ |      $$ |$$ |  $$ |$$ |$$$$$$$  |$$ |  $$ |\$$$$$$$\ \$$$$$$$ |
+    \__|      \__|\__|  \__|\__|\_______/ \__|  \__| \_______| \_______|
+                                                                        
+    ''')
+
