@@ -126,7 +126,7 @@ ctrl+c - Exit script
             time.sleep(0.1)
             print('Current value: ' + str(offset_value) + '\n')
             input = raw_input(
-                'q-set / a-decrease offset / b-increase offset \n')
+                'q-set / a-decrease offset / d-increase offset \n')
             if(input is 'q'):
                 print('Offset for ' + get_position_name(pin_name) +
                       ' has been set.\n')
