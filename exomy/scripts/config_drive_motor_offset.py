@@ -42,11 +42,11 @@ On each motor you have to turn the correction screw until the motor really stand
 
     pwm = Adafruit_PCA9685.PCA9685()
     # For most motors a pwm frequency of 50Hz is normal
-    pwm_frequency = 50  # Hz
+    pwm_frequency = 50.0  # Hz
     pwm.set_pwm_freq(pwm_frequency)
 
     # The cycle is the inverted frequency converted to milliseconds
-    cycle = 1/pwm_frequency * 1000  # ms
+    cycle = 1.0/pwm_frequency * 1000.0  # ms
 
     # The time the pwm signal is set to on during the duty cycle
     on_time = 1.5  # ms
@@ -58,6 +58,7 @@ On each motor you have to turn the correction screw until the motor really stand
     value = int(duty_cycle*4096.0)
 
     pin_list = get_driving_pins()
+    print(pin_list)
     for pin in pin_list:
         pwm.set_pwm(pin, 0, value)
         time.sleep(0.1)
