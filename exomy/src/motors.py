@@ -23,24 +23,6 @@ class Motors():
     def __init__(self):
 
         # Set variables for the GPIO motor pins
-        # self.pin_drive_fl = 15
-        # self.pin_steer_fl = 13
-
-        # self.pin_drive_fr = 0
-        # self.pin_steer_fr = 3
-
-        # self.pin_drive_cl = 14
-        # self.pin_steer_cl = 12
-
-        # self.pin_drive_cr = 1
-        # self.pin_steer_cr = 2
-
-        # self.pin_drive_rl = 9
-        # self.pin_steer_rl = 11
-
-        # self.pin_drive_rr = 8
-        # self.pin_steer_rr = 10
-
         self.pin_drive_fl = rospy.get_param("pin_drive_fl")
         self.pin_steer_fl = rospy.get_param("pin_steer_fl")
 
