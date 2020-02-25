@@ -147,16 +147,20 @@ This script can always be stopped with ctrl+c and restarted.
         while(1):
             print_exomy_layout()
             input = raw_input(
-                'Type the position of the motor that moved.[1-6]\n')
-            try:
-                pos = int(input)
-                if(pos >= 1 and pos <= 6):
-                    motor.pin_name += pos_names[pos]
-                    break
-                else:
+                'Type the position of the motor that moved.[1-6] or (r)epeat\n')
+            if(input == 'r'):
+                print('Look closely\n')
+                motor.wiggle_motor()
+            else:
+                try:
+                    pos = int(input)
+                    if(pos >= 1 and pos <= 6):
+                        motor.pin_name += pos_names[pos]
+                        break
+                    else:
+                        print('The input was not a number between 1 and 6\n')
+                except ValueError:
                     print('The input was not a number between 1 and 6\n')
-            except ValueError:
-                print('The input was not a number between 1 and 6\n')
         pin_dict[motor.pin_name] = motor.pin_number
         print('Motor set!\n')
         print('########################################################\n')
