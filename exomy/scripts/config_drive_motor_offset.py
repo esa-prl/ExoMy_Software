@@ -58,7 +58,7 @@ On each motor you have to turn the correction screw until the motor really stand
     value = int(duty_cycle*4096.0)
 
     pin_list = get_driving_pins()
-    print(pin_list)
+
     for pin in pin_list:
         pwm.set_pwm(pin, 0, value)
         time.sleep(0.1)

@@ -113,7 +113,6 @@ ctrl+c - Exit script
     # Get all steering pins
     steering_motor_pins = get_steering_motor_pins()
     offset_dict = get_steering_motor_offsets()
-    print(offset_dict)
     # Iterating over all motors and fine tune the zero value
     for pin_name, pin_value in steering_motor_pins.items():
         offset_name = pin_name.replace('pin_steer_', 'steer_offset_')
