@@ -134,14 +134,12 @@ class Rover():
 
             if steering_command > 90 or steering_command < -90:
                 # Steering to the right
-                print('right turn')
                 steering_angles[self.FL] = outer_angle
                 steering_angles[self.FR] = inner_angle
                 steering_angles[self.RL] = -outer_angle
                 steering_angles[self.RR] = -inner_angle
             else:
                 # Steering to the left
-                print('left turn')
                 steering_angles[self.FL] = -inner_angle
                 steering_angles[self.FR] = -outer_angle
                 steering_angles[self.RL] = inner_angle
