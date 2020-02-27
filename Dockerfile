@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get install vim git tmux wget curl python-pip -y
 
 # Install additional ros packages
-RUN apt-get install ros-melodic-rosbridge-server ros-melodic-joy -y
+RUN apt-get update && apt-get install ros-melodic-rosbridge-server ros-melodic-joy -y
 RUN pip install adafruit-pca9685
 
 
@@ -22,6 +22,9 @@ RUN npm install http-server -g
 # Install packages for camera use
 RUN apt-get update && \
     apt-get install ros-melodic-web-video-server ros-melodic-usb-cam -y
+
+# Add ros sourcing to bashrc
+RUN echo ". /opt/ros/meldoic/setup.bash" >> ~/.bashrc
 
 # Create Ros workspace
 ENV EXOMY_WS=/root/exomy_ws
