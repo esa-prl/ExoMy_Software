@@ -83,6 +83,30 @@ class Motors():
         self.pwm.set_pwm(self.pin_steer_rr, 0,
                          self.steering_pwm_neutral[self.RR])
         time.sleep(0.1)
+        
+        self.wiggle()
+
+
+    def wiggle(self):
+        time.sleep(0.1)
+        self.pwm.set_pwm(self.pin_steer_fl, 0,
+                         int(self.steering_pwm_neutral[self.FL] + self.steering_pwm_range * 0.3))
+        time.sleep(0.1)
+        self.pwm.set_pwm(self.pin_steer_fr, 0,
+                         int(self.steering_pwm_neutral[self.FR] + self.steering_pwm_range * 0.3))
+        time.sleep(0.3)
+        self.pwm.set_pwm(self.pin_steer_fl, 0,
+                         int(self.steering_pwm_neutral[self.FL] - self.steering_pwm_range * 0.3))
+        time.sleep(0.1)
+        self.pwm.set_pwm(self.pin_steer_fr, 0,
+                         int(self.steering_pwm_neutral[self.FR] - self.steering_pwm_range * 0.3))
+        time.sleep(0.3)
+        self.pwm.set_pwm(self.pin_steer_fl, 0,
+                         int(self.steering_pwm_neutral[self.FL]))
+        time.sleep(0.1)
+        self.pwm.set_pwm(self.pin_steer_fr, 0,
+                         int(self.steering_pwm_neutral[self.FR]))
+        time.sleep(0.3)
 
     def setSteering(self, steering_command):
         duty_cycle = int(
