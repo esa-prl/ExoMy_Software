@@ -24,7 +24,7 @@ RUN apt-get update && \
     apt-get install ros-melodic-web-video-server ros-melodic-usb-cam -y
 
 # Add ros sourcing to bashrc
-RUN echo ". /opt/ros/meldoic/setup.bash" >> ~/.bashrc
+RUN echo ". /opt/ros/melodic/setup.bash" >> ~/.bashrc
 
 # Create Ros workspace
 ENV EXOMY_WS=/root/exomy_ws
