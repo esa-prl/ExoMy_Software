@@ -47,22 +47,27 @@
         var y = Math.sin(nipple.angle.radian) * nipple.distance / max_distance;
         axes = [x, y]
 
-        // nipplejs is triggering events when joystic moves each pixel
+        // nipplejs is triggering events when joystick moves each pixel
         // we need delay between consecutive messege publications to 
         // prevent system from being flooded by messages
         // events triggered earlier than 50ms after last publication will be dropped 
-        if (publishImmidiately) {
-          publishImmidiately = false;
-          joy_event()
-          setTimeout(function () {
-            publishImmidiately = true;
-          }, 50);
-        }
+
+        // if (publishImmidiately) {
+        //   publishImmidiately = false;
+        //   joy_event()
+        //   setTimeout(function () {
+        //     publishImmidiately = true;
+        //   }, 50);
+        // }
+        joy_event()
+        window.clearInterval()
+        window.setInterval(joy_event, 50)
       });
 
       self.manager.on('end', function () {
         axes = [0, 0]
         joy_event()
+        window.clearInterval()
       });
     }
     window.onload = function () {
