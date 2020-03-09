@@ -1,8 +1,7 @@
 # ExoMy - Software Repository
 This repository contains the software to run Exomy. The [wiki](https://github.com/esa-prl/ExoMy/wiki) explains you how to use it.
 
-Otherwise there is an overview of the rest of the ExoMy project in the  [[ExoMy Project Structure|Home#exomy-project-structure]] section.   
-[[/images/renderings/2020_02_25.JPG]]
+[[https://github.com/esa-prl/ExoMy/wiki/images/renderings/2020_02_25.JPG]]
 
 # ExoMy Project Structure
 
