@@ -30,6 +30,5 @@ if __name__ == '__main__':
     rate = rospy.Rate(10)
 
     robot_pub = rospy.Publisher("/robot_commands", Commands, queue_size=1)
-    screen_pub = rospy.Publisher("/screen", Screen, queue_size=1)
 
     rospy.spin()
