@@ -1,8 +1,10 @@
 #!/bin/bash
 if [ $1 == "config" ]
 then
+	cd /root/exomy_ws/src/exomy/scripts
 	bash
 elif [ $1 == "autostart" ]
+then
 	source /opt/ros/melodic/setup.bash
 	cd /root/exomy_ws
 	catkin_make
@@ -13,7 +15,9 @@ elif [ $1 == "autostart" ]
 
 	bash
 elif [ $1 == "ros" ]
+then
 	cd /root/exomy_ws
+	source /opt/ros/melodic/setup.bash
 	catkin_make
 	source devel/setup.bash
 	bash
