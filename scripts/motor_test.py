@@ -70,12 +70,13 @@ while(selection != '0'):
                 step_size = step_size*(1-step_size_scaling)
             elif dc_selection == 'w':
                 step_size = step_size*(1+step_size_scaling)
-            
-            
-            print("t_current:\t{0:.2f} [ms]\nstep_size:\t{1:.2f} [ms]".format(curr_t, step_size))
-                        
+
             curr_dc = curr_t/cycle
-            pwm.set_pwm(pin, 0, int(curr_dc*4096.0))
+            
+            curr_pwm = int(curr_dc*4096.0)
+            print("t_current:\t{0:.4f} [ms]\nstep_size:\t{1:.4f} [ms]\ncurr_pwm: {2:.2f}".format(curr_t, step_size, curr_pwm))
+                        
+            pwm.set_pwm(pin, 0, curr_pwm)
             
         
 

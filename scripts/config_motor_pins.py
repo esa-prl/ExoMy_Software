@@ -147,6 +147,7 @@ All other controls will be explained in the process.
                 motor.wiggle_motor()
             elif(type_selection == 'n'):
                 print('Skipping pin')
+                break
             elif(type_selection == 'f'):
                 print('Finishing calibration at pin {}.'.format(pin_number))
                 break
@@ -177,182 +178,22 @@ All other controls will be explained in the process.
         elif (type_selection == 'f'):
             break
     
-    if (type_selection != 'f'):
-        print('All motors set!\n')
-        print('Now we will step through all the motors and check whether they have been assigned correctly.\n')
-        print('Press ctrl+c if something is wrong and start the script again. \n')
+
+    print('Now we will step through all the motors and check whether they have been assigned correctly.\n')
+    print('Press ctrl+c if something is wrong and start the script again. \n')
+    
+    for pin_name in pin_dict:
+        print('moving {}'.format(pin_name))
+        print_exomy_layout()        
         
-        print('Front left driving motor\n')
-        print(
-            '''
-            > fl-||-fr  
-                 ||
-              cl-||-cr  
-              rl====rr  
-            '''
-        )
-        pin = pin_dict['pin_drive_fl']
+        pin = pin_dict[pin_name]
         motor = Motor(pin)
         motor.wiggle_motor()
         raw_input('Press button to continue')
+    
+    print("You assigned {}/12 motors.".format(len(pin_dict.keys())))
 
-        print('Front left steering motor\n')
-        print(
-            '''
-            > fl-||-fr  
-                 ||
-              cl-||-cr  
-              rl====rr  
-            '''
-        )
-        pin = pin_dict['pin_steer_fl']
-        motor = Motor(pin)
-        motor.wiggle_motor()
-        raw_input('Press button to continue')
-
-        print('Front right driving motor\n')
-        print(
-            '''
-              fl-||-fr <
-                 ||
-              cl-||-cr  
-              rl====rr  
-            '''
-        )
-        pin = pin_dict['pin_drive_fr']
-        motor = Motor(pin)
-        motor.wiggle_motor()
-        raw_input('Press button to continue')
-
-        print('Front right steering motor\n')
-        print(
-            '''
-              fl-||-fr <
-                 ||
-              cl-||-cr  
-              rl====rr  
-            '''
-        )
-        pin = pin_dict['pin_steer_fr']
-        motor = Motor(pin)
-        motor.wiggle_motor()
-        raw_input('Press button to continue')
-
-        print('Center left driving motor\n')
-        print(
-            '''
-              fl-||-fr  
-                 ||
-            > cl-||-cr  
-              rl====rr  
-            '''
-        )
-        pin = pin_dict['pin_drive_cl']
-        motor = Motor(pin)
-        motor.wiggle_motor()
-        raw_input('Press button to continue')
-
-        print('Center left steering motor\n')
-        print(
-            '''
-              fl-||-fr  
-                 ||
-            > cl-||-cr  
-              rl====rr  
-            '''
-        )
-        pin = pin_dict['pin_steer_cl']
-        motor = Motor(pin)
-        motor.wiggle_motor()
-        raw_input('Press button to continue')
-
-        print('Center right driving motor\n')
-        print(
-            '''
-              fl-||-fr  
-                 ||
-              cl-||-cr <
-              rl====rr  
-            '''
-        )
-        pin = pin_dict['pin_drive_cr']
-        motor = Motor(pin)
-        motor.wiggle_motor()
-        raw_input('Press button to continue')
-
-        print('Center right steering motor\n')
-        print(
-            '''
-              fl-||-fr  
-                 ||
-              cl-||-cr <
-              rl====rr  
-            '''
-        )
-        pin = pin_dict['pin_steer_cr']
-        motor = Motor(pin)
-        motor.wiggle_motor()
-        raw_input('Press button to continue')
-
-        print('Rear left driving motor\n')
-        print(
-            '''
-              fl-||-fr  
-                 ||
-              cl-||-cr  
-            > rl====rr  
-            '''
-        )
-        pin = pin_dict['pin_drive_rl']
-        motor = Motor(pin)
-        motor.wiggle_motor()
-        raw_input('Press button to continue')
-
-        print('Rear left steering motor\n')
-        print(
-            '''
-              fl-||-fr  
-                 ||
-              cl-||-cr  
-            > rl====rr  
-            '''
-        )
-        pin = pin_dict['pin_steer_rl']
-        motor = Motor(pin)
-        motor.wiggle_motor()
-        raw_input('Press button to continue')
-
-        print('Rear right driving motor\n')
-        print(
-            '''
-              fl-||-fr  
-                 ||
-              cl-||-cr  
-              rl====rr <
-            '''
-        )
-        pin = pin_dict['pin_drive_rr']
-        motor = Motor(pin)
-        motor.wiggle_motor()
-        raw_input('Press button to continue')
-
-        print('Rear right steering motor\n')
-        print(
-            '''
-              fl-||-fr  
-                 ||
-              cl-||-cr  
-              rl====rr <
-            '''
-        )
-        pin = pin_dict['pin_steer_rr']
-        motor = Motor(pin)
-        motor.wiggle_motor()
-        raw_input('Press button to continue')
-
-
-
-    print('Write to config file\n')
+    print('Write to config file.\n')
     update_config_file()
     print(
     '''
