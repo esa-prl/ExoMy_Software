@@ -21,15 +21,63 @@ cycle = 1.0/pwm_frequency * 1000.0 #ms
 # The time the pwm signal is set to on during the duty cycle
 on_time = 2.0 #ms
 
-# Duty cycle is the percentage of a cycle the signal is on
-duty_cycle = on_time/cycle
+selection = ''
+
+while(selection != '0'):
+
+    print("What do you want to test?")
+    print("1. Min to Max oscilation")
+    print('2. Incremental positioning')
+    print('0. Abort')
+    selection = raw_input()
+
+    if (int(selection) == 1):
+
+        min_t = 0.5 # ms
+        max_t = 2.5 # ms
+        mid_t = min_t+max_t/2
+
+        print("pulsewidth_min = {:.2f}, pulsewidth_max = {:.2f}".format(min_t, max_t))
+
+        # *_dc is the percentage of a cycle the signal is on
+        min_dc = min_t/cycle
+        max_dc = max_t/cycle
+        mid_dc = mid_t/cycle
+        
+        dc_list = [min_dc, mid_dc, max_dc, mid_dc]
+        for dc in dc_list:
+            pwm.set_pwm(pin, 0, int(dc*4096.0))
+            time.sleep(2.0)
+            
+    if (int(selection) == 2):
+
+        curr_t = 1.5 # ms
+        curr_dc = curr_t/cycle
+        
+        step_size = 0.1 # ms
+        
+        step_size_scaling = 0.2
+        
+        dc_selection = ''
+        
+        while (dc_selection != '0'):
+            dc_selection = raw_input('a-d: change pulsewidth | w-s: change step size | 0: back to menu\n')
+            if dc_selection == 'a':
+                curr_t = curr_t - step_size
+            elif dc_selection == 'd':
+                curr_t = curr_t + step_size
+            elif dc_selection == 's':
+                step_size = step_size*(1-step_size_scaling)
+            elif dc_selection == 'w':
+                step_size = step_size*(1+step_size_scaling)
+            
+            
+            print("t_current:\t{0:.2f} [ms]\nstep_size:\t{1:.2f} [ms]".format(curr_t, step_size))
+                        
+            curr_dc = curr_t/cycle
+            pwm.set_pwm(pin, 0, int(curr_dc*4096.0))
+            
+        
 
 # The PCA 9685 board requests a 12 bit number for the duty_cycle
-value = int(duty_cycle*4096.0)
-
-# Ste the motor to the value
-pwm.set_pwm(pin, 0,value) 
-# Wait for 2 seconds
-time.sleep(2.0)
-# Turn the motor off
 pwm.set_pwm(pin, 0, 0)

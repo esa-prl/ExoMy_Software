@@ -6,10 +6,10 @@
 
 # Pin numbers for motors on PWM board
 pin_drive_fl: 8
-pin_steer_fl: 11
+pin_steer_fl: 2
 
 pin_drive_fr: 0
-pin_steer_fr: 2
+pin_steer_fr: 0
 
 pin_drive_cl: 9
 pin_steer_cl: 10
@@ -18,15 +18,15 @@ pin_drive_cr: 1
 pin_steer_cr: 3
 
 pin_drive_rl: 7
-pin_steer_rl: 5
+pin_steer_rl: 3
 
 pin_drive_rr: 6
-pin_steer_rr: 4
+pin_steer_rr: 1
 
 # Offsets for the steering motors
-steer_offset_fl: 307
-steer_offset_fr: 272
-steer_offset_cl: 297
-steer_offset_cr: 297
-steer_offset_rl: 322
-steer_offset_rr: 277
+steer_offset_fl: 300
+steer_offset_fr: 300
+steer_offset_cl: 300
+steer_offset_cr: 300
+steer_offset_rl: 300
+steer_offset_rr: 300
