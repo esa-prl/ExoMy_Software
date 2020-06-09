@@ -64,7 +64,7 @@ if __name__ == '__main__':
     rospy.init_node('joystick')
     rospy.loginfo('joystick started')
 
-    sub = rospy.Subscriber("/joy", Joy, callback)
+    sub = rospy.Subscriber("/joy", Joy, callback, queue_size=1)
     pub = rospy.Publisher('/rover_commands', Joystick, queue_size=1)
 
     rospy.spin()

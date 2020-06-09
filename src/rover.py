@@ -163,7 +163,7 @@ class Rover():
                 elif(steering_command <= 0): 
                     wheel_direction = steering_command + 90
                  
-                wheel_direction = np.clip(wheel_direction, -45, 45)
+                wheel_direction = np.clip(wheel_direction, -75, 75)
 
                 steering_angles[self.FL] = wheel_direction
                 steering_angles[self.FR] = wheel_direction

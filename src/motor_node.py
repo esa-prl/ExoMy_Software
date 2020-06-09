@@ -31,7 +31,7 @@ if __name__ == "__main__":
     watchdog_timer =  rospy.Timer(rospy.Duration(1), watchdog, oneshot=True)
     
 
-    sub = rospy.Subscriber("/motor_commands",Commands, callback)
+    sub = rospy.Subscriber("/motor_commands",Commands, callback, queue_size=1)
 
     rate = rospy.Rate(10)
 

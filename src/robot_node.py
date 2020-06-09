@@ -25,7 +25,7 @@ if __name__ == '__main__':
     rospy.init_node('robot')
     rospy.loginfo("Starting the robot node")
     global robot_pub
-    joy_sub = rospy.Subscriber("/rover_commands", Joystick, joy_callback)
+    joy_sub = rospy.Subscriber("/rover_commands", Joystick, joy_callback, queue_size=1)
 
     rate = rospy.Rate(10)
 
