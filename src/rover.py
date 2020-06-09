@@ -25,7 +25,7 @@ class Rover():
         self.wheel_y = 20.0
 
 
-        max_steering_angle = 60
+        max_steering_angle = 45
         self.ackermann_r_min = abs(
             self.wheel_y) / math.tan(max_steering_angle * math.pi / 180.0) + self.wheel_x
 
