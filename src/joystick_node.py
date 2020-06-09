@@ -10,7 +10,7 @@ import enum
 # Define locomotion modes
 
 global locomotion_mode
-locomotion_mode = LocomotionMode.FAKE_ACKERMANN.value
+locomotion_mode = LocomotionMode.ACKERMANN.value
 
 def callback(data):
 
@@ -20,9 +20,9 @@ def callback(data):
     # Function map for the Logitech F710 joystick
     # Button on pad | function
     # --------------|----------------------
-    # X 	    | Fake Ackermann mode
-    # B		    | Point turn mode
-    # A		    | Crabbing mode
+    # A         | Ackermann mode
+    # X         | Point turn mode
+    # Y         | Crabbing mode
     # left stick    | control speed and direction
 
     # Reading out joystick data
@@ -31,13 +31,14 @@ def callback(data):
 
     # Reading out button data to set locomotion mode
     if (data.buttons[0] == 1):
-        locomotion_mode = LocomotionMode.FAKE_ACKERMANN.value
-    if (data.buttons[1] == 1):
-        locomotion_mode = LocomotionMode.CRABBING.value
-    if (data.buttons[2] == 1):
         locomotion_mode = LocomotionMode.POINT_TURN.value
     if (data.buttons[3] == 1):
+        locomotion_mode = LocomotionMode.CRABBING.value
+    if (data.buttons[2] == 1):
+        pass
+    if (data.buttons[1] == 1):
         locomotion_mode = LocomotionMode.ACKERMANN.value
+    
     joy_out.locomotion_mode=locomotion_mode
 
     # The velocity is decoded as value between 0...100
@@ -64,6 +65,6 @@ if __name__ == '__main__':
     rospy.loginfo('joystick started')
 
     sub = rospy.Subscriber("/joy", Joy, callback)
-    pub = rospy.Publisher('joystick', Joystick, queue_size=1)
+    pub = rospy.Publisher('/rover_commands', Joystick, queue_size=1)
 
     rospy.spin()

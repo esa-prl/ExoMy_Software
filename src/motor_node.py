@@ -13,7 +13,7 @@ def callback(cmds):
     motors.setDriving(cmds.motor_speeds)
     global watchdog_timer
     watchdog_timer.shutdown()
-    watchdog_timer =  rospy.Timer(rospy.Duration(1), watchdog, oneshot=True)
+    watchdog_timer = rospy.Timer(rospy.Duration(1), watchdog, oneshot=True)
 
 def shutdown():
     motors.stopMotors()
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     watchdog_timer =  rospy.Timer(rospy.Duration(1), watchdog, oneshot=True)
     
 
-    sub = rospy.Subscriber("/robot_commands",Commands, callback)
+    sub = rospy.Subscriber("/motor_commands",Commands, callback)
 
     rate = rospy.Rate(10)
 
