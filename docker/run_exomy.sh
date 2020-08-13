@@ -73,7 +73,7 @@ fi
 # Run docker container
 docker run \
     -it \
-    -v $(pwd)/ExoMy_Software:/root/exomy_ws/src/exomy \
+    -v ~/ExoMy_Software:/root/exomy_ws/src/exomy \
     -p 8000:8000 \
     -p 8080:8080 \
     -p 9090:9090 \
