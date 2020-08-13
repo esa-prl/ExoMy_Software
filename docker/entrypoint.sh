@@ -1,9 +1,9 @@
 #!/bin/bash
-if [ $1 == "config" ]
+if [[ $1 == "config" ]]
 then
 	cd /root/exomy_ws/src/exomy/scripts
 	bash
-elif [ $1 == "autostart" ]
+elif [[ $1 == "autostart" ]]
 then
 	source /opt/ros/melodic/setup.bash
 	cd /root/exomy_ws
@@ -14,7 +14,7 @@ then
 	roslaunch exomy exomy.launch
 
 	bash
-elif [ $1 == "ros" ]
+elif [[ $1 == "ros" ]]
 then
 	cd /root/exomy_ws
 	source /opt/ros/melodic/setup.bash
