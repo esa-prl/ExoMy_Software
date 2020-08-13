@@ -24,6 +24,10 @@ if [ "$1" != "" ]; then
                                 options="--restart always"
                                  
                                 ;;
+        -s | --stop_autostart)  
+                                docker container stop "${container_name}_autostart"
+                                exit     
+                                ;;
         -c | --config)          
                                 container_name="${container_name}_config"
                                 start_command="config"
@@ -61,12 +65,15 @@ else
 fi
 
 # Stop any of the 3 containers if running
-docker stop $(docker ps -q --filter ancestor=exomy)
+RUNNING_CONTAINERS=$( docker container ls -a -q --filter ancestor=exomy )
+if [ -n "$RUNNING_CONTAINERS" ]; then
+    docker rm -f "$RUNNING_CONTAINERS"
+fi
 
+# -v $(pwd)/ExoMy_Software:/root/exomy_ws/src/exomy \
 # Run docker container
 docker run \
     -it \
-    -v $(pwd)/ExoMy_Software:/root/exomy_ws/src/exomy \
     -p 8000:8000 \
     -p 8080:8080 \
     -p 9090:9090 \
