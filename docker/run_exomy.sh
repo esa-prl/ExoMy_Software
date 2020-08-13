@@ -60,6 +60,9 @@ else
     echo "Use existing docker image: "$image_name""
 fi
 
+# Stop any of the 3 containers if running
+docker stop $(docker ps -q --filter ancestor=exomy)
+
 # Run docker container
 docker run \
     -it \
