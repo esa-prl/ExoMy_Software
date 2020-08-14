@@ -14,7 +14,7 @@ then
 	roslaunch exomy exomy.launch
 
 	bash
-elif [[ $1 == "ros" ]]
+elif [[ $1 == "devel" ]]
 then
 	cd /root/exomy_ws
 	source /opt/ros/melodic/setup.bash
