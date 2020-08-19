@@ -51,18 +51,9 @@ else
     exit
 fi
 
-# Check for image and build from Dockerfile if not accessible
-result=$( docker images -q $image_name )
-
-if [ ! -n "$result" ]; then
-    directory=$( dirname "$0" )
-
-    echo "Docker image not built yet. Build from Dockerfile. "
-    echo ${directory}
-    docker build -t $image_name $directory
-else
-    echo "Use existing docker image: "$image_name""
-fi
+# Build docker image from Dockerfile in directory 
+directory=$( dirname "$0" )
+docker build -t $image_name $directory
 
 # Stop any of the 3 containers if running
 RUNNING_CONTAINERS=$( docker container ls -a -q --filter ancestor=exomy )
