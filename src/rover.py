@@ -42,6 +42,9 @@ class Rover():
     def joystickToSteeringAngle(self, driving_command, steering_command):
         '''
         Converts the steering command [angle of joystick] to angles for the different motors
+        
+        :param int driving_command: Drive speed command range from -100 to 100
+        :param int stering_command: Turning radius command with the values 0(left) +90(forward) -90(backward)  +-180(right)
         '''
 
         steering_angles = [0]*6

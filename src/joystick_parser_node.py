@@ -8,13 +8,17 @@ import math
 import enum
 
 # Define locomotion modes
-
 global locomotion_mode
+global motors_enabled
+
 locomotion_mode = LocomotionMode.ACKERMANN.value
+motors_enabled  = True
 
 def callback(data):
 
     global locomotion_mode
+    global motors_enabled
+    
     rover_cmd = RoverCommand()
 
     # Function map for the Logitech F710 joystick
@@ -31,16 +35,35 @@ def callback(data):
     x = data.axes[0]
 
     # Reading out button data to set locomotion mode
+    # X Button
     if (data.buttons[0] == 1):
         locomotion_mode = LocomotionMode.POINT_TURN.value
-    if (data.buttons[3] == 1):
-        locomotion_mode = LocomotionMode.CRABBING.value
-    if (data.buttons[2] == 1):
-        pass
+    # A Button
     if (data.buttons[1] == 1):
         locomotion_mode = LocomotionMode.ACKERMANN.value
+    # B Button
+    if (data.buttons[2] == 1):
+        pass
+    # Y Button
+    if (data.buttons[3] == 1):
+        locomotion_mode = LocomotionMode.CRABBING.value
+            
+    rover_cmd.locomotion_mode = locomotion_mode
+
+    # Enable and disable motors
+    # START Button
+    if (data.buttons[9] == 1):
+        if motors_enabled is True:
+            motors_enabled = False
+            rospy.loginfo("Motors disabled!")
+        elif motors_enabled is False:
+            motors_enabled = True
+            rospy.loginfo("Motors enabled!")
+        else:
+            rospy.logerr("Exceptional value for [motors_enabled] = {}".format(motors_enabled))
+            motors_enabled = False
     
-    rover_cmd.locomotion_mode=locomotion_mode
+    rover_cmd.motors_enabled = motors_enabled
 
     # The velocity is decoded as value between 0...100
     rover_cmd.vel = 100 * min(math.sqrt(x*x + y*y),1.0)
@@ -62,10 +85,10 @@ def callback(data):
 if __name__ == '__main__':
     global pub
 
-    rospy.init_node('joystick')
-    rospy.loginfo('joystick started')
+    rospy.init_node('joystick_parser_node')
+    rospy.loginfo('joystick_parser_node started')
 
     sub = rospy.Subscriber("/joy", Joy, callback, queue_size=1)
-    pub = rospy.Publisher('/rover_commands', RoverCommand, queue_size=1)
+    pub = rospy.Publisher('/rover_command', RoverCommand, queue_size=1)
 
     rospy.spin()
