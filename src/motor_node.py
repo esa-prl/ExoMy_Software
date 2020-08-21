@@ -2,7 +2,7 @@
 import time
 import rospy
 
-from exomy.msg import Commands
+from exomy.msg import MotorCommands
 from motors import Motors
 
 motors = Motors()
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     global watchdog_timer
     watchdog_timer =  rospy.Timer(rospy.Duration(1.0), watchdog, oneshot=True)
 
-    sub = rospy.Subscriber("/motor_commands",Commands, callback, queue_size=1)
+    sub = rospy.Subscriber("/motor_commands", MotorCommands, callback, queue_size=1)
 
     rate = rospy.Rate(10)
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import time
-from exomy.msg import Joystick, Commands, Screen
+from exomy.msg import RoverCommand, MotorCommands, Screen
 import rospy
 from rover import Rover
 import message_filters
@@ -11,7 +11,7 @@ exomy = Rover()
 
 
 def joy_callback(message):
-    cmds = Commands()
+    cmds = MotorCommands()
 
     exomy.setLocomotionMode(message.locomotion_mode)
     cmds.motor_angles = exomy.joystickToSteeringAngle(
@@ -25,10 +25,10 @@ if __name__ == '__main__':
     rospy.init_node('robot')
     rospy.loginfo("Starting the robot node")
     global robot_pub
-    joy_sub = rospy.Subscriber("/rover_commands", Joystick, joy_callback, queue_size=1)
+    joy_sub = rospy.Subscriber("/rover_commands", RoverCommand, joy_callback, queue_size=1)
 
     rate = rospy.Rate(10)
 
-    robot_pub = rospy.Publisher("/motor_commands", Commands, queue_size=1)
+    robot_pub = rospy.Publisher("/motor_commands", MotorCommands, queue_size=1)
 
     rospy.spin()
