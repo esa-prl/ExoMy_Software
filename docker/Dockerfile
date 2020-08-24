@@ -6,7 +6,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Basic tools
 RUN apt-get update && \
-    apt-get install vim git tmux wget curl python-pip -y
+    apt-get install vim nano git tmux wget curl python-pip net-tools iputils-ping  -y
 
 # Install additional ros packages
 RUN apt-get update && apt-get install ros-melodic-rosbridge-server ros-melodic-joy -y
