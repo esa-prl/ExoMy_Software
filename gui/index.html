@@ -100,28 +100,28 @@
     }
 
     buttonY_clicked = function () {
-      axes = [0, 0]
-      buttons = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0];
+      axex = [0, 0, 0, 0, 0, 0]
+      buttons = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
       joy_event();
     }
     buttonX_clicked = function () {
-      axes = [0, 0]
-      buttons = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      axes = [0, 0, 0, 0, 0, 0]
+      buttons = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       joy_event();
     }
     buttonB_clicked = function () {
-      axes = [0, 0]
-      buttons = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0];
+      axes = [0, 0, 0, 0, 0, 0]
+      buttons = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       joy_event();
     }
     buttonA_clicked = function () {
-      axes = [0, 0]
-      buttons = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+      axes = [0, 0, 0, 0, 0, 0]
+      buttons = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       joy_event();
     }
 
-    var axes = [0, 0];
-    var buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var axes = [0, 0, 0, 0, 0, 0];
+    var buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 
   </script>
@@ -144,9 +144,9 @@
       </div>
       <div class="right" id="right">
         <div class="button_container">
-          <button class="button buttonY" onclick="buttonY_clicked()">ACKERMANN</button>
-          <button class="button buttonB" onclick="buttonB_clicked()">POINT_TURN</button>
-          <button class="button buttonA" onclick="buttonA_clicked()">CRABBING</button>
+          <button class="button buttonY" onclick="buttonY_clicked()">CRABBING</button>
+	  <button class="button buttonX" onclick="buttonX_clicked()">SPOT TURN</button>
+          <button class="button buttonA" onclick="buttonA_clicked()">ACKERMANN</button>
         </div>
       </div>
     </div>
