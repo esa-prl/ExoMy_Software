@@ -1,24 +1,23 @@
 #!/usr/bin/env python
 import rospy
-import time
 from sensor_msgs.msg import Joy
 from exomy.msg import RoverCommand
 from locomotion_modes import LocomotionMode
 import math
-import enum
 
 # Define locomotion modes
 global locomotion_mode
 global motors_enabled
 
 locomotion_mode = LocomotionMode.ACKERMANN.value
-motors_enabled  = True
+motors_enabled = True
+
 
 def callback(data):
 
     global locomotion_mode
     global motors_enabled
-    
+
     rover_cmd = RoverCommand()
 
     # Function map for the Logitech F710 joystick
@@ -47,7 +46,7 @@ def callback(data):
     # Y Button
     if (data.buttons[3] == 1):
         locomotion_mode = LocomotionMode.CRABBING.value
-            
+
     rover_cmd.locomotion_mode = locomotion_mode
 
     # Enable and disable motors
@@ -60,13 +59,14 @@ def callback(data):
             motors_enabled = True
             rospy.loginfo("Motors enabled!")
         else:
-            rospy.logerr("Exceptional value for [motors_enabled] = {}".format(motors_enabled))
+            rospy.logerr(
+                "Exceptional value for [motors_enabled] = {}".format(motors_enabled))
             motors_enabled = False
-    
+
     rover_cmd.motors_enabled = motors_enabled
 
     # The velocity is decoded as value between 0...100
-    rover_cmd.vel = 100 * min(math.sqrt(x*x + y*y),1.0)
+    rover_cmd.vel = 100 * min(math.sqrt(x*x + y*y), 1.0)
 
     # The steering is described as an angle between -180...180
     # Which describe the joystick position as follows:
@@ -79,7 +79,6 @@ def callback(data):
     rover_cmd.connected = True
 
     pub.publish(rover_cmd)
-
 
 
 if __name__ == '__main__':

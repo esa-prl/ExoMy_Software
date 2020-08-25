@@ -24,7 +24,6 @@ class Rover():
         self.wheel_x = 12.0
         self.wheel_y = 20.0
 
-
         max_steering_angle = 45
         self.ackermann_r_min = abs(
             self.wheel_y) / math.tan(max_steering_angle * math.pi / 180.0) + self.wheel_x
@@ -37,12 +36,13 @@ class Rover():
         '''
         if(self.locomotion_mode != locomotion_mode_command):
             self.locomotion_mode = locomotion_mode_command
-            rospy.loginfo('Set locomotion mode to: %s', LocomotionMode(locomotion_mode_command).name)
+            rospy.loginfo('Set locomotion mode to: %s',
+                          LocomotionMode(locomotion_mode_command).name)
 
     def joystickToSteeringAngle(self, driving_command, steering_command):
         '''
         Converts the steering command [angle of joystick] to angles for the different motors
-        
+
         :param int driving_command: Drive speed command range from -100 to 100
         :param int stering_command: Turning radius command with the values 0(left) +90(forward) -90(backward)  +-180(right)
         '''
@@ -112,11 +112,10 @@ class Rover():
 
             return steering_angles
         if(self.locomotion_mode == LocomotionMode.ACKERMANN.value):
-            
+
             # No steering if robot is not driving
             if(driving_command is 0):
                 return steering_angles
-
 
             # Scale between min and max Ackermann radius
             if math.cos(math.radians(steering_command)) == 0:
@@ -125,7 +124,7 @@ class Rover():
                 r = self.ackermann_r_max - \
                     abs(math.cos(math.radians(steering_command))) * \
                     ((self.ackermann_r_max-self.ackermann_r_min))
-                
+
             # No steering
             if r == self.ackermann_r_max:
                 return steering_angles
@@ -162,10 +161,10 @@ class Rover():
                 wheel_direction = 0
                 if(steering_command > 0):
                     wheel_direction = steering_command - 90
-                 
-                elif(steering_command <= 0): 
+
+                elif(steering_command <= 0):
                     wheel_direction = steering_command + 90
-                 
+
                 wheel_direction = np.clip(wheel_direction, -75, 75)
 
                 steering_angles[self.FL] = wheel_direction
@@ -174,7 +173,6 @@ class Rover():
                 steering_angles[self.CR] = wheel_direction
                 steering_angles[self.RL] = wheel_direction
                 steering_angles[self.RR] = wheel_direction
-                
 
         return steering_angles
 
@@ -209,13 +207,13 @@ class Rover():
         if (self.locomotion_mode == LocomotionMode.ACKERMANN.value):
             v = driving_command
             if(steering_command < 0):
-                v *=-1
+                v *= -1
 
             # Scale between min and max Ackermann radius
             radius = self.ackermann_r_max - \
                 abs(math.cos(math.radians(steering_command))) * \
                 ((self.ackermann_r_max-self.ackermann_r_min))
- 
+
             if (v == 0):
                 return motor_speeds
 
@@ -233,15 +231,15 @@ class Rover():
                 r2 = rmax_float
                 r3 = r1
                 r4 = math.sqrt(a+c)
-                r5 = abs(radius) - self.wheel_x  
+                r5 = abs(radius) - self.wheel_x
                 r6 = r4
 
-                v1 = int(v) 
-                v2 = int(v*r2/r1) 
+                v1 = int(v)
+                v2 = int(v*r2/r1)
                 v3 = v1
-                v4 = int(v*r4/r1) 
+                v4 = int(v*r4/r1)
                 v5 = int(v*r5/r1)
-                v6 = v4 
+                v6 = v4
 
                 if (steering_command > 90 or steering_command < -90):
                     motor_speeds = [v1, v2, v3, v4, v5, v6]
@@ -252,52 +250,49 @@ class Rover():
 
         if (self.locomotion_mode == LocomotionMode.POINT_TURN.value):
             deg = steering_command
-            if(driving_command is not 0): 
+            if(driving_command is not 0):
                 # Left turn
                 if(deg < 85 and deg > -85):
                     motor_speeds[self.FL] = -50
-                    motor_speeds[self.FR] =  50
+                    motor_speeds[self.FR] = 50
                     motor_speeds[self.CL] = -50
-                    motor_speeds[self.CR] =  50
+                    motor_speeds[self.CR] = 50
                     motor_speeds[self.RL] = -50
-                    motor_speeds[self.RR] =  50
+                    motor_speeds[self.RR] = 50
                 # Right turn
                 elif(deg > 95 or deg < -95):
-                    motor_speeds[self.FL] =  50
+                    motor_speeds[self.FL] = 50
                     motor_speeds[self.FR] = -50
-                    motor_speeds[self.CL] =  50
+                    motor_speeds[self.CL] = 50
                     motor_speeds[self.CR] = -50
-                    motor_speeds[self.RL] =  50
+                    motor_speeds[self.RL] = 50
                     motor_speeds[self.RR] = -50
             else:
                 # Stop
-                    motor_speeds[self.FL] = 0
-                    motor_speeds[self.FR] = 0
-                    motor_speeds[self.CL] = 0
-                    motor_speeds[self.CR] = 0
-                    motor_speeds[self.RL] = 0
-                    motor_speeds[self.RR] = 0
-                
-            
+                motor_speeds[self.FL] = 0
+                motor_speeds[self.FR] = 0
+                motor_speeds[self.CL] = 0
+                motor_speeds[self.CR] = 0
+                motor_speeds[self.RL] = 0
+                motor_speeds[self.RR] = 0
+
             return motor_speeds
 
         if(self.locomotion_mode == LocomotionMode.CRABBING.value):
             if(driving_command > 0):
                 if(steering_command > 0):
-                        motor_speeds[self.FL] = 50
-                        motor_speeds[self.FR] = 50
-                        motor_speeds[self.CL] = 50
-                        motor_speeds[self.CR] = 50
-                        motor_speeds[self.RL] = 50
-                        motor_speeds[self.RR] = 50
+                    motor_speeds[self.FL] = 50
+                    motor_speeds[self.FR] = 50
+                    motor_speeds[self.CL] = 50
+                    motor_speeds[self.CR] = 50
+                    motor_speeds[self.RL] = 50
+                    motor_speeds[self.RR] = 50
                 elif(steering_command <= 0):
-                        motor_speeds[self.FL] = -50
-                        motor_speeds[self.FR] = -50
-                        motor_speeds[self.CL] = -50
-                        motor_speeds[self.CR] = -50
-                        motor_speeds[self.RL] = -50
-                        motor_speeds[self.RR] = -50
-            
-            
+                    motor_speeds[self.FL] = -50
+                    motor_speeds[self.FR] = -50
+                    motor_speeds[self.CL] = -50
+                    motor_speeds[self.CR] = -50
+                    motor_speeds[self.RL] = -50
+                    motor_speeds[self.RR] = -50
 
         return motor_speeds
