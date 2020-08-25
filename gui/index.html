@@ -54,15 +54,15 @@
         // events triggered earlier than 50ms after last publication will be dropped 
 
         if (publishImmidiately) {
-           publishImmidiately = false;
-       	   joy_event()
-	   window.clearInterval(watchdog_handle)
-           watchdog_handle=window.setInterval(joy_event, 50)
+          publishImmidiately = false;
+          joy_event()
+          window.clearInterval(watchdog_handle)
+          watchdog_handle = window.setInterval(joy_event, 50)
 
-           setTimeout(function () {
-             publishImmidiately = true;
-           }, 50);
-         }
+          setTimeout(function () {
+            publishImmidiately = true;
+          }, 50);
+        }
         //joy_event()
         //window.clearInterval()
         //window.setInterval(joy_event, 500)
@@ -72,7 +72,7 @@
         window.clearInterval(watchdog_handle)
         axes = [0, 0]
         joy_event()
-	console.log('End function called')
+        console.log('End function called')
       });
     }
     window.onload = function () {
@@ -101,27 +101,27 @@
 
     buttonY_clicked = function () {
       axes = [0, 0]
-      buttons = [0, 0, 0, 1];
+      buttons = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0];
       joy_event();
     }
     buttonX_clicked = function () {
       axes = [0, 0]
-      buttons = [1, 0, 0, 0];
+      buttons = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       joy_event();
     }
     buttonB_clicked = function () {
       axes = [0, 0]
-      buttons = [0, 0, 1, 0];
+      buttons = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0];
       joy_event();
     }
     buttonA_clicked = function () {
       axes = [0, 0]
-      buttons = [0, 1, 0, 0];
+      buttons = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
       joy_event();
     }
 
     var axes = [0, 0];
-    var buttons = [0, 0, 0, 0];
+    var buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 
   </script>
