@@ -46,7 +46,7 @@
         var max_distance = 75;
         var x = -Math.cos(nipple.angle.radian) * nipple.distance / max_distance;
         var y = Math.sin(nipple.angle.radian) * nipple.distance / max_distance;
-        axes = [x, y]
+        axes = [x, y, 0, 0, 0, 0]
 
         // nipplejs is triggering events when joystick moves each pixel
         // we need delay between consecutive messege publications to 
@@ -70,7 +70,7 @@
 
       self.manager.on('end', function () {
         window.clearInterval(watchdog_handle)
-        axes = [0, 0]
+        axes = [0, 0, 0, 0, 0, 0]
         joy_event()
         console.log('End function called')
       });
@@ -97,32 +97,41 @@
       joy_listener.publish(joy);
       console.log(axes)
       console.log(buttons)
+      // The buttons variable is reset to all 0s after the command was sent.
+      // The axes message shold persists since the axes message is
+      // only updated if the joystick is moved.
+      buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
 
     buttonY_clicked = function () {
-      axex = [0, 0, 0, 0, 0, 0]
+      axes = [0, 0, 0, 0, 0, 0];
       buttons = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
       joy_event();
     }
     buttonX_clicked = function () {
-      axes = [0, 0, 0, 0, 0, 0]
+      axes = [0, 0, 0, 0, 0, 0];
       buttons = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       joy_event();
     }
     buttonB_clicked = function () {
-      axes = [0, 0, 0, 0, 0, 0]
+      axes = [0, 0, 0, 0, 0, 0];
       buttons = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       joy_event();
     }
     buttonA_clicked = function () {
-      axes = [0, 0, 0, 0, 0, 0]
+      axes = [0, 0, 0, 0, 0, 0];
       buttons = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      joy_event();
+    }
+
+    buttonStart_clicked = function () {
+      axes = [0, 0, 0, 0, 0, 0];
+      buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0];
       joy_event();
     }
 
     var axes = [0, 0, 0, 0, 0, 0];
     var buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
 
   </script>
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -133,8 +142,7 @@
   <main>
     <div class="wrapper">
       <div class="left" id="left">
-        <div class="joy_container" id="joy_container">
-        </div>
+        <div class="joy_container" id="joy_container"></div>
       </div>
 
       <div class="middle" id="middle">
@@ -147,6 +155,7 @@
           <button class="button buttonY" onclick="buttonY_clicked()">CRABBING</button>
 	  <button class="button buttonX" onclick="buttonX_clicked()">SPOT TURN</button>
           <button class="button buttonA" onclick="buttonA_clicked()">ACKERMANN</button>
+	  <button class="button buttonStart" onclick="buttonStart_clicked()">MOTORS</button>
         </div>
       </div>
     </div>

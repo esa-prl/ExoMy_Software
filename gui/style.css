@@ -44,6 +44,14 @@ body {
     grid-row: 3;
 }
 
+.buttonStart{
+    background-color: red;
+    grid-row: 4;
+    border-radius: 50%;
+    width: 40%;
+    font-size: 12px;
+}
+
 .button_container {
     position: absolute;
     display: grid;
