@@ -47,9 +47,9 @@ body {
 .buttonStart{
     background-color: red;
     grid-row: 4;
-    border-radius: 50%;
-    width: 40%;
+    width: 50%;
     font-size: 12px;
+
 }
 
 .button_container {

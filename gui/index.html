@@ -16,6 +16,10 @@
       url: 'ws://' + host_url + ':9090'
     });
 
+    // Initialize Axes and Buttons arrays
+    var axes = [0, 0, 0, 0, 0, 0];
+    var buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
     ros.on('connection', function () {
       document.getElementById("status").innerHTML = "Connected";
     });
@@ -97,41 +101,18 @@
       joy_listener.publish(joy);
       console.log(axes)
       console.log(buttons)
-      // The buttons variable is reset to all 0s after the command was sent.
-      // The axes message shold persists since the axes message is
-      // only updated if the joystick is moved.
-      buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
 
-    buttonY_clicked = function () {
+     button_clicked = function (button_index) {
+      // The desired button index can be found by listening to the /joy ros message
+      // or by checking in the wiki for the gamepad mapping.
+      // Set axes to 0 to prevent driving during mode change.
       axes = [0, 0, 0, 0, 0, 0];
-      buttons = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+      buttons[button_index] = 1;
       joy_event();
+      // After the command is sent set the index back to 0
+      buttons[button_index] = 0;
     }
-    buttonX_clicked = function () {
-      axes = [0, 0, 0, 0, 0, 0];
-      buttons = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      joy_event();
-    }
-    buttonB_clicked = function () {
-      axes = [0, 0, 0, 0, 0, 0];
-      buttons = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      joy_event();
-    }
-    buttonA_clicked = function () {
-      axes = [0, 0, 0, 0, 0, 0];
-      buttons = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      joy_event();
-    }
-
-    buttonStart_clicked = function () {
-      axes = [0, 0, 0, 0, 0, 0];
-      buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0];
-      joy_event();
-    }
-
-    var axes = [0, 0, 0, 0, 0, 0];
-    var buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   </script>
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -152,10 +133,10 @@
       </div>
       <div class="right" id="right">
         <div class="button_container">
-          <button class="button buttonY" onclick="buttonY_clicked()">CRABBING</button>
-	  <button class="button buttonX" onclick="buttonX_clicked()">SPOT TURN</button>
-          <button class="button buttonA" onclick="buttonA_clicked()">ACKERMANN</button>
-	  <button class="button buttonStart" onclick="buttonStart_clicked()">MOTORS</button>
+          <button class="button buttonY" onclick="button_clicked(3)">CRABBING</button>
+	  <button class="button buttonX" onclick="button_clicked(0)">SPOT TURN</button>
+          <button class="button buttonA" onclick="button_clicked(1)">ACKERMANN</button>
+	  <button class="button buttonStart" onclick="button_clicked(9)">MOTORS</button>
         </div>
       </div>
     </div>
