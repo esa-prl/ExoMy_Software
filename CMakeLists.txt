@@ -51,8 +51,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
       FILES
-      Joystick.msg
-      Commands.msg
+      RoverCommand.msg
+      MotorCommands.msg
       Screen.msg
   )
 ## Generate services in the 'srv' folder
