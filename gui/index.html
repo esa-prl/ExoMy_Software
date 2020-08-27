@@ -16,6 +16,10 @@
       url: 'ws://' + host_url + ':9090'
     });
 
+    // Initialize Axes and Buttons arrays
+    var axes = [0, 0, 0, 0, 0, 0];
+    var buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
     ros.on('connection', function () {
       document.getElementById("status").innerHTML = "Connected";
     });
@@ -46,7 +50,7 @@
         var max_distance = 75;
         var x = -Math.cos(nipple.angle.radian) * nipple.distance / max_distance;
         var y = Math.sin(nipple.angle.radian) * nipple.distance / max_distance;
-        axes = [x, y]
+        axes = [x, y, 0, 0, 0, 0]
 
         // nipplejs is triggering events when joystick moves each pixel
         // we need delay between consecutive messege publications to 
@@ -54,15 +58,15 @@
         // events triggered earlier than 50ms after last publication will be dropped 
 
         if (publishImmidiately) {
-           publishImmidiately = false;
-       	   joy_event()
-	   window.clearInterval(watchdog_handle)
-           watchdog_handle=window.setInterval(joy_event, 50)
+          publishImmidiately = false;
+          joy_event()
+          window.clearInterval(watchdog_handle)
+          watchdog_handle = window.setInterval(joy_event, 50)
 
-           setTimeout(function () {
-             publishImmidiately = true;
-           }, 50);
-         }
+          setTimeout(function () {
+            publishImmidiately = true;
+          }, 50);
+        }
         //joy_event()
         //window.clearInterval()
         //window.setInterval(joy_event, 500)
@@ -70,9 +74,9 @@
 
       self.manager.on('end', function () {
         window.clearInterval(watchdog_handle)
-        axes = [0, 0]
+        axes = [0, 0, 0, 0, 0, 0]
         joy_event()
-	console.log('End function called')
+        console.log('End function called')
       });
     }
     window.onload = function () {
@@ -99,30 +103,16 @@
       console.log(buttons)
     }
 
-    buttonY_clicked = function () {
-      axes = [0, 0]
-      buttons = [0, 0, 0, 1];
+     button_clicked = function (button_index) {
+      // The desired button index can be found by listening to the /joy ros message
+      // or by checking in the wiki for the gamepad mapping.
+      // Set axes to 0 to prevent driving during mode change.
+      axes = [0, 0, 0, 0, 0, 0];
+      buttons[button_index] = 1;
       joy_event();
+      // After the command is sent set the index back to 0
+      buttons[button_index] = 0;
     }
-    buttonX_clicked = function () {
-      axes = [0, 0]
-      buttons = [1, 0, 0, 0];
-      joy_event();
-    }
-    buttonB_clicked = function () {
-      axes = [0, 0]
-      buttons = [0, 0, 1, 0];
-      joy_event();
-    }
-    buttonA_clicked = function () {
-      axes = [0, 0]
-      buttons = [0, 1, 0, 0];
-      joy_event();
-    }
-
-    var axes = [0, 0];
-    var buttons = [0, 0, 0, 0];
-
 
   </script>
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -133,8 +123,7 @@
   <main>
     <div class="wrapper">
       <div class="left" id="left">
-        <div class="joy_container" id="joy_container">
-        </div>
+        <div class="joy_container" id="joy_container"></div>
       </div>
 
       <div class="middle" id="middle">
@@ -144,9 +133,10 @@
       </div>
       <div class="right" id="right">
         <div class="button_container">
-          <button class="button buttonY" onclick="buttonY_clicked()">ACKERMANN</button>
-          <button class="button buttonB" onclick="buttonB_clicked()">POINT_TURN</button>
-          <button class="button buttonA" onclick="buttonA_clicked()">CRABBING</button>
+          <button class="button buttonY" onclick="button_clicked(3)">CRABBING</button>
+          <button class="button buttonX" onclick="button_clicked(0)">SPOT TURN</button>
+          <button class="button buttonA" onclick="button_clicked(1)">ACKERMANN</button>
+          <button class="button buttonStart" onclick="button_clicked(9)">MOTORS</button>
         </div>
       </div>
     </div>
