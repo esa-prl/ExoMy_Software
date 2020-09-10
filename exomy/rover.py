@@ -106,7 +106,7 @@ class Rover():
         if(self.locomotion_mode == LocomotionMode.ACKERMANN.value):
 
             # No steering if robot is not driving
-            if(driving_command is 0):
+            if(driving_command == 0):
                 return steering_angles
 
             # Scale between min and max Ackermann radius
@@ -242,7 +242,7 @@ class Rover():
 
         if (self.locomotion_mode == LocomotionMode.POINT_TURN.value):
             deg = steering_command
-            if(driving_command is not 0):
+            if(driving_command != 0):
                 # Left turn
                 if(deg < 85 and deg > -85):
                     motor_speeds[self.FL] = -50
