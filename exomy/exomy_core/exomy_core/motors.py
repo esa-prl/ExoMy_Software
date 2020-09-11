@@ -1,9 +1,6 @@
 #!/usr/bin/env python
-from std_msgs.msg import String
 
 import time
-import numpy as np
-
 import Adafruit_PCA9685
 
 
