@@ -1,7 +1,3 @@
-import launch
-import launch.actions
-import launch.substitutions
-import launch_ros.actions
 
 from launch import LaunchDescription
 from launch_ros.actions import Node
@@ -12,30 +8,30 @@ namespace_ = 'exomy'
 def generate_launch_description():
     robot = Node(
         package='exomy_core',
-        node_executable='robot_node',
-        node_name='robot_node',
-        node_namespace=namespace_,
+        executable='robot_node',
+        name='robot_node',
+        namespace=namespace_,
         output='screen'
     )
     joy = Node(
         package='joy',
-        node_executable='joy_node',
-        node_name='joy_node',
-        node_namespace=namespace_,
+        executable='joy_node',
+        name='joy_node',
+        namespace=namespace_,
         output='screen'
     )
     joystick = Node(
         package='exomy_core',
-        node_executable='joystick_node',
-        node_name='joystick_node',
-        node_namespace=namespace_,
+        executable='joystick_parser_node',
+        name='joystick_parser_node',
+        namespace=namespace_,
         output='screen'
     )
     motors = Node(
         package='exomy_core',
-        node_executable='motor_node',
-        node_name='motor_node',
-        node_namespace=namespace_,
+        executable='motor_node',
+        name='motor_node',
+        namespace=namespace_,
         output='screen'
     )
 
