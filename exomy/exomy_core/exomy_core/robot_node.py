@@ -39,13 +39,16 @@ class RobotNode(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    robot_node = RobotNode()
-
-    rclpy.spin(robot_node)
-
-    robot_node.destroy_node()
-
-    rclpy.shutdown()
+    try:
+        robot_node = RobotNode()
+        try:
+            rclpy.spin(robot_node)
+        finally:
+            robot_node.destroy_node()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        rclpy.shutdown()
 
 
 if __name__ == '__main__':

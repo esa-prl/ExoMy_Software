@@ -35,7 +35,7 @@ class MotorNode(Node):
         # then watchdog() is called stopping the driving motors.
         self.watchdog_timer = self.create_timer(5.0, self.watchdog)
 
-    def watchdog(self, event):
+    def watchdog(self):
         self.get_logger().info('Watchdog fired. Stopping driving motors.')
         self.motors.stopMotors()
 
@@ -43,11 +43,16 @@ class MotorNode(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    motor_node = MotorNode()
-
-    rclpy.spin(motor_node)
-
-    rclpy.shutdown()
+    try:
+        motor_node = MotorNode()
+        try:
+            rclpy.spin(motor_node)
+        finally:
+            motor_node.destroy_node()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        rclpy.shutdown()
 
 
 if __name__ == "__main__":

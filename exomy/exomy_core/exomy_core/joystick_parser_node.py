@@ -98,13 +98,16 @@ class JoystickParserNode(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    joystick_parser_node = JoystickParserNode()
-
-    rclpy.spin(joystick_parser_node)
-
-    joystick_parser_node.destroy_node()
-
-    rclpy.shutdown()
+    try:
+        joystick_parser_node = JoystickParserNode()
+        try:
+            rclpy.spin(joystick_parser_node)
+        finally:
+            joystick_parser_node.destroy_node()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        rclpy.shutdown()
 
 
 if __name__ == '__main__':
