@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rclpy
 from rclpy.node import Node
-
+from rclpy.timer import Timer
 from exomy_msgs.msg import RoverCommand
 from exomy_core.motors import Motors
 
@@ -19,7 +19,7 @@ class MotorNode(Node):
         self.subscription  # prevent unused variable warning
         self.motors = Motors()
 
-        self.watchdog_timer
+        self.watchdog_timer = self.create_timer(5.0, self.watchdog)
 
         self.get_logger().info('\t{} STARTED.'.format(self.node_name.upper()))
 
@@ -33,8 +33,7 @@ class MotorNode(Node):
         self.watchdog_timer.shutdown()
         # If this timer runs longer than the duration specified,
         # then watchdog() is called stopping the driving motors.
-        self.watchdog_timer = rclpy.Timer(
-            rclpy.Duration(5.0), self.watchdog, oneshot=True)
+        self.watchdog_timer = self.create_timer(5.0, self.watchdog)
 
     def watchdog(self, event):
         self.get_logger().info('Watchdog fired. Stopping driving motors.')
@@ -45,8 +44,6 @@ def main(args=None):
     rclpy.init(args=args)
 
     motor_node = MotorNode()
-    motor_node.watchdog_timer = rclpy.Timer(
-        rclpy.Duration(5.0), motor_node.watchdog, oneshot=True)
 
     rclpy.spin(motor_node)
 
