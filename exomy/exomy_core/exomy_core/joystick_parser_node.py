@@ -2,17 +2,16 @@
 import rclpy
 from rclpy.node import Node
 
-import time
 from sensor_msgs.msg import Joy
 from exomy_msgs.msg import RoverCommand
 from exomy_core.locomotion_modes import LocomotionMode
 import math
-import enum
 
 
 class JoystickParserNode(Node):
     def __init__(self):
-        super().__init__('joystick_parser_node')
+        self.node_name = 'joystick_parser_node'
+        super().__init__(self.node_name)
 
         self.sub = self.create_subscription(
             Joy,
@@ -28,57 +27,82 @@ class JoystickParserNode(Node):
         self.locomotion_mode = LocomotionMode.ACKERMANN.value
         self.motors_enabled = True
 
-    def callback(self, joy_msg):
+        self.get_logger().info('\t{} STARTED.'.format(self.node_name.upper()))
 
-        global locomotion_mode
-        joy_out = Joystick()
+    def callback(self, data):
+
+        rover_cmd = RoverCommand()
 
         # Function map for the Logitech F710 joystick
         # Button on pad | function
         # --------------|----------------------
-        # X 		| Fake Ackermann mode
-        # B		| Point turn mode
-        # A		| Crabbing mode
-        # left stick	| control speed and direction
+        # A             | Ackermann mode
+        # X             | Point turn mode
+        # Y             | Crabbing mode
+        # Left Stick    | Control speed and direction
+        # START Button  | Enable and disable motors
 
         # Reading out joystick data
-        y = joy_msg.axes[1]
-        x = joy_msg.axes[0]
+        y = data.axes[1]
+        x = data.axes[0]
 
         # Reading out button data to set locomotion mode
-        if (joy_msg.buttons[0] == 1):
-            self.locomotion_mode = LocomotionMode.FAKE_ACKERMANN.value
-        if (joy_msg.buttons[1] == 1):
-            self.locomotion_mode = LocomotionMode.CRABBING.value
-        if (joy_msg.buttons[2] == 1):
+        # X Button
+        if (data.buttons[0] == 1):
             self.locomotion_mode = LocomotionMode.POINT_TURN.value
-        if (joy_msg.buttons[3] == 1):
+        # A Button
+        if (data.buttons[1] == 1):
             self.locomotion_mode = LocomotionMode.ACKERMANN.value
-        joy_out.locomotion_mode = self.locomotion_mode
+        # B Button
+        if (data.buttons[2] == 1):
+            pass
+        # Y Button
+        if (data.buttons[3] == 1):
+            self.locomotion_mode = LocomotionMode.CRABBING.value
+
+        rover_cmd.locomotion_mode = self.locomotion_mode
+
+        # Enable and disable motors
+        # START Button
+        if (data.buttons[9] == 1):
+            if self.motors_enabled is True:
+                self.motors_enabled = False
+                self.node.get_logger().info("Motors disabled!")
+            elif self.motors_enabled is False:
+                self.motors_enabled = True
+                self.node.get_logger().info("Motors enabled!")
+            else:
+                self.node.get_logger().error(
+                    "Exceptional value for [motors_enabled] \
+                    = {}".format(self.motors_enabled))
+                self.motors_enabled = False
+
+        rover_cmd.motors_enabled = self.motors_enabled
 
         # The velocity is decoded as value between 0...100
-        joy_out.vel = int(100 * min(math.sqrt(x*x + y*y), 1.0))
+        rover_cmd.vel = int(100 * min(math.sqrt(x*x + y*y), 1.0))
 
         # The steering is described as an angle between -180...180
         # Which describe the joystick position as follows:
         #   +90
         # 0      +-180
         #   -90
-        joy_out.steering = int(math.atan2(y, x)*180.0/math.pi)
+        #
+        rover_cmd.steering = int(math.atan2(y, x)*180.0/math.pi)
 
-        joy_out.connected = True
+        rover_cmd.connected = True
 
-        self.pub.publish(joy_out)
+        self.pub.publish(rover_cmd)
 
 
 def main(args=None):
     rclpy.init(args=args)
 
-    joystick_node = JoystickNode()
+    joystick_parser_node = JoystickParserNode()
 
-    rclpy.spin(joystick_node)
+    rclpy.spin(joystick_parser_node)
 
-    joystick_node.destroy_node()
+    joystick_parser_node.destroy_node()
 
     rclpy.shutdown()
 
