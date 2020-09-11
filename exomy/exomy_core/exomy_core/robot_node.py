@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-import time
-from exomy_msgs.msg import Joystick, Commands
+from exomy_msgs.msg import RoverCommand, MotorCommands
 import rclpy
 from rclpy.node import Node
 from exomy_core.rover import Rover
@@ -8,22 +7,25 @@ from exomy_core.rover import Rover
 
 class RobotNode(Node):
     def __init__(self):
-        super().__init__('robot_node')
+        self.node_name = 'robot_node'
+        super().__init__(self.node_name)
 
         self.joy_sub = self.create_subscription(
-            Joystick,
-            'joystick',
+            RoverCommand,
+            'rover_command',
             self.joy_callback,
             10)
 
         self.robot_pub = self.create_publisher(
-            Commands,
-            'robot_commands',
+            MotorCommands,
+            'motor_commands',
             1)
         self.robot = Rover()
 
+        self.get_logger().info('\t{} STARTED.'.format(self.node_name.upper()))
+
     def joy_callback(self, msg):
-        cmds = Commands()
+        cmds = MotorCommands()
 
         self.robot.setLocomotionMode(msg.locomotion_mode)
         cmds.motor_angles = self.robot.joystickToSteeringAngle(
@@ -41,7 +43,7 @@ def main(args=None):
 
     rclpy.spin(robot_node)
 
-    rover_node.destroy_node()
+    robot_node.destroy_node()
 
     rclpy.shutdown()
 
