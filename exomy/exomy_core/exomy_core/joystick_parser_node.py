@@ -4,15 +4,15 @@ from rclpy.node import Node
 
 import time
 from sensor_msgs.msg import Joy
-from exomy_msgs.msg import Joystick
-from exomy.locomotion_modes import LocomotionMode
+from exomy_msgs.msg import RoverCommand
+from exomy_core.locomotion_modes import LocomotionMode
 import math
 import enum
 
 
-class JoystickNode(Node):
+class JoystickParserNode(Node):
     def __init__(self):
-        super().__init__('joystick_node')
+        super().__init__('joystick_parser_node')
 
         self.sub = self.create_subscription(
             Joy,
@@ -20,9 +20,13 @@ class JoystickNode(Node):
             self.callback,
             10)
 
-        self.pub = self.create_publisher(Joystick, 'joystick', 1)
+        self.pub = self.create_publisher(
+            RoverCommand,
+            'rover_command',
+            1)
 
-        self.locomotion_mode = LocomotionMode.FAKE_ACKERMANN.value
+        self.locomotion_mode = LocomotionMode.ACKERMANN.value
+        self.motors_enabled = True
 
     def callback(self, joy_msg):
 
@@ -53,7 +57,7 @@ class JoystickNode(Node):
         joy_out.locomotion_mode = self.locomotion_mode
 
         # The velocity is decoded as value between 0...100
-        joy_out.vel = int(100 * min(math.sqrt(x*x + y*y),1.0))
+        joy_out.vel = int(100 * min(math.sqrt(x*x + y*y), 1.0))
 
         # The steering is described as an angle between -180...180
         # Which describe the joystick position as follows:

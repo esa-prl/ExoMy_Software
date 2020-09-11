@@ -2,7 +2,7 @@ import os
 from glob import glob
 from setuptools import setup
 
-package_name = 'exomy'
+package_name = 'exomy_core'
 
 setup(
     name=package_name,
@@ -18,13 +18,13 @@ setup(
     zip_safe=True,
     maintainer='Maximilian Ehrhardt',
     maintainer_email='max.ehrhardt@hotmail.de',
-    description='Control functionalities for the ExoMy rover',
+    description='Core functionalities for the ExoMy rover',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'motor_node = exomy.motor_node:main',
-            'joystick_node = exomy.joystick_node:main',
+            'joystick_parser_node = exomy.joystick_parser_node:main',
             'robot_node = exomy.robot_node:main',
         ],
     },

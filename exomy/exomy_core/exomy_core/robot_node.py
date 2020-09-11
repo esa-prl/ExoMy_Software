@@ -3,7 +3,7 @@ import time
 from exomy_msgs.msg import Joystick, Commands
 import rclpy
 from rclpy.node import Node
-from exomy.rover import Rover
+from exomy_core.rover import Rover
 
 
 class RobotNode(Node):

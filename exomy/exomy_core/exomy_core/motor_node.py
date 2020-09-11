@@ -4,7 +4,7 @@ from rclpy.node import Node
 import time
 
 from exomy_msgs.msg import Commands
-from exomy.motors import Motors
+from exomy_core.motors import Motors
 
 
 class MotorNode(Node):
