@@ -2,7 +2,7 @@
 import rclpy
 from rclpy.node import Node
 
-from exomy_msgs.msg import Commands
+from exomy_msgs.msg import RoverCommand
 from exomy_core.motors import Motors
 
 
@@ -12,8 +12,8 @@ class MotorNode(Node):
         super().__init__(self.node_name)
 
         self.subscription = self.create_subscription(
-            Commands,
-            'robot_commands',
+            RoverCommand,
+            'rover_command',
             self.callback,
             10)
         self.subscription  # prevent unused variable warning
