@@ -8,8 +8,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && \
     apt-get install vim nano git tmux wget curl python3-pip net-tools iputils-ping zsh fonts-powerline -y
 
+# Workaround for issue: https://github.com/sudo-project/sudo/issues/42
+RUN echo "Set disable_coredump false" >> /etc/sudo.conf
+
 # Create and switch to non-root user in sudoers group
-RUN adduser --disabled-password --gecos '' exomy --shell /bin/zsh &&\
+RUN adduser --disabled-password --gecos '' exomy --shell /bin/bash &&\
     adduser exomy sudo &&\
     echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER exomy
@@ -17,7 +20,7 @@ USER exomy
 # OH-MY-ZSH Installation
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" &&\
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/' ~/.zshrc &&\
-    echo "source /opt/ros/foxy/setup.zsh" >> ~/.zshrc
+    echo "source /opt/ros/foxy/setup.zsh" >> ~/.zshrc 
 
 # Install additional ros packages
 RUN sudo apt-get update && \
@@ -29,20 +32,19 @@ RUN pip3 install adafruit-pca9685
 RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
 RUN sudo apt-get update && \
     sudo apt-get install nodejs -y
-RUN sudo npm install http-server -g
 
-# Install packages for camera use
-# RUN apt-get update && \
-# apt-get install ros-foxy-web-video-server ros-foxy-usb-cam -y
-
-# Add ros sourcing to bashrc
-# RUN echo ". /opt/ros/foxy/setup.bash" >> ~/.bashrc
+ENV NPM_CONFIG_PREFIX=/home/exomy/.npm-global
+ENV PATH=$PATH:/home/exomy/.npm-global/bin
+RUN npm install http-server -g
 
 # Create Ros workspace
 ENV EXOMY_WS=/home/exomy/exomy_ws
 RUN mkdir -p $EXOMY_WS/src
 
-WORKDIR /home/exomy
+WORKDIR /home/exomy/exomy_ws
+
+RUN echo ". /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+CMD [ "bash" ]

@@ -1,26 +1,36 @@
 #!/bin/bash
+set -e
+
 if [[ $1 == "config" ]]
 then
-	cd /root/exomy_ws/src/exomy/scripts
-	zsh	
+	cd "/home/exomy/exomy_ws/src/exomy/scripts"
+	bash
 elif [[ $1 == "autostart" ]]
 then
-	source /opt/ros/foxy/setup.bash
-	cd /root/exomy_ws
-	colcon build	
-	http-server src/exomy/gui -p 8000 &
+	cd "/home/exomy/exomy_ws"
 
-	source install/setup.zsh
-	roslaunch exomy exomy.launch
+	source "/opt/ros/foxy/setup.bash"
+	colcon build
+	source "/home/exomy/exomy_ws/install/setup.bash"
+	
+	cd "/home/exomy/exomy_ws/src/exomy_gui"
 
-	zsh
+	node node_modules/ros2-web-bridge/bin/rosbridge.js &
+	http-server -p 8000 &
+
+	# Sleep is needed to first print output and yjem start bash
+	sleep 1
+	
+	cd "/home/exomy/exomy_ws"
+	bash
 elif [[ $1 == "devel" ]]
 then
-	cd /root/exomy_ws
-	source /opt/ros/foxy/setup.bash
-	catkin_make
-	source install/setup.bash
-	zsh	
+	cd "/home/exomy/exomy_ws"
+	source "/opt/ros/foxy/setup.bash"
+	colcon build
+	source "/home/exomy/exomy_ws/install/setup.bash"
+	
+	bash
 else
-	zsh
+	bash
 fi
