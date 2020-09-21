@@ -1,0 +1,15 @@
+{
+  "name": "exomy_gui",
+  "version": "1.0.0",
+  "description": "This package provides a web based gui for ExoMy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maximilian Ehrhardt",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "nipplejs": "^0.8.7",
+    "ros2-web-bridge": "^0.3.0"
+  }
+}

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+
+  <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+  <script src="./node_modules/nipplejs/dist/nipplejs.js"></script>
+  <script type="text/javascript" type="text/javascript">
+    var publishImmidiately = true;
+    var host_url = window.location.hostname;
+    console.log(host_url);
+    var watchdog_handle;
+
+    var ros = new ROSLIB.Ros({
+      url: 'ws://' + host_url + ':9090'
+    });
+
+    // Initialize Axes and Buttons arrays
+    var axes = [0, 0, 0, 0, 0, 0];
+    var buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    ros.on('connection', function () {
+      document.getElementById("status").innerHTML = "Connected";
+    });
+
+    ros.on('error', function (error) {
+      document.getElementById("status").innerHTML = "Error";
+    });
+
+    ros.on('close', function () {
+      document.getElementById("status").innerHTML = "Closed";
+    });
+
+    createJoystick = function () {
+      var options = {
+        zone: document.getElementById('joy_container'),
+        threshold: 0.1,
+        position: { left: '50%', top: '50%' },
+        mode: 'static',
+        size: 150,
+        color: 'black'
+      };
+      manager = nipplejs.create(options);
+
+      self.manager.on('start', function (event, nipple) {
+      });
+
+      self.manager.on('move', function (event, nipple) {
+        var max_distance = 75;
+        var x = -Math.cos(nipple.angle.radian) * nipple.distance / max_distance;
+        var y = Math.sin(nipple.angle.radian) * nipple.distance / max_distance;
+        axes = [x, y, 0, 0, 0, 0]
+
+        // nipplejs is triggering events when joystick moves each pixel
+        // we need delay between consecutive messege publications to 
+        // prevent system from being flooded by messages
+        // events triggered earlier than 50ms after last publication will be dropped 
+
+        if (publishImmidiately) {
+          publishImmidiately = false;
+          joy_event()
+          window.clearInterval(watchdog_handle)
+          watchdog_handle = window.setInterval(joy_event, 50)
+
+          setTimeout(function () {
+            publishImmidiately = true;
+          }, 50);
+        }
+        //joy_event()
+        //window.clearInterval()
+        //window.setInterval(joy_event, 500)
+      });
+
+      self.manager.on('end', function () {
+        window.clearInterval(watchdog_handle)
+        axes = [0, 0, 0, 0, 0, 0]
+        joy_event()
+        console.log('End function called')
+      });
+    }
+    window.onload = function () {
+      createJoystick();
+      // Video output
+      // stream_url = '//' + host_url + ':8080/stream?topic=/pi_cam/image_raw';
+      // console.log(stream_url);
+      // document.getElementById("video_output").src = stream_url;
+    }
+
+    var joy_listener = new ROSLIB.Topic({
+      ros: ros,
+      name: "/joy",
+      messageType: 'sensor_msgs/Joy'
+    });
+
+    joy_event = function () {
+      var currentTime = new Date();
+      var secs = Math.floor(currentTime.getTime() / 1000);
+      var nsecs = Math.round(1000000000 * (currentTime.getTime() / 1000 - secs));
+
+      joy_listener.publish({
+        header: {
+          stamp: { sec: secs, nanosec: nsecs },
+          frame_id: ''
+        },
+        axes: axes,
+        buttons: buttons
+      })
+
+      console.log(currentTime)
+      console.log(axes)
+      console.log(buttons)
+    }
+
+    button_clicked = function (button_index) {
+      // The desired button index can be found by listening to the /joy ros message
+      // or by checking in the wiki for the gamepad mapping.
+      // Set axes to 0 to prevent driving during mode change.
+      axes = [0, 0, 0, 0, 0, 0];
+      buttons[button_index] = 1;
+      joy_event();
+      // After the command is sent set the index back to 0
+      buttons[button_index] = 0;
+    }
+
+  </script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+
+<body>
+  <main>
+    <div class="wrapper">
+      <div class="left" id="left">
+        <div class="joy_container" id="joy_container"></div>
+      </div>
+
+      <div class="middle" id="middle">
+        <div class="image_container">
+          <img id="video_output" style="object-fit:cover; width:100%;"></img>
+        </div>
+      </div>
+      <div class="right" id="right">
+        <div class="button_container">
+          <button class="button buttonY" onclick="button_clicked(3)">CRABBING</button>
+          <button class="button buttonX" onclick="button_clicked(0)">SPOT TURN</button>
+          <button class="button buttonA" onclick="button_clicked(1)">ACKERMANN</button>
+          <button class="button buttonStart" onclick="button_clicked(9)">MOTORS</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+</html>
