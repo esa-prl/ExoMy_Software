@@ -65,9 +65,13 @@ fi
 docker run \
     -it \
     -v ~/ExoMy_Software:/root/exomy_ws/src/exomy \
+    -v ~/ExoMy_Model:/root/exomy_ws/src/ExoMy_Model \
     -p 8000:8000 \
     -p 8080:8080 \
     -p 9090:9090 \
+    --env="DISPLAY" \
+    --env="QT_X11_NO_MITSHM=1" \
+    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --privileged \
     ${options} \
     --name "${container_name}" \

@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get install vim nano git tmux wget curl python-pip net-tools iputils-ping  -y
 
 # Install additional ros packages
-RUN apt-get update && apt-get install ros-melodic-rosbridge-server ros-melodic-joy -y
+RUN apt-get update && apt-get install ros-melodic-rosbridge-server ros-melodic-joy ros-melodic-joint-state-publisher ros-melodic-joint-state-publisher-gui ros-melodic-robot-state-publisher ros-melodic-rviz ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-ros-control -y
 RUN pip install adafruit-pca9685
 
 
