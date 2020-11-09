@@ -46,16 +46,16 @@ On each motor you have to turn the correction screw until the motor really stand
     pwm.set_pwm_freq(pwm_frequency)
 
     # The cycle is the inverted frequency converted to milliseconds
-    cycle = 1.0/pwm_frequency * 1000.0  # ms
+    cycle = 1.0/pwm_frequency * 1000.0  # 20 ms
 
     # The time the pwm signal is set to on during the duty cycle
     on_time = 1.5  # ms
 
     # Duty cycle is the percentage of a cycle the signal is on
-    duty_cycle = on_time/cycle
+    duty_cycle = on_time/cycle # 0.075
 
     # The PCA 9685 board requests a 12 bit number for the duty_cycle
-    value = int(duty_cycle*4096.0)
+    value = int(duty_cycle*4096.0) # 307
 
     pin_list = get_driving_pins()
 
