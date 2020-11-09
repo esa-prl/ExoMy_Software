@@ -58,16 +58,16 @@ class Motors():
 
         self.steering_pwm_neutral = [None] * 6
 
-        self.steering_pwm_neutral[self.FL] = rospy.get_param("steer_offset_fl")
-        self.steering_pwm_neutral[self.FR] = rospy.get_param("steer_offset_fr")
-        self.steering_pwm_neutral[self.CL] = rospy.get_param("steer_offset_cl")
-        self.steering_pwm_neutral[self.CR] = rospy.get_param("steer_offset_cr")
-        self.steering_pwm_neutral[self.RL] = rospy.get_param("steer_offset_rl")
-        self.steering_pwm_neutral[self.RR] = rospy.get_param("steer_offset_rr")
+        self.steering_pwm_neutral[self.FL] = rospy.get_param("steer_pwm_neutral_fl")
+        self.steering_pwm_neutral[self.FR] = rospy.get_param("steer_pwm_neutral_fr")
+        self.steering_pwm_neutral[self.CL] = rospy.get_param("steer_pwm_neutral_cl")
+        self.steering_pwm_neutral[self.CR] = rospy.get_param("steer_pwm_neutral_cr")
+        self.steering_pwm_neutral[self.RL] = rospy.get_param("steer_pwm_neutral_rl")
+        self.steering_pwm_neutral[self.RR] = rospy.get_param("steer_pwm_neutral_rr")
         self.steering_pwm_range = rospy.get_param("steer_range")
 
         self.driving_pwm_low_limit = 100
-        self.driving_pwm_neutral = rospy.get_param("drive_offset")
+        self.driving_pwm_neutral = rospy.get_param("drive_pwm_neutral")
         self.driving_pwm_upper_limit = 500
         self.driving_pwm_range = rospy.get_param("drive_range")
 
