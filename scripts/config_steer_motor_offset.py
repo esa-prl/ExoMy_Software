@@ -15,15 +15,15 @@ def get_steering_motor_pins():
             steering_motor_pins[param_key] = param_value
     return steering_motor_pins
 
-def get_steering_motor_offsets():
-    steering_motor_offsets = {}
+def get_steering_pwm_neutral_values():
+    steering_pwm_neutral_values = {}
     with open(config_filename, 'r') as file:
         param_dict = yaml.load(file)
 
     for param_key, param_value in param_dict.items():
-        if('steer_offset_' in str(param_key)):
-            steering_motor_offsets[param_key] = param_value
-    return steering_motor_offsets
+        if('steer_pwm_neutral_' in str(param_key)):
+            steering_pwm_neutral_values[param_key] = param_value
+    return steering_pwm_neutral_values
 
 
 def get_position_name(name):
@@ -44,11 +44,11 @@ def get_position_name(name):
     return position_name
 
 
-def update_config_file(steering_offset_dict):
+def update_config_file(steering_pwm_neutral_dict):
     output = ''
     with open(config_filename, 'rt') as file:
         for line in file:
-            for key, value in steering_offset_dict.items():
+            for key, value in steering_pwm_neutral_dict.items():
                 if(key in line):
                     line = line.replace(line.split(': ', 1)[
                                         1], str(value) + '\n')
@@ -78,13 +78,14 @@ $$$$$$$$\ $$  /\$$\ \$$$$$$  |$$ | \_/ $$ |\$$$$$$$ |
     )
     print(
         '''
-This script helps you to set the offset for the steering motors.
+This script helps you to set the neutral pwm values for the steering motors.
 You will iterate over all steering motors and set them to a neutral position.
+The determined value is written to the config file.
 
 Commands:
-a - Decrease offset for current pin
-d - Increase offset for current pin
-q - Finish setting offset for current pin
+a - Decrease value for current pin
+d - Increase value for current pin
+q - Finish setting value for current pin
 
 [Every of these commands must be confirmed with the enter key]
 
@@ -112,29 +113,29 @@ ctrl+c - Exit script
 
     # Get all steering pins
     steering_motor_pins = get_steering_motor_pins()
-    offset_dict = get_steering_motor_offsets()
+    pwm_neutral_dict = get_steering_pwm_neutral_values()
     # Iterating over all motors and fine tune the zero value
     for pin_name, pin_value in steering_motor_pins.items():
-        offset_name = pin_name.replace('pin_steer_', 'steer_offset_')
-        offset_value = offset_dict[offset_name] 
+        pwm_neutral_name = pin_name.replace('pin_steer_', 'steer_pwm_neutral_')
+        pwm_neutral_value = pwm_neutral_dict[pwm_neutral_name] 
 
         print('Set ' + get_position_name(pin_name) + ' steering motor: \n')
         while(1):
             # Set motor
-            pwm.set_pwm(pin_value, 0, offset_value)
+            pwm.set_pwm(pin_value, 0, pwm_neutral_value)
             time.sleep(0.1)
-            print('Current value: ' + str(offset_value) + '\n')
+            print('Current value: ' + str(pwm_neutral_value) + '\n')
             input = raw_input(
-                'q-set / a-decrease offset / d-increase offset \n')
+                'q-set / a-decrease pwm neutral value/ d-increase pwm neutral value\n')
             if(input is 'q'):
-                print('Offset for ' + get_position_name(pin_name) +
+                print('PWM neutral value for ' + get_position_name(pin_name) +
                       ' has been set.\n')
                 break
             elif(input is 'a'):
-                print('Decreased offset')
-                offset_value -= 5
+                print('Decreased pwm neutral value')
+                pwm_neutral_value-= 5
             elif(input is 'd'):
-                print('Increased offset')
-                offset_value += 5
-        offset_dict[offset_name] = offset_value
-    update_config_file(offset_dict)
+                print('Increased pwm neutral value')
+                pwm_neutral_value += 5
+        pwm_neutral_dict[pwm_neutral_name] = pwm_neutral_value
+    update_config_file(pwm_neutral_dict)

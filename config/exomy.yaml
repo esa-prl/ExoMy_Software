@@ -23,23 +23,20 @@ pin_steer_rl: 13
 pin_drive_rr: 3
 pin_steer_rr: 1
 
-# Offsets for the steering motors
-steer_offset_fl: 300
-steer_offset_fr: 300
-steer_offset_cl: 300
-steer_offset_cr: 300
-steer_offset_rl: 300
-steer_offset_rr: 300
+## PWM values
+# Those values highly depend on the motors and pwm board used
+# Check out the wiki for further explanation
 
-steer_range: 250
+# Offsets for the steering motors
+steer_pwm_neutral_fl: 300
+steer_pwm_neutral_fr: 300
+steer_pwm_neutral_cl: 300
+steer_pwm_neutral_cr: 300
+steer_pwm_neutral_rl: 300
+steer_pwm_neutral_rr: 300
+
+steer_pwm_range: 250
 
 # Offsets for the driving motors
-drive_offset_fl: 300
-drive_offset_fr: 300
-drive_offset_cl: 300
-drive_offset_cr: 300
-drive_offset_rl: 300
-drive_offset_rr: 300
-
-drive_offset: 325
-drive_range: 100
+drive_pwm_neutral: 307
+drive_pwm_range: 100
