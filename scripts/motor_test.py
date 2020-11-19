@@ -13,7 +13,7 @@ if len(sys.argv) < 2:
     print('You must give the pin number of the motor to be tested as argument.')
     print('E.g: python motor_test.py 3')
     print('Tests the motor connected to pin 3.')
-    exit
+    exit()
 
 # Set the pin of the motor
 pin = int(sys.argv[1])
