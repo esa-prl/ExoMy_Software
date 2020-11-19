@@ -114,8 +114,9 @@ Motor Configuration
 
 This scripts leads you through the configuration of the motors.
 First we have to find out, to which pin of the PWM board a motor is connected.
-Look closely which motor moves and type in the asnwer.
+Look closely which motor moves and type in the answer.
 
+Ensure to run the script until the end, otherwise your changes will not be saved!
 This script can always be stopped with ctrl+c and restarted.
 All other controls will be explained in the process.
 ###############
