@@ -1,5 +1,7 @@
 import Adafruit_PCA9685
 import time
+from shutil import copyfile
+import os
 
 DRIVE_MOTOR, STEER_MOTOR = [0, 1]
 
@@ -73,8 +75,14 @@ def print_exomy_layout():
         '''
     )
 
+
 def update_config_file():
     file_name = '../config/exomy.yaml'
+    template_file_name = file_name+'.template'
+
+    if not os.path.exists(file_name):
+        copyfile(template_file_name, file_name)
+        print("exomy.yaml.template was copied to exomy.yaml")
 
     output = ''
     with open(file_name, 'rt') as file:
@@ -122,6 +130,7 @@ All other controls will be explained in the process.
 ###############
         '''
     )
+
     for pin_number in range(16):
         motor = Motor(pin_number)
         motor.stop_motor()

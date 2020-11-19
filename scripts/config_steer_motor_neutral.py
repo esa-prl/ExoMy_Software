@@ -94,6 +94,10 @@ ctrl+c - Exit script
         '''
     )
 
+    if not os.path.exists(config_filename):
+        print("exomy.yaml does not exist. Finish config_motor_pins.py to generate it.")
+        exit()
+
     pwm = Adafruit_PCA9685.PCA9685()
     # For most motors a pwm frequency of 50Hz is normal
     pwm_frequency = 50.0  # Hz
