@@ -64,12 +64,12 @@ class Motors():
         self.steering_pwm_neutral[self.CR] = rospy.get_param("steer_pwm_neutral_cr")
         self.steering_pwm_neutral[self.RL] = rospy.get_param("steer_pwm_neutral_rl")
         self.steering_pwm_neutral[self.RR] = rospy.get_param("steer_pwm_neutral_rr")
-        self.steering_pwm_range = rospy.get_param("steer_range")
+        self.steering_pwm_range = rospy.get_param("steer_pwm_range")
 
         self.driving_pwm_low_limit = 100
         self.driving_pwm_neutral = rospy.get_param("drive_pwm_neutral")
         self.driving_pwm_upper_limit = 500
-        self.driving_pwm_range = rospy.get_param("drive_range")
+        self.driving_pwm_range = rospy.get_param("drive_pwm_range")
 
         # Set steering motors to neutral values (straight)
         for wheel_name, motor_pin in self.pins['steer'].items():
