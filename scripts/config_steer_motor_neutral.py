@@ -1,6 +1,7 @@
 import Adafruit_PCA9685
 import yaml
 import time
+import os
 
 config_filename = '../config/exomy.yaml'
 
@@ -143,3 +144,4 @@ ctrl+c - Exit script
                 pwm_neutral_value += 5
         pwm_neutral_dict[pwm_neutral_name] = pwm_neutral_value
     update_config_file(pwm_neutral_dict)
+    print("Finished configuration!!!")
