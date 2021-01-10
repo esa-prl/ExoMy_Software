@@ -27,7 +27,7 @@ pin_steer_rr: 1
 # Those values highly depend on the motors and pwm board used
 # Check out the wiki for further explanation
 
-# Offsets for the steering motors
+# PWM values for the neutral steering position
 steer_pwm_neutral_fl: 300
 steer_pwm_neutral_fr: 300
 steer_pwm_neutral_cl: 300
@@ -35,8 +35,11 @@ steer_pwm_neutral_cr: 300
 steer_pwm_neutral_rl: 300
 steer_pwm_neutral_rr: 300
 
+# PWW range around steering neutral position
 steer_pwm_range: 250
 
-# Offsets for the driving motors
+# PWM value for the stop position of driving motors
 drive_pwm_neutral: 307
+
+# PWW range around driving neutral position
 drive_pwm_range: 100
