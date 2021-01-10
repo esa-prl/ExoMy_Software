@@ -1,5 +1,7 @@
 import Adafruit_PCA9685
 import time
+from shutil import copyfile
+import os
 
 DRIVE_MOTOR, STEER_MOTOR = [0, 1]
 
@@ -73,8 +75,14 @@ def print_exomy_layout():
         '''
     )
 
+
 def update_config_file():
     file_name = '../config/exomy.yaml'
+    template_file_name = file_name+'.template'
+
+    if not os.path.exists(file_name):
+        copyfile(template_file_name, file_name)
+        print("exomy.yaml.template was copied to exomy.yaml")
 
     output = ''
     with open(file_name, 'rt') as file:
@@ -114,13 +122,15 @@ Motor Configuration
 
 This scripts leads you through the configuration of the motors.
 First we have to find out, to which pin of the PWM board a motor is connected.
-Look closely which motor moves and type in the asnwer.
+Look closely which motor moves and type in the answer.
 
+Ensure to run the script until the end, otherwise your changes will not be saved!
 This script can always be stopped with ctrl+c and restarted.
 All other controls will be explained in the process.
 ###############
         '''
     )
+
     for pin_number in range(16):
         motor = Motor(pin_number)
         motor.stop_motor()

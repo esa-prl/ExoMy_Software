@@ -1,6 +1,7 @@
 import Adafruit_PCA9685
 import yaml
 import time
+import os
 
 config_filename = '../config/exomy.yaml'
 
@@ -52,6 +53,11 @@ It will send the intended signal for "not moving" to all the motors.
 On each motor you have to turn the correction screw until the motor really stands still.
         '''
     )
+
+    if not os.path.exists(config_filename):
+        print("exomy.yaml does not exist. Finish config_motor_pins.py to generate it.")
+        exit()
+
 
     pwm = Adafruit_PCA9685.PCA9685()
 
