@@ -3,7 +3,17 @@ import time
 import sys
 '''
 This script helps to test pwm motors with the Adafruit PCA9685 board 
+Example usage:
+python motor_test.py 3
+
+Performs a motor test for the motor connected to pin 3 of the PWM board
 '''
+# Check if the pin number is given as an argument
+if len(sys.argv) < 2:
+    print('You must give the pin number of the motor to be tested as argument.')
+    print('E.g: python motor_test.py 3')
+    print('Tests the motor connected to pin 3.')
+    exit()
 
 # Set the pin of the motor
 pin = int(sys.argv[1])
