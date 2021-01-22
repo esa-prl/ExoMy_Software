@@ -2,7 +2,7 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.timer import Timer
-from exomy_msgs.msg import RoverCommand
+from exomy_msgs.msg import MotorCommands
 from exomy_core.motors import Motors
 
 
@@ -12,8 +12,8 @@ class MotorNode(Node):
         super().__init__(self.node_name)
 
         self.subscription = self.create_subscription(
-            RoverCommand,
-            'rover_command',
+            MotorCommands,
+            'motor_commands',
             self.callback,
             10)
         self.subscription  # prevent unused variable warning
@@ -30,7 +30,7 @@ class MotorNode(Node):
         self.motors.setSteering(cmds.motor_angles)
         self.motors.setDriving(cmds.motor_speeds)
 
-        self.watchdog_timer.shutdown()
+        self.watchdog_timer.cancel()
         # If this timer runs longer than the duration specified,
         # then watchdog() is called stopping the driving motors.
         self.watchdog_timer = self.create_timer(5.0, self.watchdog)
