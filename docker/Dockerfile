@@ -8,15 +8,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && \
     apt-get install vim nano git tmux wget curl python3-pip net-tools iputils-ping zsh fonts-powerline -y
 
-# Workaround for issue: https://github.com/sudo-project/sudo/issues/42
-RUN echo "Set disable_coredump false" >> /etc/sudo.conf
-
-# Create and switch to non-root user in sudoers group
-RUN adduser --disabled-password --gecos '' exomy --shell /bin/bash &&\
-    adduser exomy sudo &&\
-    echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-USER exomy
-
 # OH-MY-ZSH Installation
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" &&\
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/' ~/.zshrc &&\
@@ -40,8 +31,8 @@ RUN npm install http-server -g
 # Create Ros workspace
 ENV EXOMY_WS=/home/exomy/exomy_ws
 RUN mkdir -p $EXOMY_WS/src
+WORKDIR /root
 
-WORKDIR /home/exomy/exomy_ws
 
 RUN echo ". /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 
