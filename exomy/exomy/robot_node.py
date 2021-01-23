@@ -2,7 +2,7 @@
 from exomy_msgs.msg import RoverCommand, MotorCommands
 import rclpy
 from rclpy.node import Node
-from exomy_core.rover import Rover
+from .rover import Rover
 
 
 class RobotNode(Node):

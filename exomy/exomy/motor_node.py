@@ -3,7 +3,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.timer import Timer
 from exomy_msgs.msg import MotorCommands
-from exomy_core.motors import Motors
+from .motors import Motors
 
 
 class MotorNode(Node):

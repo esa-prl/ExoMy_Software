@@ -7,7 +7,7 @@ namespace_ = 'exomy'
 
 def generate_launch_description():
     robot = Node(
-        package='exomy_core',
+        package='exomy',
         executable='robot_node',
         name='robot_node',
         namespace=namespace_,
@@ -21,14 +21,14 @@ def generate_launch_description():
         output='screen'
     )
     joystick = Node(
-        package='exomy_core',
+        package='exomy',
         executable='joystick_parser_node',
         name='joystick_parser_node',
         namespace=namespace_,
         output='screen'
     )
     motors = Node(
-        package='exomy_core',
+        package='exomy',
         executable='motor_node',
         name='motor_node',
         namespace=namespace_,
