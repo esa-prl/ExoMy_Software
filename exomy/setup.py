@@ -2,7 +2,7 @@ import os
 from glob import glob
 from setuptools import setup
 
-package_name = 'exomy_core'
+package_name = 'exomy'
 
 setup(
     name=package_name,
@@ -23,9 +23,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'motor_node = exomy_core.motor_node:main',
-            'joystick_parser_node = exomy_core.joystick_parser_node:main',
-            'robot_node = exomy_core.robot_node:main',
+            'motor_node = exomy.motor_node:main',
+            'joystick_parser_node = exomy.joystick_parser_node:main',
+            'robot_node = exomy.robot_node:main',
         ],
     },
 )

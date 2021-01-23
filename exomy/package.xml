@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>exomy_core</name>
+  <name>exomy</name>
   <version>2.0.0</version>
   <description>Core functionality for ExoMy</description>
   <maintainer email="max.ehrhardt@hotmail.de">Maximilian Ehrhardt</maintainer>
@@ -11,7 +11,6 @@
 
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-  <exec_depend>exomy_msgs</exec_depend>
   
   <export>
     <build_type>ament_python</build_type>
