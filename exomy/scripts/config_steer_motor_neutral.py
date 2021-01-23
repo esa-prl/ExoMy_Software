@@ -9,7 +9,7 @@ config_filename = '../config/exomy.yaml'
 def get_steering_motor_pins():
     steering_motor_pins = {}
     with open(config_filename, 'r') as file:
-        param_dict = yaml.load(file)
+        param_dict = yaml.load(file, yaml.FullLoader)
 
     for param_key, param_value in param_dict.items():
         if('pin_steer_' in str(param_key)):
@@ -19,7 +19,7 @@ def get_steering_motor_pins():
 def get_steering_pwm_neutral_values():
     steering_pwm_neutral_values = {}
     with open(config_filename, 'r') as file:
-        param_dict = yaml.load(file)
+        param_dict = yaml.load(file, yaml.FullLoader)
 
     for param_key, param_value in param_dict.items():
         if('steer_pwm_neutral_' in str(param_key)):

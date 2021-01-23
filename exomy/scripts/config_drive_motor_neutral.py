@@ -9,7 +9,7 @@ config_filename = '../config/exomy.yaml'
 def get_driving_pins():
     pin_list = []
     with open(config_filename, 'r') as file:
-        param_dict = yaml.load(file)
+        param_dict = yaml.load(file, yaml.FullLoader)
 
     for key, value in param_dict.items():
         if('pin_drive_' in str(key)):
@@ -19,7 +19,7 @@ def get_driving_pins():
 def get_drive_pwm_neutral():
      
     with open(config_filename, 'r') as file:
-        param_dict = yaml.load(file)
+        param_dict = yaml.load(file, yaml.FullLoader)
 
     for key, value in param_dict.items():
         if('drive_pwm_neutral' in str(key)):
