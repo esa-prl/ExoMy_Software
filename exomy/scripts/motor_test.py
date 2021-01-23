@@ -39,7 +39,7 @@ while(selection != '0'):
     print("1. Min to Max oscilation")
     print('2. Incremental positioning')
     print('0. Abort')
-    selection = raw_input()
+    selection = input()
 
     if (int(selection) == 1):
 

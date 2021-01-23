@@ -130,7 +130,7 @@ ctrl+c - Exit script
             pwm.set_pwm(pin_value, 0, pwm_neutral_value)
             time.sleep(0.1)
             print('Current value: ' + str(pwm_neutral_value) + '\n')
-            input = raw_input(
+            input = input(
                 'q-set / a-decrease pwm neutral value/ d-increase pwm neutral value\n')
             if(input is 'q'):
                 print('PWM neutral value for ' + get_position_name(pin_name) +

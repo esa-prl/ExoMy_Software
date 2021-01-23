@@ -90,7 +90,7 @@ On each motor you have to turn the correction screw until the motor really stand
         pwm.set_pwm(pin, 0, value)
         time.sleep(0.1)
 
-    raw_input('Press any button if you are done to complete configuration\n')
+    input('Press any button if you are done to complete configuration\n')
 
     for pin in pin_list:
         pwm.set_pwm(pin, 0, 0)
