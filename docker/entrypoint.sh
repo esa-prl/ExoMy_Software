@@ -13,7 +13,7 @@ then
 	colcon build
 	source "/root/exomy_ws/install/setup.bash"
 	
-	cd "/root/exomy_ws/src/exomy_gui"
+	cd "/root/exomy_ws/src/exomy/gui"
 
 	node node_modules/ros2-web-bridge/bin/rosbridge.js &
 	http-server -p 8000 &
@@ -27,8 +27,8 @@ elif [[ $1 == "devel" ]]
 then
 	cd "/root/exomy_ws"
 	source "/opt/ros/foxy/setup.bash"
-	colcon build
-	source "/root/exomy_ws/install/setup.bash"
+	# colcon build
+	# source "/root/exomy_ws/install/setup.bash"
 	
 	bash
 else
