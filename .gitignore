@@ -1,3 +1,4 @@
 *.pyc
 *.cpython-36.pyc
 .vscode
+exomy/config/exomy.yaml
