@@ -105,7 +105,8 @@ class MotorNode(Node):
         self.watchdog_timer.cancel()
         # If this timer runs longer than the duration specified,
         # then watchdog() is called stopping the driving motors.
-        self.watchdog_timer = self.create_timer(5.0, self.watchdog)
+        # Preventing the robot to go on driving if connection is lost.
+        self.watchdog_timer = self.create_timer(2.0, self.watchdog)
 
     def watchdog(self):
         self.get_logger().info('Watchdog fired. Stopping driving motors.')
