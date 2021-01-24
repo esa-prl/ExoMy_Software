@@ -67,12 +67,12 @@ class JoystickParserNode(Node):
         if (data.buttons[9] == 1):
             if self.motors_enabled is True:
                 self.motors_enabled = False
-                self.node.get_logger().info("Motors disabled!")
+                self.get_logger().info("Motors disabled!")
             elif self.motors_enabled is False:
                 self.motors_enabled = True
-                self.node.get_logger().info("Motors enabled!")
+                self.get_logger().info("Motors enabled!")
             else:
-                self.node.get_logger().error(
+                self.get_logger().error(
                     "Exceptional value for [motors_enabled] \
                     = {}".format(self.motors_enabled))
                 self.motors_enabled = False
