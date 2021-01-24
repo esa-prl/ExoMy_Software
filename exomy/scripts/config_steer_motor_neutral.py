@@ -10,21 +10,42 @@ def get_steering_motor_pins():
     steering_motor_pins = {}
     with open(config_filename, 'r') as file:
         param_dict = yaml.load(file, yaml.FullLoader)
-
-    for param_key, param_value in param_dict.items():
-        if('pin_steer_' in str(param_key)):
-            steering_motor_pins[param_key] = param_value
-    return steering_motor_pins
+    
+    if 'exomy' in param_dict:
+        param_dict = param_dict['exomy']
+        if 'ros__parameters' in param_dict:
+            param_dict = param_dict['ros__parameters']
+            for param_key, param_value in param_dict.items():
+                if('pin_steer_' in str(param_key)):
+                    steering_motor_pins[param_key] = param_value
+            return steering_motor_pins
+        else:
+            print('Unexpected format of exomy.yaml file! Missing ros__parameters')
+            exit()
+    else:
+        print('Unexpected format of exomy.yaml file! Missing namespace')
+        exit()
+        
 
 def get_steering_pwm_neutral_values():
     steering_pwm_neutral_values = {}
     with open(config_filename, 'r') as file:
         param_dict = yaml.load(file, yaml.FullLoader)
 
-    for param_key, param_value in param_dict.items():
-        if('steer_pwm_neutral_' in str(param_key)):
-            steering_pwm_neutral_values[param_key] = param_value
-    return steering_pwm_neutral_values
+    if 'exomy' in param_dict:
+        param_dict = param_dict['exomy']
+        if 'ros__parameters' in param_dict:
+            param_dict = param_dict['ros__parameters']
+            for param_key, param_value in param_dict.items():
+                if('steer_pwm_neutral_' in str(param_key)):
+                    steering_pwm_neutral_values[param_key] = param_value
+            return steering_pwm_neutral_values
+        else:
+            print('Unexpected format of exomy.yaml file! Missing ros__parameters')
+            exit()
+    else:
+        print('Unexpected format of exomy.yaml file! Missing namespace')
+        exit()
 
 
 def get_position_name(name):
@@ -119,6 +140,7 @@ ctrl+c - Exit script
     # Get all steering pins
     steering_motor_pins = get_steering_motor_pins()
     pwm_neutral_dict = get_steering_pwm_neutral_values()
+
     # Iterating over all motors and fine tune the zero value
     for pin_name, pin_value in steering_motor_pins.items():
         pwm_neutral_name = pin_name.replace('pin_steer_', 'steer_pwm_neutral_')
