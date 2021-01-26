@@ -5,7 +5,7 @@
   <version>2.0.0</version>
   <description>Core functionality for ExoMy</description>
   <maintainer email="max.ehrhardt@hotmail.de">Maximilian Ehrhardt</maintainer>
-  <license>TODO: License declaration</license>
+  <license>GPLv3</license>
 
   <buildtool_depend>ament_python</buildtool_depend>
 

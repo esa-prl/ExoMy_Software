@@ -20,7 +20,7 @@ setup(
     maintainer='Maximilian Ehrhardt',
     maintainer_email='max.ehrhardt@hotmail.de',
     description='Core functionalities for the ExoMy rover',
-    license='TODO: License declaration',
+    license='GPLv3',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
