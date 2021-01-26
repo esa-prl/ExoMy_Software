@@ -25,7 +25,7 @@ setup(
     entry_points={
         'console_scripts': [
             'motor_node = exomy.motor_node:main',
-            'joystick_parser_node = exomy.joystick_parser_node:main',
+            'gamepad_parser_node = exomy.gamepad_parser_node:main',
             'robot_node = exomy.robot_node:main',
         ],
     },
