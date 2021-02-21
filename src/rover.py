@@ -21,15 +21,29 @@ class Rover():
     def __init__(self):
         self.locomotion_mode = LocomotionMode.FAKE_ACKERMANN
 
-        self.wheel_x = 12.0
-        self.wheel_y = 20.0
+        # Rear
+        self.wheel_x = 13.0
+        self.wheel_y = 20.8
+        
+        # Front
+        self.wheel_fx = 15.8
+        self.wheel_fy = 20.8
+        
 
         max_steering_angle = 45
+        # Rear
         self.ackermann_r_min = abs(
             self.wheel_y) / math.tan(max_steering_angle * math.pi / 180.0) + self.wheel_x
 
         self.ackermann_r_max = 250
 
+        # Front
+        self.ackermann_fr_min = abs(
+            self.wheel_fy) / math.tan(max_steering_angle * math.pi / 180.0) + self.wheel_fx
+
+        self.ackermann_fr_max = 250
+
+        
     def setLocomotionMode(self, locomotion_mode_command):
         '''
         Sets the locomotion mode
@@ -117,7 +131,7 @@ class Rover():
             if(driving_command is 0):
                 return steering_angles
 
-            # Scale between min and max Ackermann radius
+            # Rear: Scale between min and max Ackermann radius
             if math.cos(math.radians(steering_command)) == 0:
                 r = self.ackermann_r_max
             else:
@@ -125,25 +139,41 @@ class Rover():
                     abs(math.cos(math.radians(steering_command))) * \
                     ((self.ackermann_r_max-self.ackermann_r_min))
 
+            # Front: Scale between min and max Ackermann radius
+            if math.cos(math.radians(steering_command)) == 0:
+                fr = self.ackermann_fr_max
+            else:
+                fr = self.ackermann_fr_max - \
+                    abs(math.cos(math.radians(steering_command))) * \
+                    ((self.ackermann_fr_max-self.ackermann_fr_min))
+ 
+               
             # No steering
             if r == self.ackermann_r_max:
                 return steering_angles
 
+            # Rear
             inner_angle = int(math.degrees(
                 math.atan(self.wheel_x/(abs(r)-self.wheel_y))))
             outer_angle = int(math.degrees(
                 math.atan(self.wheel_x/(abs(r)+self.wheel_y))))
+            
+            # Front
+            front_inner_angle = int(math.degrees(
+                math.atan(self.wheel_fx/(abs(fr)-self.wheel_fy))))
+            front_outer_angle = int(math.degrees(
+                math.atan(self.wheel_fx/(abs(fr)+self.wheel_fy))))
 
             if steering_command > 90 or steering_command < -90:
                 # Steering to the right
-                steering_angles[self.FL] = outer_angle
-                steering_angles[self.FR] = inner_angle
+                steering_angles[self.FL] = front_outer_angle
+                steering_angles[self.FR] = front_inner_angle
                 steering_angles[self.RL] = -outer_angle
                 steering_angles[self.RR] = -inner_angle
             else:
                 # Steering to the left
-                steering_angles[self.FL] = -inner_angle
-                steering_angles[self.FR] = -outer_angle
+                steering_angles[self.FL] = -front_inner_angle
+                steering_angles[self.FR] = -front_outer_angle
                 steering_angles[self.RL] = inner_angle
                 steering_angles[self.RR] = outer_angle
 
