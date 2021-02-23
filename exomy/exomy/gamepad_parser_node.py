@@ -47,15 +47,15 @@ class GamepadParserNode(Node):
         x = data.axes[0]
 
         # Reading out button data to set locomotion mode
-        # X Button
-        if (data.buttons[0] == 1):
-            self.locomotion_mode = LocomotionMode.POINT_TURN.value
         # A Button
-        if (data.buttons[1] == 1):
+        if (data.buttons[0] == 1):
             self.locomotion_mode = LocomotionMode.ACKERMANN.value
         # B Button
-        if (data.buttons[2] == 1):
+        if (data.buttons[1] == 1):
             pass
+        # X Button
+        if (data.buttons[2] == 1):
+            self.locomotion_mode = LocomotionMode.POINT_TURN.value
         # Y Button
         if (data.buttons[3] == 1):
             self.locomotion_mode = LocomotionMode.CRABBING.value
