@@ -8,9 +8,9 @@ from .locomotion_modes import LocomotionMode
 import math
 
 
-class JoystickParserNode(Node):
+class GamepadParserNode(Node):
     def __init__(self):
-        self.node_name = 'joystick_parser_node'
+        self.node_name = 'gamepad_parser_node'
         super().__init__(self.node_name)
 
         self.sub = self.create_subscription(
@@ -99,11 +99,11 @@ def main(args=None):
     rclpy.init(args=args)
 
     try:
-        joystick_parser_node = JoystickParserNode()
+        gamepad_parser_node = GamepadParserNode()
         try:
-            rclpy.spin(joystick_parser_node)
+            rclpy.spin(gamepad_parser_node)
         finally:
-            joystick_parser_node.destroy_node()
+            gamepad_parser_node.destroy_node()
     except KeyboardInterrupt:
         pass
     finally:

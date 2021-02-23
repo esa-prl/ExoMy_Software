@@ -24,10 +24,10 @@ def generate_launch_description():
         namespace=namespace_,
         output='screen'
     )
-    joystick = Node(
+    gamepad = Node(
         package='exomy',
-        executable='joystick_parser_node',
-        name='joystick_parser_node',
+        executable='gamepad_parser_node',
+        name='gamepad_parser_node',
         namespace=namespace_,
         output='screen'
     )
@@ -42,7 +42,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         robot,
-        joystick,
+        gamepad,
         joy,
         motors
     ])
