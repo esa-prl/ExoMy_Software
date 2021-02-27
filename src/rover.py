@@ -258,31 +258,28 @@ class Rover():
             if (radius == self.ackermann_r_max):
                 return [v] * 6
             else:
-                rmax = radius + self.wheel_x
-
-                a = math.pow(self.wheel_y, 2)
-                b = math.pow(abs(radius) + self.wheel_x, 2)
-                c = math.pow(abs(radius) - self.wheel_x, 2)
-                rmax_float = float(rmax)
-
-                r1 = math.sqrt(a+b)
-                r2 = rmax_float
-                r3 = r1
-                r4 = math.sqrt(a+c)
-                r5 = abs(radius) - self.wheel_x
-                r6 = r4
-
-                v1 = int(v)
+                # radius (r) and speed (v) definition for left turn
+                r1 = ( radius - (self.wheel_fy / 2) ) / math.sin ( (90 - int(math.degrees(math.atan(self.wheel_fx/(abs(radius)-(self.wheel_fy/2)))))) * math.pi / 180.0)
+                r2 = ( radius + (self.wheel_fy / 2) ) / math.sin ( (90 - int(math.degrees(math.atan(self.wheel_fx/(abs(radius)+(self.wheel_fy/2)))))) * math.pi / 180.0)
+                r3 = ( radius - (self.wheel_fy / 2) )
+                r4 = ( radius + (self.wheel_fy / 2) )
+                r5 = ( radius - (self.wheel_y / 2) ) / math.sin ( (90 - int(math.degrees(math.atan(self.wheel_x/(abs(radius)-(self.wheel_y/2)))))) * math.pi / 180.0)
+                r6 = ( radius + (self.wheel_y / 2) ) / math.sin ( (90 - int(math.degrees(math.atan(self.wheel_x/(abs(radius)+(self.wheel_y/2)))))) * math.pi / 180.0)
+                
+                v1 = int(v*r1/r1)
                 v2 = int(v*r2/r1)
-                v3 = v1
+                v3 = int(v*r3/r1)
                 v4 = int(v*r4/r1)
                 v5 = int(v*r5/r1)
-                v6 = v4
-
+                v6 = int(v*r6/r1)
+                
+                # FL, FR, CL, CR, RL, RR
+                # right steering
                 if (steering_command > 90 or steering_command < -90):
-                    motor_speeds = [v1, v2, v3, v4, v5, v6]
+                    motor_speeds = [v2, v1, v4, v3, v6, v5]
+                # left steering
                 else:
-                    motor_speeds = [v6, v5, v4, v3, v2, v1]
+                    motor_speeds = [v1, v2, v3, v4, v5, v6]
 
                 return motor_speeds
 
