@@ -266,12 +266,15 @@ class Rover():
                 r5 = ( radius - (self.wheel_y / 2) ) / math.sin ( (90 - int(math.degrees(math.atan(self.wheel_x/(abs(radius)-(self.wheel_y/2)))))) * math.pi / 180.0)
                 r6 = ( radius + (self.wheel_y / 2) ) / math.sin ( (90 - int(math.degrees(math.atan(self.wheel_x/(abs(radius)+(self.wheel_y/2)))))) * math.pi / 180.0)
                 
-                v1 = int(v*r1/r1)
-                v2 = int(v*r2/r1)
-                v3 = int(v*r3/r1)
-                v4 = int(v*r4/r1)
-                v5 = int(v*r5/r1)
-                v6 = int(v*r6/r1)
+                # Select the biggest radius from all 6 to keep maximum speed of motors below max speed of the motors
+                reference_radius = max(r1, r2, r3, r4, r5, r6)
+                
+                v1 = int(v*r1/reference_radius)
+                v2 = int(v*r2/reference_radius)
+                v3 = int(v*r3/reference_radius)
+                v4 = int(v*r4/reference_radius)
+                v5 = int(v*r5/reference_radius)
+                v6 = int(v*r6/reference_radius)
                 
                 # FL, FR, CL, CR, RL, RR
                 # right steering
