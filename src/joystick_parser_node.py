@@ -67,7 +67,8 @@ def callback(data):
 
     # The velocity is decoded as value between 0...100
     # Minus sensitivity on value to allow for lower speeds without loosing directions (sensitivity must be between 0.0 and 0.41)
-    sensitivity = 0.3
+    # Similar to the threshold value in the nipplejs as defined in the gui/index.html
+    sensitivity = 0.2
     
     if(math.sqrt(x*x + y*y) > sensitivity):
         rover_cmd.vel = 100 * min(math.sqrt(x*x + y*y)-sensitivity, 1.0)
