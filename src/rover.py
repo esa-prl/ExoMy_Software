@@ -161,15 +161,11 @@ class Rover():
                 return steering_angles
 
             # Rear
-            # old: inner_angle = int(math.degrees(math.atan(self.wheel_x/(abs(r)-self.wheel_y))))
             inner_angle = int(math.degrees(math.atan(self.wheel_x/(abs(r)-(self.wheel_y/2)))))
-            # old: outer_angle = int(math.degrees(math.atan(self.wheel_x/(abs(r)+self.wheel_y))))
             outer_angle = int(math.degrees(math.atan(self.wheel_x/(abs(r)+(self.wheel_y/2)))))
             
             # Front
-            #old: front_inner_angle = int(math.degrees(math.atan(self.wheel_fx/(abs(fr)-self.wheel_fy))))
             front_inner_angle = int(math.degrees(math.atan(self.wheel_fx/(abs(fr)-(self.wheel_fy/2)))))
-            #old: front_outer_angle = int(math.degrees(math.atan(self.wheel_fx/(abs(fr)+self.wheel_fy))))
             front_outer_angle = int(math.degrees(math.atan(self.wheel_fx/(abs(fr)+(self.wheel_fy/2)))))
 
             if steering_command > 90 or steering_command < -90:
