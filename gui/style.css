@@ -13,7 +13,7 @@ body {
 .wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr; 
+    grid-template-rows: 1fr;
     width: 100vw;
     height: 100vh;
 }
@@ -49,14 +49,20 @@ body {
     grid-row: 4;
     width: 50%;
     font-size: 12px;
+}
 
+.buttonShutdown{
+    background-color: gray;
+    grid-row: 5;
+    width: 50%;
+    font-size: 12px;
 }
 
 .button_container {
     position: absolute;
     display: grid;
     left: 25%;
-    top: 25%;
+    top: 20%;
     height: 50%;
     width: 50%;
 }
