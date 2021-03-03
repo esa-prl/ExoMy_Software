@@ -8,10 +8,12 @@
 # o Add to crontab: sudo crontab -e
 #
 # Run Every 5 mins. If once a min change */5 to *
-# once every 2 mins */5 to */2 ...
+# If once every 2 mins change */5 to */2 ...
 #
 # */5 * * * * /usr/bin/sudo -H /home/pi/ExoMy_Software/scripts/wlan_reconnect.sh >> /dev/null 2>&1
 #
+# Change /etc/default/cron and add "EXTRA_OPTS="-L 0" to stop logging cronjob in syslog
+# Restart cron: /etc/init.d/cron force-reload
 ##################################################################
 # Settings
 # Which Interface do you want to check/fix
