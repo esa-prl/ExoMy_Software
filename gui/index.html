@@ -115,6 +115,28 @@
       buttons[button_index] = 0;
     }
 
+	shutdownrpi = function () {
+		var answer = window.confirm("Shutdown ExoMy?");
+		if (answer) {
+			var surl= 'http://' + host_url + ':8001/shutdown'
+
+			console.log("Shuting down started...");
+			const Http = new XMLHttpRequest();
+			Http.open("GET", surl);
+			Http.send();
+
+			Http.onreadystatechange = (e) => {
+				console.log(Http.responseText);
+				console.log("Shutdown OK!");
+			}
+			alert("ExoMy shuting down safely...")
+		}
+		else {
+		    // alert("Shutdown aborted!")
+		}
+		
+
+	}
   </script>
   <link rel="stylesheet" type="text/css" href="style.css">
 
@@ -137,11 +159,12 @@
           <button class="button buttonY" onclick="button_clicked(3)">CRABBING</button>
           <button class="button buttonX" onclick="button_clicked(0)">SPOT TURN</button>
           <button class="button buttonA" onclick="button_clicked(1)">ACKERMANN</button>
-          <button class="button buttonStart" onclick="button_clicked(9)">MOTORS</button>
+          <button class="button buttonStart" onclick="button_clicked(9)">MOTORS OFF/ON</button>
+		  <button class="button buttonShutdown" onclick="shutdownrpi()">Shutdown</button>
         </div>
       </div>
     </div>
   </main>
-</body>
 
+</body>
 </html>
