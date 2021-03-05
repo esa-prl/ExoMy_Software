@@ -1,8 +1,10 @@
 # This script runs on raspberry host to for example safely shut down the system
 # It listens in port 8001. Issue for example http://192.168.2.64:8001/shutdown 
 # to shutdown the system. 
-# To autostart this script add to "crontab -e":
+# To autostart this script add to "crontab -e" and reboot RPi afterwards:
+#
 # @reboot python /home/pi/ExoMy_Software/src/raspberry_server.py >> /dev/null 2>&1
+#
 # Do not use sudo for crontab or python command, as it would run the script as root
 # and therefore not access the server gui.
 
