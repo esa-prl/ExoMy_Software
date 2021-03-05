@@ -3,7 +3,7 @@
 #
 # Instructions:
 #
-# o Place file where you want it /usr/local/bin
+# o Place file where you want it /usr/local/bin or leave it in ExoMy folder
 # o chmod -x wlan_reconnect.sh
 # o Add to crontab: sudo crontab -e
 #
@@ -14,6 +14,7 @@
 #
 # Change /etc/default/cron and add "EXTRA_OPTS="-L 0" to stop logging cronjob in syslog
 # Restart cron: /etc/init.d/cron force-reload
+#
 ##################################################################
 # Settings
 # Which Interface do you want to check/fix
