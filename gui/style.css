@@ -95,3 +95,7 @@ body {
     background: rgba(63, 58, 55, 0.1);
     grid-column: 3;
 }
+
+.hidden {
+	display: none;
+}

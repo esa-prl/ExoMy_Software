@@ -86,6 +86,11 @@
       stream_url = '//' + host_url + ':8080/stream?topic=/pi_cam/image_raw';
       console.log(stream_url);
       document.getElementById("video_output").src = stream_url;
+      // Ping output
+	  // Load a ping image to check if system server is running 
+      ping_url = 'http://' + host_url + ':8001/ping.png';
+      console.log(ping_url);
+      document.getElementById("ping").src = ping_url;
     }
 
     joy_listener = new ROSLIB.Topic({
@@ -115,6 +120,7 @@
       buttons[button_index] = 0;
     }
 
+	// Load Shutdown URL from system server and trigger therfore the defined shutdown
 	shutdownrpi = function () {
 		var answer = window.confirm("Shutdown ExoMy?");
 		if (answer) {
@@ -134,9 +140,20 @@
 		else {
 		    // alert("Shutdown aborted!")
 		}
-		
-
+	
 	}
+	
+	// Show and Hide elements by ID
+	function showOrHide(id) {
+	      var element = document.getElementById(id);
+	      if (element.style.display === "none") {
+	         element.style.display = "block";
+	      }
+		  else {
+	         element.style.display = "none";
+	      }
+	   }
+	
   </script>
   <link rel="stylesheet" type="text/css" href="style.css">
 
@@ -160,11 +177,13 @@
           <button class="button buttonX" onclick="button_clicked(0)">SPOT TURN</button>
           <button class="button buttonA" onclick="button_clicked(1)">ACKERMANN</button>
           <button class="button buttonStart" onclick="button_clicked(9)">MOTORS OFF/ON</button>
-		  <button class="button buttonShutdown" onclick="shutdownrpi()">Shutdown</button>
+		  <button id="shutdown" class="button buttonShutdown" onclick="shutdownrpi()">Shutdown</button>
         </div>
       </div>
     </div>
   </main>
 
+  <!-- Load a ping image to check if system server is running and hide shutdown button if not, as it would not work -->
+  <img id="ping" class="hidden" width="1" height="1" onerror="showOrHide('shutdown');"/>
 </body>
 </html>
