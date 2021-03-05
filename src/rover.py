@@ -237,12 +237,14 @@ class Rover():
                 motor_speeds[self.RR] = -50
 
             return motor_speeds
-
+            
         if (self.locomotion_mode == LocomotionMode.ACKERMANN.value):
+            
+            #Speed parameters
             v = driving_command
             if(steering_command < 0):
                 v *= -1
-
+            
             # Scale between min and max Ackermann radius
             radius = self.ackermann_r_max - \
                 abs(math.cos(math.radians(steering_command))) * \
@@ -287,20 +289,20 @@ class Rover():
             if(driving_command is not 0):
                 # Left turn
                 if(deg < 85 and deg > -85):
-                    motor_speeds[self.FL] = -50
-                    motor_speeds[self.FR] = 50
-                    motor_speeds[self.CL] = -50
-                    motor_speeds[self.CR] = 50
-                    motor_speeds[self.RL] = -50
-                    motor_speeds[self.RR] = 50
+                    motor_speeds[self.FL] = -v
+                    motor_speeds[self.FR] = v
+                    motor_speeds[self.CL] = -v
+                    motor_speeds[self.CR] = v
+                    motor_speeds[self.RL] = -v
+                    motor_speeds[self.RR] = v
                 # Right turn
                 elif(deg > 95 or deg < -95):
-                    motor_speeds[self.FL] = 50
-                    motor_speeds[self.FR] = -50
-                    motor_speeds[self.CL] = 50
-                    motor_speeds[self.CR] = -50
-                    motor_speeds[self.RL] = 50
-                    motor_speeds[self.RR] = -50
+                    motor_speeds[self.FL] = v
+                    motor_speeds[self.FR] = -v
+                    motor_speeds[self.CL] = v
+                    motor_speeds[self.CR] = -v
+                    motor_speeds[self.RL] = v
+                    motor_speeds[self.RR] = -v
             else:
                 # Stop
                 motor_speeds[self.FL] = 0
@@ -315,18 +317,18 @@ class Rover():
         if(self.locomotion_mode == LocomotionMode.CRABBING.value):
             if(driving_command > 0):
                 if(steering_command > 0):
-                    motor_speeds[self.FL] = 50
-                    motor_speeds[self.FR] = 50
-                    motor_speeds[self.CL] = 50
-                    motor_speeds[self.CR] = 50
-                    motor_speeds[self.RL] = 50
-                    motor_speeds[self.RR] = 50
+                    motor_speeds[self.FL] = v
+                    motor_speeds[self.FR] = v
+                    motor_speeds[self.CL] = v
+                    motor_speeds[self.CR] = v
+                    motor_speeds[self.RL] = v
+                    motor_speeds[self.RR] = v
                 elif(steering_command <= 0):
-                    motor_speeds[self.FL] = -50
-                    motor_speeds[self.FR] = -50
-                    motor_speeds[self.CL] = -50
-                    motor_speeds[self.CR] = -50
-                    motor_speeds[self.RL] = -50
-                    motor_speeds[self.RR] = -50
+                    motor_speeds[self.FL] = -v
+                    motor_speeds[self.FR] = -v
+                    motor_speeds[self.CL] = -v
+                    motor_speeds[self.CR] = -v
+                    motor_speeds[self.RL] = -v
+                    motor_speeds[self.RR] = -v
 
         return motor_speeds
