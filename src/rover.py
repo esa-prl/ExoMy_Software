@@ -184,10 +184,12 @@ class Rover():
             return steering_angles
 
         if(self.locomotion_mode == LocomotionMode.POINT_TURN.value):
-            steering_angles[self.FL] = 45
-            steering_angles[self.FR] = -45
-            steering_angles[self.RL] = -45
-            steering_angles[self.RR] = 45
+            point_turn_angle = int(math.degrees(math.atan((self.wheel_x+self.wheel_fx) / self.wheel_y)))
+            #For ExoMy approx. 55 degree
+            steering_angles[self.FL] = point_turn_angle
+            steering_angles[self.FR] = -point_turn_angle
+            steering_angles[self.RL] = -point_turn_angle
+            steering_angles[self.RR] = point_turn_angle
 
             return steering_angles
         if(self.locomotion_mode == LocomotionMode.CRABBING.value):
