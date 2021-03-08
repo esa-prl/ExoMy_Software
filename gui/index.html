@@ -177,7 +177,7 @@
           <button class="button buttonX" onclick="button_clicked(0)">SPOT TURN</button>
           <button class="button buttonA" onclick="button_clicked(1)">ACKERMANN</button>
           <button class="button buttonStart" onclick="button_clicked(9)">MOTORS OFF/ON</button>
-		  <button id="shutdown" class="button buttonShutdown" onclick="shutdownrpi()">Shutdown</button>
+          <button id="shutdown" class="button buttonShutdown" onclick="shutdownrpi()">Shutdown</button>
         </div>
       </div>
     </div>
@@ -185,5 +185,7 @@
 
   <!-- Load a ping image to check if system server is running and hide shutdown button if not, as it would not work -->
   <img id="ping" class="hidden" width="1" height="1" onerror="showOrHide('shutdown');"/>
+  <!-- Add hidden ROS status field -->
+  <p id="status" class="hidden"></p>
 </body>
 </html>
