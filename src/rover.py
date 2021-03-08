@@ -185,9 +185,13 @@ class Rover():
 
         if(self.locomotion_mode == LocomotionMode.POINT_TURN.value):
             point_turn_angle = int(math.degrees(math.atan((self.wheel_x+self.wheel_fx) / self.wheel_y)))
+            
+            point_turn_angle_center = int(math.degrees(math.atan((((self.wheel_x+self.wheel_fx) / 2 ) - self.wheel_x) / (self.wheel_y / 2))))
             #For ExoMy approx. 55 degree
             steering_angles[self.FL] = point_turn_angle
             steering_angles[self.FR] = -point_turn_angle
+            steering_angles[self.CL] = point_turn_angle_center
+            steering_angles[self.CR] = -point_turn_angle_center
             steering_angles[self.RL] = -point_turn_angle
             steering_angles[self.RR] = point_turn_angle
 
@@ -287,24 +291,30 @@ class Rover():
                 return motor_speeds
 
         if (self.locomotion_mode == LocomotionMode.POINT_TURN.value):
+            outer_turning_radius = math.sqrt(math.pow(self.wheel_x+self.wheel_fx,2) + math.pow(self.wheel_y,2)) / 2
+            inner_turning_radius = math.sqrt(math.pow(((self.wheel_x+self.wheel_fx) / 2 ) - self.wheel_x,2) + math.pow((self.wheel_y / 2),2))
+            
+            v_outer = v
+            v_inner = int(v*inner_turning_radius/outer_turning_radius)
+            
             deg = steering_command
             if(driving_command is not 0):
                 # Left turn
                 if(deg < 85 and deg > -85):
-                    motor_speeds[self.FL] = -v
-                    motor_speeds[self.FR] = v
-                    motor_speeds[self.CL] = -v
-                    motor_speeds[self.CR] = v
-                    motor_speeds[self.RL] = -v
-                    motor_speeds[self.RR] = v
+                    motor_speeds[self.FL] = -v_outer
+                    motor_speeds[self.FR] = v_outer
+                    motor_speeds[self.CL] = -v_inner
+                    motor_speeds[self.CR] = v_inner
+                    motor_speeds[self.RL] = -v_outer
+                    motor_speeds[self.RR] = v_outer
                 # Right turn
                 elif(deg > 95 or deg < -95):
-                    motor_speeds[self.FL] = v
-                    motor_speeds[self.FR] = -v
-                    motor_speeds[self.CL] = v
-                    motor_speeds[self.CR] = -v
-                    motor_speeds[self.RL] = v
-                    motor_speeds[self.RR] = -v
+                    motor_speeds[self.FL] = v_outer
+                    motor_speeds[self.FR] = -v_outer
+                    motor_speeds[self.CL] = v_inner
+                    motor_speeds[self.CR] = -v_inner
+                    motor_speeds[self.RL] = v_outer
+                    motor_speeds[self.RR] = -v_outer
             else:
                 # Stop
                 motor_speeds[self.FL] = 0
