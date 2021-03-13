@@ -186,7 +186,7 @@ class Rover():
         if(self.locomotion_mode == LocomotionMode.POINT_TURN.value):
             point_turn_angle = int(math.degrees(math.atan((self.wheel_x+self.wheel_fx) / self.wheel_y)))
             
-            point_turn_angle_center = int(math.degrees(math.atan((((self.wheel_x+self.wheel_fx) / 2 ) - self.wheel_x) / (self.wheel_y / 2))))
+            point_turn_angle_center = int(math.degrees(math.atan((((self.wheel_x+self.wheel_fx) / 2 ) - self.wheel_fx) / (self.wheel_y / 2))))
             #For ExoMy approx. 55 degree
             steering_angles[self.FL] = point_turn_angle
             steering_angles[self.FR] = -point_turn_angle
@@ -291,6 +291,8 @@ class Rover():
                 return motor_speeds
 
         if (self.locomotion_mode == LocomotionMode.POINT_TURN.value):
+            v = driving_command
+            
             outer_turning_radius = math.sqrt(math.pow(self.wheel_x+self.wheel_fx,2) + math.pow(self.wheel_y,2)) / 2
             inner_turning_radius = math.sqrt(math.pow(((self.wheel_x+self.wheel_fx) / 2 ) - self.wheel_x,2) + math.pow((self.wheel_y / 2),2))
             
@@ -327,6 +329,8 @@ class Rover():
             return motor_speeds
 
         if(self.locomotion_mode == LocomotionMode.CRABBING.value):
+            v = driving_command
+            
             if(driving_command > 0):
                 if(steering_command > 0):
                     motor_speeds[self.FL] = v
