@@ -1,2 +1,4 @@
 *.pyc
 config/exomy.yaml
+config/*.backup
+.DS_Store

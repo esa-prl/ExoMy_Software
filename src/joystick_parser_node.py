@@ -66,7 +66,14 @@ def callback(data):
     rover_cmd.motors_enabled = motors_enabled
 
     # The velocity is decoded as value between 0...100
-    rover_cmd.vel = 100 * min(math.sqrt(x*x + y*y), 1.0)
+    # Minus sensitivity on value to allow for lower speeds without loosing directions (sensitivity must be between 0.0 and 0.41)
+    # Similar to the threshold value in the nipplejs as defined in the gui/index.html
+    sensitivity = 0.2
+    
+    if(math.sqrt(x*x + y*y) > sensitivity):
+        rover_cmd.vel = 100 * min(math.sqrt(x*x + y*y)-sensitivity, 1.0)
+    else:
+        rover_cmd.vel = 0
 
     # The steering is described as an angle between -180...180
     # Which describe the joystick position as follows:
@@ -74,8 +81,24 @@ def callback(data):
     # 0      +-180
     #   -90
     #
-    rover_cmd.steering = math.atan2(y, x)*180.0/math.pi
-
+    # Defining a safety angle makes steep steering easier without going backwards (safety_angle must be between 0 and 90 => 90 makes steering impossible)
+    safety_angle=20
+    
+    # Messured value from the controller
+    controller_angle = math.atan2(y, x)*180.0/math.pi
+    
+    # Calculation to factor the safety angle
+    corrected_angle_factor = (180-90)/((180-safety_angle)-90)
+    offset = 90-(corrected_angle_factor*90)
+    
+    corrected_angle = max(min(corrected_angle_factor*abs(controller_angle)+offset,180),0)
+    
+    # Check direction and add it again, as it is lost in the corrected_angle calculation
+    if(controller_angle > 0):
+        rover_cmd.steering = corrected_angle
+    else:
+        rover_cmd.steering = corrected_angle * -1
+    
     rover_cmd.connected = True
 
     pub.publish(rover_cmd)
