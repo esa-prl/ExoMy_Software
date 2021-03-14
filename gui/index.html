@@ -4,9 +4,10 @@
 <head>
   <meta charset="utf-8" />
   <title>ExoMy Control Center</title>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <script type="text/javascript" src="./roslib.min.js"></script>
   <script src="./node_modules/nipplejs/dist/nipplejs.js"></script>
-  <script type="text/javascript" type="text/javascript">
+  <script type="text/javascript">
     var publishImmidiately = true;
     var host_url = window.location.hostname;
     console.log(host_url);
@@ -20,6 +21,7 @@
     var axes = [0, 0, 0, 0, 0, 0];
     var buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
+	/*
     ros.on('connection', function () {
       document.getElementById("status").innerHTML = "Connected";
     });
@@ -31,6 +33,19 @@
     ros.on('close', function () {
       document.getElementById("status").innerHTML = "Closed";
     });
+	*/
+	
+	ros.on('connection', function() {
+	    console.log('Connected to websocket server.');
+	});
+
+	ros.on('error', function(error) {
+	    console.log('Error connecting to websocket server: ', error);
+	});
+
+	ros.on('close', function() {
+	    console.log('Connection to websocket server closed.');
+	});
 
     createJoystick = function () {
       var options = {
@@ -113,6 +128,24 @@
       // After the command is sent set the index back to 0
       buttons[button_index] = 0;
     }
+	
+	var motor_listener = new ROSLIB.Topic({
+    	ros: ros,
+		name: '/rover_command',
+		messageType: 'exomy/RoverCommand'
+	});
+	
+	motor_listener.subscribe(function(message) {
+    	//console.log('Received message on ' + motor_listener.name + ': ' + message.motors_enabled);
+		if (message.motors_enabled === true) {
+			document.getElementById("buttonStart").innerHTML = "Turn MOTORS OFF";
+			document.getElementById("buttonStart").style.backgroundColor = "red";
+		}
+		else {
+			document.getElementById("buttonStart").innerHTML = "Turn MOTORS ON";
+			document.getElementById("buttonStart").style.backgroundColor = "green";
+		}
+	});
 
   </script>
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -136,11 +169,11 @@
           <button class="button buttonY" onclick="button_clicked(3)">CRABBING</button>
           <button class="button buttonX" onclick="button_clicked(0)">SPOT TURN</button>
           <button class="button buttonA" onclick="button_clicked(1)">ACKERMANN</button>
-          <button class="button buttonStart" onclick="button_clicked(9)">MOTORS</button>
+          <button id="buttonStart" class="button buttonStart" onclick="button_clicked(9)">MOTORS OFF/ON</button>
         </div>
       </div>
     </div>
   </main>
 
-
+</body>
 </html>
