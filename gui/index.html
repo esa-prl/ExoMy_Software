@@ -34,7 +34,7 @@
       document.getElementById("status").innerHTML = "Closed";
     });
 	*/
-	
+
 	ros.on('connection', function() {
 	    console.log('Connected to websocket server.');
 	});
@@ -68,9 +68,9 @@
         axes = [x, y, 0, 0, 0, 0]
 
         // nipplejs is triggering events when joystick moves each pixel
-        // we need delay between consecutive messege publications to 
+        // we need delay between consecutive messege publications to
         // prevent system from being flooded by messages
-        // events triggered earlier than 50ms after last publication will be dropped 
+        // events triggered earlier than 50ms after last publication will be dropped
 
         if (publishImmidiately) {
           publishImmidiately = false;
@@ -95,6 +95,7 @@
       });
     }
     window.onload = function () {
+      joy_event();
       createJoystick();
       // Video output
       stream_url = '//' + host_url + ':8080/stream?topic=/pi_cam/image_raw';
@@ -128,13 +129,13 @@
       // After the command is sent set the index back to 0
       buttons[button_index] = 0;
     }
-	
+
 	var motor_listener = new ROSLIB.Topic({
     	ros: ros,
 		name: '/rover_command',
 		messageType: 'exomy/RoverCommand'
 	});
-	
+
 	motor_listener.subscribe(function(message) {
     	//console.log('Received message on ' + motor_listener.name + ': ' + message.motors_enabled);
 		if (message.motors_enabled === true) {
