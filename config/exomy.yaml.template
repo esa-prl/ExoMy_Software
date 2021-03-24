@@ -42,4 +42,4 @@ steer_pwm_range: 250
 drive_pwm_neutral: 307
 
 # PWW range around driving neutral position
-drive_pwm_range: 100
+drive_pwm_range: 41
