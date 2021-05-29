@@ -4,6 +4,12 @@ FROM ros:melodic
 ENV TZ=Europe/Amsterdam
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+# Update the GPG key for packages.ros.org first
+
+RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+RUN apt-key del 421C365BD9FF1F717815A3895523BAEEB01FA116
+RUN apt update
+
 # Basic tools
 RUN apt-get update && \
     apt-get install vim nano git tmux wget curl python-pip net-tools iputils-ping  -y
