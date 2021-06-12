@@ -68,6 +68,8 @@ class Motors():
 
         self.driving_pwm_low_limit = 100
 
+        self.driving_pwm_neutral = [None] * 6
+
         self.driving_pwm_neutral[self.FL] = rospy.get_param("drive_pwm_neutral_fl")
         self.driving_pwm_neutral[self.FR] = rospy.get_param("drive_pwm_neutral_fr")
         self.driving_pwm_neutral[self.CL] = rospy.get_param("drive_pwm_neutral_cl")
