@@ -67,7 +67,16 @@ class Motors():
         self.steering_pwm_range = rospy.get_param("steer_pwm_range")
 
         self.driving_pwm_low_limit = 100
-        self.driving_pwm_neutral = rospy.get_param("drive_pwm_neutral")
+
+        self.driving_pwm_neutral = [None] * 6
+
+        self.driving_pwm_neutral[self.FL] = rospy.get_param("drive_pwm_neutral_fl")
+        self.driving_pwm_neutral[self.FR] = rospy.get_param("drive_pwm_neutral_fr")
+        self.driving_pwm_neutral[self.CL] = rospy.get_param("drive_pwm_neutral_cl")
+        self.driving_pwm_neutral[self.CR] = rospy.get_param("drive_pwm_neutral_cr")
+        self.driving_pwm_neutral[self.RL] = rospy.get_param("drive_pwm_neutral_rl")
+        self.driving_pwm_neutral[self.RR] = rospy.get_param("drive_pwm_neutral_rr")
+
         self.driving_pwm_upper_limit = 500
         self.driving_pwm_range = rospy.get_param("drive_pwm_range")
 
@@ -75,6 +84,12 @@ class Motors():
         for wheel_name, motor_pin in self.pins['steer'].items():
             self.pwm.set_pwm(motor_pin, 0,
                              self.steering_pwm_neutral[wheel_name])
+            time.sleep(0.1)
+
+        # Set driving motors to neutral values (stop)
+        for wheel_name, motor_pin in self.pins['drive'].items():
+            self.pwm.set_pwm(motor_pin, 0,
+                             self.driving_pwm_neutral[wheel_name])
             time.sleep(0.1)
 
         self.wiggle()
@@ -111,14 +126,13 @@ class Motors():
     def setDriving(self, driving_command):
         # Loop through pin dictionary. The items key is the wheel_name and the value the pin.
         for wheel_name, motor_pin in self.pins['drive'].items():
-            duty_cycle = int(self.driving_pwm_neutral +
+            duty_cycle = int(self.driving_pwm_neutral[wheel_name] +
                              driving_command[wheel_name]/100.0 * self.driving_pwm_range * self.wheel_directions[wheel_name])
 
             self.pwm.set_pwm(motor_pin, 0, duty_cycle)
 
     def stopMotors(self):
         # Set driving wheels to neutral position to stop them
-        duty_cycle = int(self.driving_pwm_neutral)
-
         for wheel_name, motor_pin in self.pins['drive'].items():
+            duty_cycle = int(self.driving_pwm_neutral[wheel_name])
             self.pwm.set_pwm(motor_pin, 0, duty_cycle)
