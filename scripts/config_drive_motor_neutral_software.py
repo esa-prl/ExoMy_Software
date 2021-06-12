@@ -138,10 +138,10 @@ ctrl+c - Exit script
                 break
             elif(input is 'a'):
                 print('Decreased pwm neutral value')
-                pwm_neutral_value-= 5
+                pwm_neutral_value-= 1
             elif(input is 'd'):
                 print('Increased pwm neutral value')
-                pwm_neutral_value += 5
+                pwm_neutral_value += 1
         pwm_neutral_dict[pwm_neutral_name] = pwm_neutral_value
     update_config_file(pwm_neutral_dict)
     print("Finished configuration!!!")
