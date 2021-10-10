@@ -5,9 +5,9 @@ then
 	bash
 elif [[ $1 == "autostart" ]]
 then
-	source /opt/ros/melodic/setup.bash
+	source /opt/ros/noetic/setup.bash
 	cd /root/exomy_ws
-	catkin_make
+	catkin build
 	http-server src/exomy/gui -p 8000 &
 
 	source devel/setup.bash
@@ -17,11 +17,10 @@ then
 elif [[ $1 == "devel" ]]
 then
 	cd /root/exomy_ws
-	source /opt/ros/melodic/setup.bash
-	# catkin_make
+	source /opt/ros/noetic/setup.bash
+	# catkin build
 	# source devel/setup.bash
 	bash
 else
 	bash
 fi
-
