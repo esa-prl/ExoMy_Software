@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package format="3">
+<package format="2">
   <name>exomy</name>
   <version>1.0.3</version>
   <description>The ExoMy ROS package</description>
