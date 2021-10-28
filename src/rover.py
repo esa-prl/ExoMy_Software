@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 import rospy
-import time
 import math
-import enum
 from locomotion_modes import LocomotionMode
 import numpy as np
-
 
 class Rover():
     '''
@@ -24,32 +21,31 @@ class Rover():
         # x = axes distance
         # y = axes width
         
-        # Rear
-        self.wheel_x = 14.0
-        self.wheel_y = 20.3
+        # Rear (r = rear)
+        self.wheel_rx = 14.0
+        self.wheel_ry = 20.3
         
-        # Front
+        # Front (f = front)
         self.wheel_fx = 16.0
         self.wheel_fy = 20.3
         
-
+        # Maxium steering angle applied to Ackermann (not for Point Turn and Crabbing)
         max_steering_angle = 45
         
-        # Rear
-        self.ackermann_r_min = abs(self.wheel_x) / math.tan(max_steering_angle * math.pi / 180.0) + (self.wheel_y / 2)
-
+        # Maximum radius for ackermann / avoids devision by 0
         self.ackermann_r_max = 250
 
-        # Front
+        # Rear (rr = rear radius)
+        self.ackermann_rr_min = abs(self.wheel_rx) / math.tan(max_steering_angle * math.pi / 180.0) + (self.wheel_ry / 2)
+
+        # Front (fr = front radius)
         self.ackermann_fr_min = abs(self.wheel_fx) / math.tan(max_steering_angle * math.pi / 180.0) + (self.wheel_fy / 2)
 
-        self.ackermann_fr_max = 250
-        
         # Check minimum radius for front and back and set the bigger one for calculations (ExoMy can't turn narrower)
-        if(self.ackermann_fr_min > self.ackermann_r_min):
+        if(self.ackermann_fr_min > self.ackermann_rr_min):
             self.ackermann_r_min = self.ackermann_fr_min
         else:
-            self.ackermann_fr_min = self.ackermann_r_min
+            self.ackermann_r_min = self.ackermann_rr_min
         
     def setLocomotionMode(self, locomotion_mode_command):
         '''
@@ -79,28 +75,28 @@ class Rover():
 
             # Rear: Scale between min and max Ackermann radius
             if math.cos(math.radians(steering_command)) == 0:
-                r = self.ackermann_r_max
+                rr = self.ackermann_r_max
             else:
-                r = self.ackermann_r_max - \
+                rr = self.ackermann_r_max - \
                     abs(math.cos(math.radians(steering_command))) * \
                     ((self.ackermann_r_max-self.ackermann_r_min))
 
             # Front: Scale between min and max Ackermann radius
             if math.cos(math.radians(steering_command)) == 0:
-                fr = self.ackermann_fr_max
+                fr = self.ackermann_r_max
             else:
-                fr = self.ackermann_fr_max - \
+                fr = self.ackermann_r_max - \
                     abs(math.cos(math.radians(steering_command))) * \
-                    ((self.ackermann_fr_max-self.ackermann_fr_min))
+                    ((self.ackermann_r_max-self.ackermann_r_min))
  
                
             # No steering
-            if r == self.ackermann_r_max:
+            if rr == self.ackermann_r_max:
                 return steering_angles
 
             # Rear
-            inner_angle = int(math.degrees(math.atan(self.wheel_x/(abs(r)-(self.wheel_y/2)))))
-            outer_angle = int(math.degrees(math.atan(self.wheel_x/(abs(r)+(self.wheel_y/2)))))
+            rear_inner_angle = int(math.degrees(math.atan(self.wheel_rx/(abs(rr)-(self.wheel_ry/2)))))
+            rear_outer_angle = int(math.degrees(math.atan(self.wheel_rx/(abs(rr)+(self.wheel_ry/2)))))
             
             # Front
             front_inner_angle = int(math.degrees(math.atan(self.wheel_fx/(abs(fr)-(self.wheel_fy/2)))))
@@ -110,21 +106,21 @@ class Rover():
                 # Steering to the right
                 steering_angles[self.FL] = front_outer_angle
                 steering_angles[self.FR] = front_inner_angle
-                steering_angles[self.RL] = -outer_angle
-                steering_angles[self.RR] = -inner_angle
+                steering_angles[self.RL] = -rear_outer_angle
+                steering_angles[self.RR] = -rear_inner_angle
             else:
                 # Steering to the left
                 steering_angles[self.FL] = -front_inner_angle
                 steering_angles[self.FR] = -front_outer_angle
-                steering_angles[self.RL] = inner_angle
-                steering_angles[self.RR] = outer_angle
+                steering_angles[self.RL] = rear_inner_angle
+                steering_angles[self.RR] = rear_outer_angle
 
             return steering_angles
 
         if(self.locomotion_mode == LocomotionMode.POINT_TURN.value):
-            point_turn_angle = int(math.degrees(math.atan((self.wheel_x+self.wheel_fx) / self.wheel_y)))
+            point_turn_angle = int(math.degrees(math.atan((self.wheel_rx+self.wheel_fx) / self.wheel_ry)))
             
-            point_turn_angle_center = int(math.degrees(math.atan((((self.wheel_x+self.wheel_fx) / 2 ) - self.wheel_fx) / (self.wheel_y / 2))))
+            point_turn_angle_center = int(math.degrees(math.atan((((self.wheel_rx+self.wheel_fx) / 2 ) - self.wheel_fx) / (self.wheel_ry / 2))))
             #For ExoMy approx. 55 degree
             steering_angles[self.FL] = point_turn_angle
             steering_angles[self.FR] = -point_turn_angle
@@ -183,12 +179,12 @@ class Rover():
                 return [v] * 6
             else:
                 # radius (r) and speed (v) definition for left turn
-                r1 = ( radius - (self.wheel_fy / 2) ) / math.sin ( (90 - int(math.degrees(math.atan(self.wheel_fx/(abs(radius)-(self.wheel_fy/2)))))) * math.pi / 180.0)
-                r2 = ( radius + (self.wheel_fy / 2) ) / math.sin ( (90 - int(math.degrees(math.atan(self.wheel_fx/(abs(radius)+(self.wheel_fy/2)))))) * math.pi / 180.0)
+                r1 = ( radius - (self.wheel_fy / 2) ) / math.cos ( math.degrees(math.atan(self.wheel_fx/(abs(radius)-(self.wheel_fy/2)))) * math.pi / 180.0)
+                r2 = ( radius + (self.wheel_fy / 2) ) / math.cos ( math.degrees(math.atan(self.wheel_fx/(abs(radius)+(self.wheel_fy/2)))) * math.pi / 180.0)
                 r3 = ( radius - (self.wheel_fy / 2) )
                 r4 = ( radius + (self.wheel_fy / 2) )
-                r5 = ( radius - (self.wheel_y / 2) ) / math.sin ( (90 - int(math.degrees(math.atan(self.wheel_x/(abs(radius)-(self.wheel_y/2)))))) * math.pi / 180.0)
-                r6 = ( radius + (self.wheel_y / 2) ) / math.sin ( (90 - int(math.degrees(math.atan(self.wheel_x/(abs(radius)+(self.wheel_y/2)))))) * math.pi / 180.0)
+                r5 = ( radius - (self.wheel_ry / 2) ) / math.cos ( math.degrees(math.atan(self.wheel_rx/(abs(radius)-(self.wheel_ry/2)))) * math.pi / 180.0)
+                r6 = ( radius + (self.wheel_ry / 2) ) / math.cos ( math.degrees(math.atan(self.wheel_rx/(abs(radius)+(self.wheel_ry/2)))) * math.pi / 180.0)
                 
                 # Select the biggest radius from all 6 to keep maximum speed of motors below max speed of the motors
                 reference_radius = max(r1, r2, r3, r4, r5, r6)
@@ -213,8 +209,8 @@ class Rover():
         if (self.locomotion_mode == LocomotionMode.POINT_TURN.value):
             v = driving_command
             
-            outer_turning_radius = math.sqrt(math.pow(self.wheel_x+self.wheel_fx,2) + math.pow(self.wheel_y,2)) / 2
-            inner_turning_radius = math.sqrt(math.pow(((self.wheel_x+self.wheel_fx) / 2 ) - self.wheel_x,2) + math.pow((self.wheel_y / 2),2))
+            outer_turning_radius = math.sqrt(math.pow(self.wheel_rx+self.wheel_fx,2) + math.pow(self.wheel_ry,2)) / 2
+            inner_turning_radius = math.sqrt(math.pow(((self.wheel_rx+self.wheel_fx) / 2 ) - self.wheel_rx,2) + math.pow((self.wheel_ry / 2),2))
             
             v_outer = v
             v_inner = int(v*inner_turning_radius/outer_turning_radius)
