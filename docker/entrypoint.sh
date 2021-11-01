@@ -19,7 +19,7 @@ then
 	# http-server -p 8000 &
 
 	ros2 launch exomy exomy.launch.py
-	# Sleep is needed to first print output and yjem start bash
+	# Sleep is needed to first print output and then start bash
 	sleep 1
 	
 	cd "/root/exomy_ws"
