@@ -1,3 +1,6 @@
 *.pyc
 config/exomy.yaml
 .DS_Store
+*.code-workspace
+.vscode/
+__pycache__
