@@ -3,7 +3,6 @@ import rospy
 from std_msgs.msg import String
 
 import time
-import numpy as np
 
 import Adafruit_PCA9685
 
@@ -57,18 +56,23 @@ class Motors():
         self.pwm.set_pwm_freq(50)  # Hz
 
         self.steering_pwm_neutral = [None] * 6
-
+        self.steering_pwm_range = [None] * 6
+        
         self.steering_pwm_neutral[self.FL] = rospy.get_param("steer_pwm_neutral_fl")
         self.steering_pwm_neutral[self.FR] = rospy.get_param("steer_pwm_neutral_fr")
         self.steering_pwm_neutral[self.CL] = rospy.get_param("steer_pwm_neutral_cl")
         self.steering_pwm_neutral[self.CR] = rospy.get_param("steer_pwm_neutral_cr")
         self.steering_pwm_neutral[self.RL] = rospy.get_param("steer_pwm_neutral_rl")
         self.steering_pwm_neutral[self.RR] = rospy.get_param("steer_pwm_neutral_rr")
-        self.steering_pwm_range = rospy.get_param("steer_pwm_range")
 
-        self.driving_pwm_low_limit = 100
+        self.steering_pwm_range[self.FL] = rospy.get_param("steer_pwm_range_fl")
+        self.steering_pwm_range[self.FR] = rospy.get_param("steer_pwm_range_fr")
+        self.steering_pwm_range[self.CL] = rospy.get_param("steer_pwm_range_cl")
+        self.steering_pwm_range[self.CR] = rospy.get_param("steer_pwm_range_cr")
+        self.steering_pwm_range[self.RL] = rospy.get_param("steer_pwm_range_rl")
+        self.steering_pwm_range[self.RR] = rospy.get_param("steer_pwm_range_rr")
+
         self.driving_pwm_neutral = rospy.get_param("drive_pwm_neutral")
-        self.driving_pwm_upper_limit = 500
         self.driving_pwm_range = rospy.get_param("drive_pwm_range")
 
         # Set steering motors to neutral values (straight)
@@ -82,16 +86,16 @@ class Motors():
     def wiggle(self):
         time.sleep(0.1)
         self.pwm.set_pwm(self.pins['steer'][self.FL], 0,
-                         int(self.steering_pwm_neutral[self.FL] + self.steering_pwm_range * 0.3))
+                         int(self.steering_pwm_neutral[self.FL] + self.steering_pwm_range[self.FL] * 0.3))
         time.sleep(0.1)
         self.pwm.set_pwm(self.pins['steer'][self.FR], 0,
-                         int(self.steering_pwm_neutral[self.FR] + self.steering_pwm_range * 0.3))
+                         int(self.steering_pwm_neutral[self.FR] + self.steering_pwm_range[self.FR] * 0.3))
         time.sleep(0.3)
         self.pwm.set_pwm(self.pins['steer'][self.FL], 0,
-                         int(self.steering_pwm_neutral[self.FL] - self.steering_pwm_range * 0.3))
+                         int(self.steering_pwm_neutral[self.FL] - self.steering_pwm_range[self.FL] * 0.3))
         time.sleep(0.1)
         self.pwm.set_pwm(self.pins['steer'][self.FR], 0,
-                         int(self.steering_pwm_neutral[self.FR] - self.steering_pwm_range * 0.3))
+                         int(self.steering_pwm_neutral[self.FR] - self.steering_pwm_range[self.FR] * 0.3))
         time.sleep(0.3)
         self.pwm.set_pwm(self.pins['steer'][self.FL], 0,
                          int(self.steering_pwm_neutral[self.FL]))
@@ -104,7 +108,7 @@ class Motors():
         # Loop through pin dictionary. The items key is the wheel_name and the value the pin.
         for wheel_name, motor_pin in self.pins['steer'].items():
             duty_cycle = int(
-                self.steering_pwm_neutral[wheel_name] + steering_command[wheel_name]/90.0 * self.steering_pwm_range)
+                self.steering_pwm_neutral[wheel_name] + steering_command[wheel_name]/90.0 * self.steering_pwm_range[wheel_name])
 
             self.pwm.set_pwm(motor_pin, 0, duty_cycle)
 

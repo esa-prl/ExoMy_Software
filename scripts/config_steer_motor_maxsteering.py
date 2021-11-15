@@ -26,15 +26,15 @@ def get_steering_pwm_neutral_values():
             steering_pwm_neutral_values[param_key] = param_value
     return steering_pwm_neutral_values
 
-def get_steering_pwm_range_value():
-    steering_pwm_range_value = {}    
+def get_steering_pwm_range_values():
+    steering_pwm_range_values = {}    
     with open(config_filename, 'r') as file:
         param_dict = yaml.load(file)
 
     for param_key, param_value in param_dict.items():
-        if('steer_pwm_range' in str(param_key)):
-            steering_pwm_range_value[param_key] = param_value
-    return steering_pwm_range_value
+        if('steer_pwm_range_' in str(param_key)):
+            steering_pwm_range_values[param_key] = param_value
+    return steering_pwm_range_values
 
 
 def get_position_name(name):
@@ -92,8 +92,7 @@ $$$$$$$$\ $$  /\$$\ \$$$$$$  |$$ | \_/ $$ |\$$$$$$$ |
     print(
         '''
 This script helps you to set the pwm range for the steering motors.
-You will iterate over two steering motors and set them to left and right 90 degree position.
-Based on their average the other steering motors are configured too.
+You will iterate over all steering motors and set them to left and right 90 degree position.
 
 !! It is recommended to run 'config_steer_motor_neutral.py' first. !!
 
@@ -146,10 +145,6 @@ ctrl+c - Exit script
     # Set Sleep time for better understanding of what is happening
     time.sleep(1)
     
-    #Remove 4 steering motors from dict
-    for x in range(4):
-    	steering_motor_pins.popitem()
-    
     # Iterating over selected motors and fine tune the 90 degree left and right value
     for pin_name, pin_value in steering_motor_pins.items():
         pwm_neutral_name = pin_name.replace('pin_steer_', 'steer_pwm_neutral_')
@@ -161,22 +156,22 @@ ctrl+c - Exit script
         print('Set ' + get_position_name(pin_name) + ' steering motor to 90 degree left position:')
         print('#################################### \n') 
         # Preset a certain angle for faster config
-        pwm_left_value = pwm_neutral_value - ( pwm_neutral_value / 2 )
+        pwm_left_value = int(round(pwm_neutral_value - ( pwm_neutral_value / 2 ),0))
         while(1):
             # Set motor
             pwm.set_pwm(pin_value, 0, pwm_left_value)
             time.sleep(0.1)
             print('Current value: ' + str(pwm_left_value) + '\n')
-            input = raw_input(
+            key_input = raw_input(
                 'q-set / a-decrease pwm left value/ d-increase pwm left value\n')
-            if(input is 'q'):
+            if(key_input is 'q'):
                 print('PWM left value for ' + get_position_name(pin_name) +
                       ' has been set.\n')
                 break
-            elif(input is 'a'):
+            elif(key_input is 'a'):
                 print('Decreased pwm left value')
                 pwm_left_value-= 5
-            elif(input is 'd'):
+            elif(key_input is 'd'):
                 print('Increased pwm left value')
                 pwm_left_value += 5
          
@@ -185,45 +180,35 @@ ctrl+c - Exit script
         print('Set ' + get_position_name(pin_name) + ' steering motor to 90 degree right position:')
         print('#################################### \n')
         # Preset a certain angle for faster config
-        pwm_right_value = pwm_neutral_value + ( pwm_neutral_value / 2 )
+        pwm_right_value = int(round(pwm_neutral_value + ( pwm_neutral_value / 2 )))
         while(1):
             # Set motor
             pwm.set_pwm(pin_value, 0, pwm_right_value)
             time.sleep(0.1)
             print('Current value: ' + str(pwm_right_value) + '\n')
-            input = raw_input(
+            key_input = raw_input(
                 'q-set / a-decrease pwm right value/ d-increase pwm right value\n')
-            if(input is 'q'):
+            if(key_input is 'q'):
                 print('PWM right value for ' + get_position_name(pin_name) +
                       ' has been set.\n')
                 break
-            elif(input is 'a'):
+            elif(key_input is 'a'):
                 print('Decreased pwm right value')
                 pwm_right_value-= 5
-            elif(input is 'd'):
+            elif(key_input is 'd'):
                 print('Increased pwm right value')
                 pwm_right_value += 5
         
         pwm.set_pwm(pin_value, 0, pwm_neutral_value)
         
         # Calculate pwm_range_value
-        pwm_range_value = abs(pwm_right_value-pwm_left_value) / 2
+        pwm_range_value = int(round(abs(pwm_right_value-pwm_left_value) / 2))
         #Save pwm_range_value to dict
         steering_pwm_range_dict[pwm_range_name] = pwm_range_value
     
-    pwm_range_sum = 0
-    pwm_range_count = 0
-    
-    for pwm_range_name, pwm_range_value in steering_pwm_range_dict.items():
-        pwm_range_count = pwm_range_count + 1
-        pwm_range_sum = pwm_range_sum + pwm_range_value
-    
-    pwm_range_average = int(pwm_range_sum / pwm_range_count)
-    steering_pwm_range_dict = {"steer_pwm_range": pwm_range_average}
-
     update_config_file(steering_pwm_range_dict)
     
     print('####################################') 
-    print('PWM Range set to: ' + str(pwm_range_average))
+    print('All PWM ranges set')
     print('Finished configuration!!!')
     print('####################################') 

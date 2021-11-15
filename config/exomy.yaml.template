@@ -36,7 +36,12 @@ steer_pwm_neutral_rl: 300
 steer_pwm_neutral_rr: 300
 
 # PWW range around steering neutral position
-steer_pwm_range: 250
+steer_pwm_range_fl: 185
+steer_pwm_range_fr: 185
+steer_pwm_range_cl: 185
+steer_pwm_range_cr: 185
+steer_pwm_range_rl: 185
+steer_pwm_range_rr: 185
 
 # PWM value for the stop position of driving motors
 drive_pwm_neutral: 307
