@@ -48,7 +48,7 @@
 
       self.manager.on('move', function (event, nipple) {
         var max_distance = 75;
-        var x = -Math.cos(nipple.angle.radian) * nipple.distance / max_distance;
+        var x = Math.cos(nipple.angle.radian) * nipple.distance / max_distance;
         var y = Math.sin(nipple.angle.radian) * nipple.distance / max_distance;
         axes = [x, y, 0, 0, 0, 0]
 
@@ -95,6 +95,9 @@
 
     joy_event = function () {
       var joy = new ROSLIB.Message({
+        header: {
+			    frame_id: "webgui"
+		    },
         axes: axes,
         buttons: buttons
       });
