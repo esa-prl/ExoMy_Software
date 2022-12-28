@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import Adafruit_PCA9685
 import yaml
 import time
@@ -9,7 +10,7 @@ config_filename = '../config/exomy.yaml'
 def get_steering_motor_pins():
     steering_motor_pins = {}
     with open(config_filename, 'r') as file:
-        param_dict = yaml.load(file)
+        param_dict = yaml.load(file,Loader=yaml.FullLoader)
 
     for param_key, param_value in param_dict.items():
         if('pin_steer_' in str(param_key)):
@@ -19,7 +20,7 @@ def get_steering_motor_pins():
 def get_steering_pwm_neutral_values():
     steering_pwm_neutral_values = {}
     with open(config_filename, 'r') as file:
-        param_dict = yaml.load(file)
+        param_dict = yaml.load(file,Loader=yaml.FullLoader)
 
     for param_key, param_value in param_dict.items():
         if('steer_pwm_neutral_' in str(param_key)):
@@ -99,7 +100,7 @@ ctrl+c - Exit script
         print("exomy.yaml does not exist. Finish config_motor_pins.py to generate it.")
         exit()
 
-    pwm = Adafruit_PCA9685.PCA9685()
+    pwm = Adafruit_PCA9685.PCA9685(busnum=1)
     # For most motors a pwm frequency of 50Hz is normal
     pwm_frequency = 50.0  # Hz
     pwm.set_pwm_freq(pwm_frequency)
@@ -130,16 +131,15 @@ ctrl+c - Exit script
             pwm.set_pwm(pin_value, 0, pwm_neutral_value)
             time.sleep(0.1)
             print('Current value: ' + str(pwm_neutral_value) + '\n')
-            input = raw_input(
-                'q-set / a-decrease pwm neutral value/ d-increase pwm neutral value\n')
-            if(input is 'q'):
+            input_data = input('q-set / a-decrease pwm neutral value/ d-increase pwm neutral value\n')
+            if(input_data == 'q'):
                 print('PWM neutral value for ' + get_position_name(pin_name) +
                       ' has been set.\n')
                 break
-            elif(input is 'a'):
+            elif(input_data == 'a'):
                 print('Decreased pwm neutral value')
                 pwm_neutral_value-= 5
-            elif(input is 'd'):
+            elif(input_data == 'd'):
                 print('Increased pwm neutral value')
                 pwm_neutral_value += 5
         pwm_neutral_dict[pwm_neutral_name] = pwm_neutral_value

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import Adafruit_PCA9685
 import yaml
 import time
@@ -9,7 +10,7 @@ config_filename = '../config/exomy.yaml'
 def get_driving_pins():
     pin_list = []
     with open(config_filename, 'r') as file:
-        param_dict = yaml.load(file)
+        param_dict = yaml.load(file,Loader=yaml.FullLoader)
 
     for key, value in param_dict.items():
         if('pin_drive_' in str(key)):
@@ -19,7 +20,7 @@ def get_driving_pins():
 def get_drive_pwm_neutral():
      
     with open(config_filename, 'r') as file:
-        param_dict = yaml.load(file)
+        param_dict = yaml.load(file,Loader=yaml.FullLoader)
 
     for key, value in param_dict.items():
         if('drive_pwm_neutral' in str(key)):
@@ -59,7 +60,7 @@ On each motor you have to turn the correction screw until the motor really stand
         exit()
 
 
-    pwm = Adafruit_PCA9685.PCA9685()
+    pwm = Adafruit_PCA9685.PCA9685(busnum=1)
 
     '''
     The drive_pwm_neutral value is determined from the exomy.yaml file.
@@ -90,7 +91,7 @@ On each motor you have to turn the correction screw until the motor really stand
         pwm.set_pwm(pin, 0, value)
         time.sleep(0.1)
 
-    raw_input('Press any button if you are done to complete configuration\n')
+    input('Press any button if you are done to complete configuration\n')
 
     for pin in pin_list:
         pwm.set_pwm(pin, 0, 0)

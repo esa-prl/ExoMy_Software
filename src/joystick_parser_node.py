@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import rospy
 from sensor_msgs.msg import Joy
 from exomy.msg import RoverCommand
@@ -149,6 +149,9 @@ def callback(data):
     rover_cmd.steering = math.atan2(y, x)*180.0/math.pi
 
     rover_cmd.connected = True
+
+    rover_cmd.vel = int(rover_cmd.vel)
+    rover_cmd.steering = int(rover_cmd.steering)
 
     pub.publish(rover_cmd)
 

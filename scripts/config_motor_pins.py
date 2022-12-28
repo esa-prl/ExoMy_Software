@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import Adafruit_PCA9685
 import time
 from shutil import copyfile
@@ -18,7 +19,7 @@ pin_dict = {
 
 }
 
-pwm = Adafruit_PCA9685.PCA9685()
+pwm = Adafruit_PCA9685.PCA9685(busnum=1)
 # For most motors a pwm frequency of 50Hz is normal
 pwm_frequency = 50.0  # Hz
 pwm.set_pwm_freq(pwm_frequency)
@@ -143,7 +144,7 @@ All other controls will be explained in the process.
             print("Pin #{}".format(pin_number))
             print(
                 'Was it a steering or driving motor that moved, or should I repeat the movement? ')
-            type_selection = raw_input('(d)rive (s)teer (r)epeat - (n)one (f)inish_configuration\n')
+            type_selection = input('(d)rive (s)teer (r)epeat - (n)one (f)inish_configuration\n')
             if(type_selection == 'd'):
                 motor.pin_name += 'drive_'
                 print('Good job\n')
@@ -167,7 +168,7 @@ All other controls will be explained in the process.
         if (type_selection == 'd' or type_selection == 's'):
             while(1):
                 print_exomy_layout()
-                pos_selection = raw_input(
+                pos_selection = input(
                     'Type the position of the motor that moved.[1-6] or (r)epeat\n')
                 if(pos_selection == 'r'):
                     print('Look closely\n')
@@ -199,7 +200,7 @@ All other controls will be explained in the process.
         pin = pin_dict[pin_name]
         motor = Motor(pin)
         motor.wiggle_motor()
-        raw_input('Press button to continue')
+        input('Press button to continue')
     
     print("You assigned {}/12 motors.".format(len(pin_dict.keys())))
 

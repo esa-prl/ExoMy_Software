@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>exomy</name>
-  <version>1.0.1</version>
+  <version>1.0.3</version>
   <description>The ExoMy ROS package</description>
 
   <maintainer email="max.ehrhardt@hotmail.de">Maximilian Ehrhardt</maintainer>
