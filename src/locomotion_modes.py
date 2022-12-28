@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-
 import enum
-
 
 class LocomotionMode(enum.Enum):
     FAKE_ACKERMANN = 0
