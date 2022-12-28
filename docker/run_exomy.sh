@@ -4,10 +4,11 @@
 help_text="Usage: "$0" [MODE] [OPTIONS]
     A script to run ExoMy in different configurations
     Options:
-        -a, --autostart     Toggles autostart mode on or off
-        -c, --config        Runs the motor configuration of ExoMy
-        -d, --devel         Runs the development mode to change some code of ExoMy 
-        -h, --help          Shows this text
+        -a, --autostart         Autostart mode on / Start ExoMy
+        -s, --stop_autostart    Autostart mode off
+        -c, --config            Runs the motor configuration of ExoMy
+        -d, --devel             Runs the development mode to change some code of ExoMy 
+        -h, --help              Shows this text
 "
 
 ### Main

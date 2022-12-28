@@ -48,3 +48,6 @@ drive_pwm_neutral: 307
 
 # PWW range around driving neutral position
 drive_pwm_range: 41
+
+# Select connected controller (possible options: "logitech-F710" or "xbox-one")
+controller: "logitech-F710"

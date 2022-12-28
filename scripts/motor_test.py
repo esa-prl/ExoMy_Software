@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import Adafruit_PCA9685
 import time
 import sys
@@ -20,7 +21,7 @@ pin = int(sys.argv[1])
 print('Pin: '+str(pin))
 
 
-pwm = Adafruit_PCA9685.PCA9685()
+pwm = Adafruit_PCA9685.PCA9685(busnum=1)
 # For most motors a pwm frequency of 50Hz is normal
 pwm_frequency = 50.0 #Hz
 pwm.set_pwm_freq(pwm_frequency)
@@ -39,7 +40,7 @@ while(selection != '0'):
     print("1. Min to Max oscilation")
     print('2. Incremental positioning')
     print('0. Abort')
-    selection = raw_input()
+    selection = input()
 
     if (int(selection) == 1):
 
@@ -71,7 +72,7 @@ while(selection != '0'):
         dc_selection = ''
         
         while (dc_selection != '0'):
-            dc_selection = raw_input('a-d: change pulsewidth | w-s: change step size | 0: back to menu\n')
+            dc_selection = input('a-d: change pulsewidth | w-s: change step size | 0: back to menu\n')
             if dc_selection == 'a':
                 curr_t = curr_t - step_size
             elif dc_selection == 'd':
@@ -88,7 +89,5 @@ while(selection != '0'):
                         
             pwm.set_pwm(pin, 0, curr_pwm)
             
-        
-
 # The PCA 9685 board requests a 12 bit number for the duty_cycle
 pwm.set_pwm(pin, 0, 0)

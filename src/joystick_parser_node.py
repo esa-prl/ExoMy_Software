@@ -1,9 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import rospy
 from sensor_msgs.msg import Joy
 from exomy.msg import RoverCommand
 from locomotion_modes import LocomotionMode
 import math
+import time
 
 # Define locomotion modes
 global locomotion_mode
@@ -20,7 +21,7 @@ def callback(data):
 
     rover_cmd = RoverCommand()
 
-    # Function map for the Logitech F710 joystick
+    # Function map for joystick
     # Button on pad | function
     # --------------|----------------------
     # A             | Ackermann mode
@@ -29,35 +30,100 @@ def callback(data):
     # Left Stick    | Control speed and direction
     # START Button  | Enable and disable motors
 
+    # More info on mapping: https://wiki.ros.org/joy
+    if data.header.frame_id == "webgui":
+        # Logitech WebGUI
+        controller_funtion_map = {
+            "x_axis": 0,
+            "y_axis": 1,
+            "invert_x_axis": True,
+            "X_button": 0,
+            "Y_button": 3,
+            "A_button": 1,
+            "B_button": 2,
+            "start_button": 9,
+            "select_button": 8,
+            "sensitivity": 0.15
+        }
+    elif rospy.get_param("controller") == "logitech-F710": 
+        # Logitech F710 joystick
+        controller_funtion_map = {
+            "x_axis": 0,
+            "y_axis": 1,
+            "invert_x_axis": True,
+            "X_button": 0,
+            "Y_button": 3,
+            "A_button": 1,
+            "B_button": 2,
+            "start_button": 9,
+            "select_button": 8,
+            "sensitivity": 0.1
+        }
+    elif rospy.get_param("controller") == "xbox-one": 
+        #X-Box One controller
+        controller_funtion_map = {
+            "x_axis": 0,
+            "y_axis": 1,
+            "invert_x_axis": True,
+            "X_button": 2,
+            "Y_button": 3,
+            "A_button": 0,
+            "B_button": 1,
+            "start_button": 7,
+            "select_button": 6,
+            "sensitivity": 0.11
+        }
+    else:
+        rospy.logerr("No controller identified. Using fallback.")
+        controller_funtion_map = {
+            "x_axis": 0,
+            "y_axis": 1,
+            "invert_x_axis": True,
+            "X_button": 0,
+            "Y_button": 3,
+            "A_button": 1,
+            "B_button": 2,
+            "start_button": 9,
+            "select_button": 8,
+            "sensitivity": 0.0
+        }
+   
     # Reading out joystick data
     y = data.axes[1]
     x = data.axes[0]
 
+    if controller_funtion_map["invert_x_axis"] == True:
+        x = x * -1
+
     # Reading out button data to set locomotion mode
     # X Button
-    if (data.buttons[0] == 1):
+    if (data.buttons[controller_funtion_map["X_button"]] == 1):
         locomotion_mode = LocomotionMode.POINT_TURN.value
     # A Button
-    if (data.buttons[1] == 1):
+    if (data.buttons[controller_funtion_map["A_button"]] == 1):
         locomotion_mode = LocomotionMode.ACKERMANN.value
     # B Button
-    if (data.buttons[2] == 1):
+    if (data.buttons[controller_funtion_map["B_button"]] == 1):
         pass
     # Y Button
-    if (data.buttons[3] == 1):
+    if (data.buttons[controller_funtion_map["Y_button"]] == 1):
         locomotion_mode = LocomotionMode.CRABBING.value
 
     rover_cmd.locomotion_mode = locomotion_mode
 
     # Enable and disable motors
     # START Button
-    if (data.buttons[9] == 1):
+    if (data.buttons[controller_funtion_map["start_button"]] == 1):
         if motors_enabled is True:
             motors_enabled = False
             rospy.loginfo("Motors disabled!")
+            # Set a sleep timer, if not a button movement could be triggered falsely
+            time.sleep(0.5)
         elif motors_enabled is False:
             motors_enabled = True
             rospy.loginfo("Motors enabled!")
+            # Set a sleep timer, if not a button movement could be triggered falsely
+            time.sleep(0.5)
         else:
             rospy.logerr(
                 "Exceptional value for [motors_enabled] = {}".format(motors_enabled))
@@ -66,7 +132,13 @@ def callback(data):
     rover_cmd.motors_enabled = motors_enabled
 
     # The velocity is decoded as value between 0...100
-    rover_cmd.vel = 100 * min(math.sqrt(x*x + y*y), 1.0)
+    # Sensitivity defines an area in the center, where no steering or speed commands are send to allow for lower speeds without loosing directions
+    # Similar to "joy_node"-"deadzone"-parameter. The parameter is not touched, as every controller has its own sensitivity
+    rover_cmd.vel = min(math.sqrt(x*x + y*y), 1.0)
+    if rover_cmd.vel < controller_funtion_map["sensitivity"]:
+        rover_cmd.vel = 0
+    else:
+        rover_cmd.vel = (rover_cmd.vel - controller_funtion_map["sensitivity"]) * (1 / (1 - controller_funtion_map["sensitivity"])) * 100
 
     # The steering is described as an angle between -180...180
     # Which describe the joystick position as follows:
@@ -77,6 +149,9 @@ def callback(data):
     rover_cmd.steering = math.atan2(y, x)*180.0/math.pi
 
     rover_cmd.connected = True
+
+    rover_cmd.vel = int(rover_cmd.vel)
+    rover_cmd.steering = int(rover_cmd.steering)
 
     pub.publish(rover_cmd)
 
